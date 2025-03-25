@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "types": ["node", "react", "jest"],
+    "paths": {
+      "@/*": ["./*"],
+      "@packages/*": ["./packages/*"],
+      "@hulk/common": ["packages/common/main"],
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "build",
+
+    "sourceMap": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    /* Bundler mode */
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "test/**/*",
+    "__test__/**/*",
+    "typings/**/*",
+    ".eslintrc.cjs",
+    ".stylelintrc.js",
+    ".prettierrc.cjs",
+    "node_modules/ts-jest/globals.d.ts",
+    "public/google-closure/goog/proto/serializer_test.js"
+  ],
+  "exclude": ["node_modules", "demo", "build", "dist", "scripts", "jest", "**/*.js", "**/*.jsx"]
+}
