@@ -5,18 +5,16 @@ import path from 'path'
 export default defineConfig(({}) => {
 
   return {
+    base: './',
     plugins: [react()],
     build: {
       outDir: 'dist_{{nameKebab}}',
       rollupOptions: {
         input: path.resolve(__dirname, 'index.html'),
-        external: ['react', 'react-dom', '@hulk/common', "@vitejs/plugin-react"],
+        external: ['react', 'react-dom', '@hulk/common', "@vitejs/plugin-react"]
         output: {
-          globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-            '@hulk/common': '@hulk/common',
-            '@vitejs/plugin-react': '@vitejs/plugin-react'
+          paths: {
+            '@hulk/common': '/dist_common/common.umd.js',
           }
         }
       },

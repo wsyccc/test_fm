@@ -11,19 +11,15 @@ export default defineConfig({
     lib: {
       entry: 'index.ts',
       name: '@hulk/common',
-      formats: ['es', 'umd'],
+      formats: ['umd', 'es'],
       fileName: (format) => `common.${format}.js`
     },
     outDir: 'dist_common',
-    rollupOptions: {
-      external: ['react', "react-dom", '@vitejs/plugin-react'],
-      output: {
-        globals: {
-          'react': 'React',
-          'react-dom': 'ReactDOM',
-          '@vitejs/plugin-react': '@vitejs/plugin-react'
-        }
-      }
-    }
+    // rollupOptions: {
+    //   external: [],
+    //   output: {
+    //     globals: {}
+    //   }
+    // }
   },
 });

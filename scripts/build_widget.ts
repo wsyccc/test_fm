@@ -1,13 +1,27 @@
-import fs from 'fs'
-import path from 'path'
-import { execSync } from 'child_process'
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+const child_process = require('child_process');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+})
+
+const askYesNo = (question: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+        rl.question(`${question} (y/N): `, (answer) => {
+            rl.close()
+            resolve(answer.trim().toLowerCase() === 'y')
+        })
+    })
+}
 
 const args = process.argv.slice(2)
 const widgetName = args[0]
-const forceBuildCommon = args[1] === 'yes'
 
 if (!widgetName) {
-    console.error('❌ 组件名不能为空，例如：yarn build:widget button [yes]')
+    console.error('❌ Widget Name is Required，e.g：yarn build:widget button')
     process.exit(1)
 }
 
@@ -15,34 +29,73 @@ const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
 const distCommonDir = path.join(distDir, 'dist_common')
 
-// 检查是否需要构建 common
-const shouldBuildCommon = forceBuildCommon || !fs.existsSync(distCommonDir)
-
-if (shouldBuildCommon) {
-    console.log(`🚧 正在构建 @hulk/common...`)
-    execSync('yarn workspace @hulk/common build', { stdio: 'inherit' })
-
-    // 将 common/dist 移动到根 dist 目录下
-    const commonDistFrom = path.join(rootDir, 'packages/common/dist')
-    const commonDistTo = path.join(distDir, 'dist_common')
-
-    if (fs.existsSync(commonDistTo)) fs.rmSync(commonDistTo, { recursive: true })
-    fs.renameSync(commonDistFrom, commonDistTo)
-
-    console.log(`✅ 已构建 @hulk/common 并移动到 dist/dist_common`)
-} else {
-    console.log('✅ 已存在 dist/dist_common，跳过构建 common')
+if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true })
+    console.log('📁 Created dist in root directory')
 }
 
-// 构建指定 widget
-console.log(`🚧 正在构建组件 ${widgetName}...`)
-execSync(`yarn workspace ${widgetName} build`, { stdio: 'inherit' })
+const main = async () => {
+    let shouldBuildCommon = false
 
-// 移动 widget 输出目录到根 dist 目录下
-const widgetDistFrom = path.join(rootDir, `packages/${widgetName}/dist_${widgetName}`)
-const widgetDistTo = path.join(distDir, `dist_${widgetName}`)
+    if (!fs.existsSync(distCommonDir)) {
+        console.log('⚠️ dist_common not exist，creating @hulk/common...')
+        shouldBuildCommon = true
+    } else {
+        shouldBuildCommon = await askYesNo('rebuild @hulk/common？')
+    }
 
-if (fs.existsSync(widgetDistTo)) fs.rmSync(widgetDistTo, { recursive: true })
-fs.renameSync(widgetDistFrom, widgetDistTo)
+    if (shouldBuildCommon) {
+        console.log(`🚧 building @hulk/common...`)
+        child_process.execSync('yarn workspace @hulk/common build', { stdio: 'inherit' })
 
-console.log(`✅ 构建完成：dist/dist_${widgetName}`)
+        const commonDistFrom = path.join(rootDir, 'packages/common/dist_common')
+        const commonDistTo = path.join(distDir, 'dist_common')
+
+        if (fs.existsSync(commonDistTo)) fs.rmSync(commonDistTo, { recursive: true })
+        fs.renameSync(commonDistFrom, commonDistTo)
+
+        if (fs.existsSync(commonDistFrom)) {
+            fs.rmSync(commonDistFrom, { recursive: true })
+            console.log(`🧹 Clearing ：packages/common/dist_common`)
+        }
+
+        console.log(`✅ @hulk/common build done`)
+    } else {
+        console.log('✅ skip build @hulk/common')
+    }
+
+
+    console.log(`🚧 building ${widgetName}...`)
+    child_process.execSync(`yarn workspace ${widgetName} build`, { stdio: 'inherit' })
+
+    const widgetDistFrom = path.join(rootDir, `packages/${widgetName}/dist_${widgetName}`)
+    const widgetDistTo = path.join(distDir, `dist_${widgetName}`)
+
+    if (fs.existsSync(widgetDistTo)) fs.rmSync(widgetDistTo, { recursive: true })
+    fs.renameSync(widgetDistFrom, widgetDistTo)
+
+    if (fs.existsSync(widgetDistFrom)) {
+        fs.rmSync(widgetDistFrom, { recursive: true })
+        console.log(`🧹 Clearing：packages/${widgetName}/dist_${widgetName}`)
+    }
+
+    const indexHtmlPath = path.join(widgetDistTo, 'index.html')
+    if (fs.existsSync(indexHtmlPath)) {
+        let html = fs.readFileSync(indexHtmlPath, 'utf-8')
+
+        const scriptTag = `<script type="module" src="../dist_common/common.umd.js"></script>`
+
+        if (!html.includes(scriptTag)) {
+            html = html.replace('</head>', `  ${scriptTag}\n</head>`)
+            fs.writeFileSync(indexHtmlPath, html, 'utf-8')
+            console.log(`🔗 Injected dist_common/common.umd.js into ${widgetName}/index.html`)
+        }
+    }
+
+
+    console.log(`✅ build：dist/dist_${widgetName} done`)
+
+    process.exit(0)
+}
+
+main()

@@ -4,7 +4,6 @@
   "private": true,
   "description": "",
   "keywords": [],
-  "author": "king <wsyccc@hotmail.com>",
   "main": "dist_common/common.umd.js",
   "module": "dist_common/common.es.js",
   "types": "dist_common/index.d.ts",
@@ -12,18 +11,7 @@
     "test": "node ./__tests__/@hulk/common.test.js",
     "build": "vite build"
   },
-  "exports": {
-    ".": {
-      "import": "./dist_common/common.es.js",
-      "require": "./dist_common/common.umd.js"
-    }
-  },
   "files": [
     "dist_common"
-  ],
-  "peerDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
+  ]
 }

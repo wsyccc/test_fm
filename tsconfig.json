@@ -11,8 +11,6 @@
     "moduleResolution": "Node",
     "declaration": true,
     "declarationMap": true,
-    "outDir": "build",
-
     "sourceMap": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
