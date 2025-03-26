@@ -2,9 +2,9 @@
   "compilerOptions": {
     "types": ["node", "react", "jest"],
     "paths": {
-      "@/*": ["./*"],
-      "@packages/*": ["./packages/*"],
-      "@hulk/common": ["packages/common/main"],
+      "@/*": ["*"],
+      "@packages/*": ["packages/*"],
+      "@hulk/common": ["packages/common"],
     },
     "target": "ESNext",
     "module": "ESNext",

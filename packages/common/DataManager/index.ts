@@ -1,3 +1,6 @@
-export function getMessage() {
-  return 'Hello World';
+export class DataManager {
+  static getMessage() {
+    return 'hello from DataManager'
+  }
+
 }

@@ -22,6 +22,18 @@ const config: StorybookConfig = {
   "framework": {
     "name": getAbsolutePath('@storybook/react-vite'),
     "options": {}
+  },
+  "viteFinal": (config, { configType }) => {
+    const isDev = configType === 'DEVELOPMENT';
+
+    config.resolve ??= {};
+    config.resolve.alias ??= {};
+
+    config.resolve.alias['@packages'] = isDev ? join(__dirname, '../packages') : '../packages';
+    config.resolve.alias['@'] = isDev ? join(__dirname, '../') : '../';
+    config.resolve.alias['@hulk/common'] = isDev ? join(__dirname, '../packages/common') : '@hulk/common';
+
+    return config;
   }
 };
 export default config;

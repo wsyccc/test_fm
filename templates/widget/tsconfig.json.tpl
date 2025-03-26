@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "___OUT_DIR___",
-    "rootDir": "src",
+    "outDir": "dist_{{nameKebab}}",
     "composite": false
   },
   "include": ["src"]

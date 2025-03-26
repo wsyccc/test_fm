@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist_button",
-    "rootDir": "src",
     "composite": false
   },
   "include": ["src"]

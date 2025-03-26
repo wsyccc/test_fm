@@ -1,12 +1,10 @@
 {
   "name": "{{nameKebab}}",
   "version": "0.0.0",
-  "main": "dist/{{nameKebab}}.umd.js",
-  "module": "dist/{{nameKebab}}.es.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "peerDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
