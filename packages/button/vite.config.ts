@@ -5,26 +5,14 @@ import path from 'path'
 export default defineConfig(({}) => {
 
   return {
-    base: './',
-    plugins: [react({
-      jsxRuntime: 'automatic'
-    })],
+    base: 'dist_button',
+    plugins: [react()],
     build: {
       outDir: 'dist_button',
       rollupOptions: {
         input: path.resolve(__dirname, 'index.html'),
-        external: ['@hulk/common'],
-        output: {
-          globals: {
-            '@hulk/common': '@hulk/common'
-          }
-        }
+        external: ['react', 'react-dom', '@hulk/common', "@vitejs/plugin-react"]
       },
     },
-    resolve: {
-      alias: {
-        '@hulk/common': path.resolve(__dirname, '../common'),
-      }
-    }
   }
 })

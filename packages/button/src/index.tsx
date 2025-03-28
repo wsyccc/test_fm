@@ -1,13 +1,19 @@
 import React from 'react'
-import { DataManager } from '@hulk/common'
+import {useCommon} from '@hulk/common'
+import AntdButton from 'antd/es/button';
 
 export interface ButtonProps {
   title: string
 }
 
 const Button: React.FC<ButtonProps> = ({ title }) => {
-  console.log(DataManager.getMessage())
-  return <div className="button">123</div>
+  const { count, increment } = useCommon();
+  return (
+    <>
+      <span>{title}  {count}</span>
+      <AntdButton onClick={increment} />
+    </>
+  );
 }
 
 export default Button
