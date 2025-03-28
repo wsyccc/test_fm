@@ -49,8 +49,7 @@ copyTemplateFile('vite.config.ts.tpl', 'vite.config.ts')
 copyTemplateFile('tsconfig.json.tpl', 'tsconfig.json')
 copyTemplateFile('index.tsx.tpl', 'src/index.tsx')
 copyTemplateFile('index.html.tpl', 'index.html')
-
-
+copyTemplateFile('app.tsx.tpl', 'src/app.tsx')
 copyTemplateFile('component.stories.tsx.tpl', `${nameKebab}.stories.tsx`)
 
 exec(`cd packages/${nameKebab} && yarn`, (err, stdout, stderr) => {

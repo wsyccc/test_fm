@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-export { React, ReactDOM };
-
 export * from './DataManager';
+
+export * from './CommonProvider';

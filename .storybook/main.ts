@@ -31,7 +31,7 @@ const config: StorybookConfig = {
 
     config.resolve.alias['@packages'] = isDev ? join(__dirname, '../packages') : '../packages';
     config.resolve.alias['@'] = isDev ? join(__dirname, '../') : '../';
-    config.resolve.alias['@hulk/common'] = isDev ? join(__dirname, '../packages/common') : '@hulk/common';
+    config.resolve.alias['@hulk/common'] = isDev ? join(__dirname, '../packages/common') : 'common';
 
     return config;
   }

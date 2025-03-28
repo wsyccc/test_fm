@@ -8,12 +8,14 @@
   "module": "./dist_common/common.es.js",
   "types": "./dist_common/index.d.ts",
   "exports": {
-    "types": "./dist_common/index.d.ts",
-    "import": "./dist_common/common.es.js",
-    "require": "./dist_common/common.umd.js"
+    ".": {
+      "types": "./dist_common/index.d.ts",
+      "import": "./dist_common/common.es.js",
+      "require": "./dist_common/common.umd.js"
+    }
   },
   "scripts": {
-    "test": "node ./__tests__/@hulk/common.test.js",
+    "test": "node ./__tests__/common.test.js",
     "build": "vite build"
   },
   "files": [
@@ -22,5 +24,13 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   }
 }

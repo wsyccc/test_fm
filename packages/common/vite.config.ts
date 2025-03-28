@@ -11,7 +11,7 @@ export default defineConfig({
     lib: {
       entry: 'index.ts',
       name: '@hulk/common',
-      formats: ['umd', 'es'],
+      formats: ['es'],
       fileName: (format) => `common.${format}.js`
     },
     outDir: 'dist_common',
@@ -25,4 +25,7 @@ export default defineConfig({
       }
     }
   },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production')
+  }
 });

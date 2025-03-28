@@ -83,12 +83,29 @@ const main = async () => {
     if (fs.existsSync(indexHtmlPath)) {
         let html = fs.readFileSync(indexHtmlPath, 'utf-8')
 
-        const scriptTag = `<script type="module" src="../dist_common/common.umd.js"></script>`
+        const importMapScript = `<script type="importmap">
+    {
+        "imports": {
+            "@hulk/common": "/dist_common/common.es.js",
+            "react": "https://esm.sh/react@19.0.0",
+            "react-dom": "https://esm.sh/react-dom@19.0.0"
+        }
+    }
+  </script>`
 
-        if (!html.includes(scriptTag)) {
-            html = html.replace('</head>', `  ${scriptTag}\n</head>`)
+        if (!html.includes(importMapScript)) {
+            const moduleScriptRegex = /<script\s+type="module"[^>]*>/i
+
+            if (moduleScriptRegex.test(html)) {
+
+                html = html.replace(moduleScriptRegex, `${importMapScript}\n$&`)
+            } else {
+
+                html = html.replace('</head>', `  ${importMapScript}\n</head>`)
+            }
+
             fs.writeFileSync(indexHtmlPath, html, 'utf-8')
-            console.log(`🔗 Injected dist_common/common.umd.js into ${widgetName}/index.html`)
+            console.log(`🔗 Injected importmap into ${widgetName}/index.html`)
         }
     }
 
