@@ -10,10 +10,19 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'index.ts',
-      name: 'HulkCommon',
+      name: '@hulk/common',
       formats: ['umd', 'es'],
       fileName: (format) => `common.${format}.js`
     },
     outDir: 'dist_common',
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        }
+      }
+    }
   },
 });

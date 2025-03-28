@@ -4,14 +4,23 @@
   "private": true,
   "description": "",
   "keywords": [],
-  "main": "dist_common/common.umd.js",
-  "module": "dist_common/common.es.js",
-  "types": "dist_common/index.d.ts",
+  "main": "./dist_common/common.umd.js",
+  "module": "./dist_common/common.es.js",
+  "types": "./dist_common/index.d.ts",
+  "exports": {
+    "types": "./dist_common/index.d.ts",
+    "import": "./dist_common/common.es.js",
+    "require": "./dist_common/common.umd.js"
+  },
   "scripts": {
     "test": "node ./__tests__/@hulk/common.test.js",
     "build": "vite build"
   },
   "files": [
     "dist_common"
-  ]
+  ],
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
 }

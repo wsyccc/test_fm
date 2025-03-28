@@ -6,21 +6,17 @@ export default defineConfig(({}) => {
 
   return {
     base: './',
-    plugins: [react()],
+    plugins: [react({
+      jsxRuntime: 'automatic'
+    })],
     build: {
       outDir: 'dist_button',
       rollupOptions: {
         input: path.resolve(__dirname, 'index.html'),
-        external: ['react', 'react-dom', '@hulk/common'],
+        external: ['@hulk/common'],
         output: {
           globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-            '@hulk/common': 'HulkCommon',
-            "@vitejs/plugin-react": "pluginReact"
-          },
-          paths: {
-            '@hulk/common': '/dist_common/common.umd.js',
+            '@hulk/common': '@hulk/common'
           }
         }
       },
