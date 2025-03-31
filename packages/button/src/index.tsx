@@ -1,19 +1,29 @@
-import React from 'react'
-import {useCommon} from '@hulk/common'
-import AntdButton from 'antd/es/button';
+import { React } from '@hulk/common';
+import { Button as AntdButton } from '@hulk/common';
+import { useButtonCommon } from './context';
+import {ButtonPropsInterface} from "./type.ts";
+import { WidgetActions } from '@hulk/common';
 
-export interface ButtonProps {
-  title: string
-}
+const Button: React.FC = (props: ButtonPropsInterface | {}) => {
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useButtonCommon();
+  // if widgetData is null, use props because it's from storybook
+  const data = widgetData ?? props as ButtonPropsInterface;
 
-const Button: React.FC<ButtonProps> = ({ title }) => {
-  const { count, increment } = useCommon();
+  const isStorybook = props !== undefined && (props as ButtonPropsInterface).id !== undefined;
+
+  const update = () => {
+    console.log(isStorybook);
+    if (data) updateWidgetData({ id: data?.id ? (Number(data.id) + 1).toString() : '1' }, isStorybook);
+  };
+
   return (
     <>
-      <span>{title}  {count}</span>
-      <AntdButton onClick={increment} />
+      <span>{widgetData?.id ?? 0}</span>
+      <AntdButton onClick={update}>+</AntdButton>
+      <AntdButton onClick={resetWidgetData}>---</AntdButton>
+      <AntdButton onClick={() => triggerAction([WidgetActions.onClick])}>....</AntdButton>
     </>
   );
-}
+};
 
-export default Button
+export default Button;

@@ -1,13 +1,19 @@
 import React from 'react'
-import { DataManager } from '@hulk/common'
+import { use{{namePascal}}Common } from './context';
+import { {{namePascal}}PropsInterface } from "./type.ts";
+import { WidgetActions } from '@hulk/common';
+// import must be import the specific component from the library
+// DO NOT import the whole library
 
-export interface {{namePascal}}Props {
-  title: string
-}
+// YES: import AntdButton from 'antd/es/button'; or import { Button } from 'antd';
+// NO: import antd;
 
-const {{namePascal}}: React.FC<{{namePascal}}Props> = ({ title }) => {
-  console.log(DataManager.getMessage())
-  return <div className="{{nameKebab}}">{title}</div>
+
+const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = use{{namePascal}}Common();
+  const data = widgetData ?? props as {{namePascal}}PropsInterface;
+
+  return <div>{{namePascal}}</div>
 }
 
 export default {{namePascal}}

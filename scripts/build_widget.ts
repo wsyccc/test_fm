@@ -86,12 +86,12 @@ const main = async () => {
         const importMapScript = `<script type="importmap">
     {
         "imports": {
-            "@hulk/common": "/dist_common/common.es.js",
-            "react": "https://esm.sh/react@19.0.0",
-            "react-dom": "https://esm.sh/react-dom@19.0.0"
+            "@hulk/common": "/dist_common/common.umd.js"
         }
     }
   </script>`
+
+        // const importMapScript = `<script type="application/javascript" src="/dist_common/common.umd.js"></script>`
 
         if (!html.includes(importMapScript)) {
             const moduleScriptRegex = /<script\s+type="module"[^>]*>/i

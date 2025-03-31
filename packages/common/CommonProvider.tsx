@@ -1,37 +1,68 @@
-import {createContext, useContext, useState, ReactNode, useEffect} from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useRef,
+  useEffect
+} from 'react';
+import {BaseWidgetDataType} from './type';
+import {WidgetActions} from "./constatns";
 
-
-interface CommonContextType {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
+export interface CommonContextType<T extends BaseWidgetDataType> {
+  widgetData: T | null;
+  updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
+  resetWidgetData: () => void;
+  triggerAction: (actions: WidgetActions[], storybook?: boolean) => void;
 }
 
+export function createCommonContext<T extends BaseWidgetDataType>() {
+  const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
-const CommonContext = createContext<CommonContextType | undefined>(undefined);
+  const Provider = ({ children }: { children: ReactNode }) => {
+    const [widgetData, setWidgetData] = useState<T | null>(null);
+    const originalWidgetData = useRef<T | null>(null);
 
+    useEffect(() => {
+      originalWidgetData.current = widgetData;
+    }, []);
 
-export const CommonProvider = <T,>({ children }: { children: ReactNode}) => {
-  const [count, setCount] = useState(0);
-  const [urlData, setUrlData] = useState<T | null>(null);
+    const updateWidgetData = (update: Partial<T>) => {
+      const newWidgetData = { ...widgetData, ...update } as T;
+      console.log(newWidgetData);
+      setWidgetData(newWidgetData);
+      // pass the new widget data to pm
+    };
 
-  useEffect(() => {
-    setUrlData(urlData);
-  }, []);
+    const resetWidgetData = () => {
+      setWidgetData(originalWidgetData.current);
+    };
 
-  const increment = () => setCount(c => c + 1);
-  const decrement = () => setCount(c => c - 1);
+    const triggerAction = (actions: WidgetActions[]) => {
+      actions.forEach((action) => {
+        switch (action) {
+          case WidgetActions.onClick:
+            console.log(`onClick on ${widgetData?.id}`);
+            // Handle onClick action
+            break;
+        }
+      });
+    };
 
-  return (
-    <CommonContext.Provider value={{ count, increment, decrement }}>
-      {children}
-    </CommonContext.Provider>
-  );
-};
+    return (
+      <Context.Provider value={{ widgetData, updateWidgetData, resetWidgetData, triggerAction }}>
+        {children}
+      </Context.Provider>
+    );
+  };
 
+  const useCommon = () => {
+    const context = useContext(Context);
+    if (!context) {
+      throw new Error('useCommon must be used within a Provider');
+    }
+    return context;
+  };
 
-export const useCommon = () => {
-  const context = useContext(CommonContext);
-  if (!context) throw new Error('useCommon must be used within a CommonContext');
-  return context as CommonContextType;
-};
+  return { Provider, useCommon };
+}
