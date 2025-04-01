@@ -7,16 +7,16 @@ export default defineConfig(({}) => {
   return {
     base: 'dist_{{nameKebab}}',
     plugins: [react()],
+    resolve: {
+      alias: {
+        '@hulk/common': path.resolve(__dirname, '../../dist/dist_common/common.es.js'),
+      }
+    },
     build: {
       outDir: 'dist_{{nameKebab}}',
       rollupOptions: {
         input: path.resolve(__dirname, 'index.html'),
-        external: ['react', 'react-dom', '@hulk/common', "@vitejs/plugin-react"],
-        output: {
-          paths: {
-            '@hulk/common': '/dist_common/common.umd.js',
-          }
-        }
+        external: ['@hulk/common']
       },
     },
   }

@@ -44,21 +44,24 @@ console.log(`🚀 Creating ${nameKebab}...`)
 
 ensureDir(path.join(targetDir, 'src'))
 
-copyTemplateFile('package.json.tpl', 'package.json')
-copyTemplateFile('vite.config.ts.tpl', 'vite.config.ts')
-copyTemplateFile('tsconfig.json.tpl', 'tsconfig.json')
-copyTemplateFile('index.tsx.tpl', 'src/index.tsx')
-copyTemplateFile('index.html.tpl', 'index.html')
+
 copyTemplateFile('app.tsx.tpl', 'src/app.tsx')
 copyTemplateFile('component.stories.tsx.tpl', `${nameKebab}.stories.tsx`)
+copyTemplateFile('context.ts.tpl', 'src/context.ts')
+copyTemplateFile('index.html.tpl', 'index.html')
+copyTemplateFile('index.tsx.tpl', 'src/index.tsx')
+copyTemplateFile('package.json.tpl', 'package.json')
+copyTemplateFile('tsconfig.json.tpl', 'tsconfig.json')
+copyTemplateFile('type.ts.tpl', 'src/type.ts')
+copyTemplateFile('vite.config.ts.tpl', 'vite.config.ts')
 
-exec(`cd packages/${nameKebab} && yarn`, (err, stdout, stderr) => {
-  if (err || stderr) {
-    console.error(err, stderr)
-    return
-  }
-    console.log(stdout)
-})
+// exec(`cd packages/${nameKebab} && yarn`, (err, stdout, stderr) => {
+//   if (err || stderr) {
+//     console.error(err, stderr)
+//     return
+//   }
+//     console.log(stdout)
+// })
 
 console.log(`✅ packages/${nameKebab} created successfully`);
 

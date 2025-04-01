@@ -1,12 +1,15 @@
 /**
  * This is the entry point for the common package.
  * Add 3-rd party packages here.
- * ***********************************************************************
- * **** 1. Use the specific import for 3-rd package you need. YES: export {Button} from 'antd'; NO: export * from 'antd' *************
- * **** 2. For  *************
- * ****
- * ****
- * ****
+ * **********************************************************************
+ * ** 1. Use the specific import for 3-rd package you need.            **
+ * **    YES: export {Button} from 'antd'; NO: export * from 'antd'    **
+ * ** 2. For some packages, you need to all the exports from the lib
+ * **    e.g. React and ReactDOM
+ * **
+ * **
+ * **
+ * **
  * ****************************************************************
  */
 import * as React from 'react';

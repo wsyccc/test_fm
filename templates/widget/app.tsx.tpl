@@ -1,5 +1,5 @@
-import {createRoot} from "react-dom/client";
-import {{namePascal}} from "./src";
+import { createRoot } from "@hulk/common";
+import {{namePascal}} from "./index.tsx";
 import { {{namePascal}}Provider } from "./context.ts";
 
 const rootElement = document.getElementById('root');

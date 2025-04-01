@@ -1,8 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "dist_button",
-    "composite": false
-  },
-  "include": ["src"]
-}

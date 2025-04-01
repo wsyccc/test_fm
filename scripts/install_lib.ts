@@ -5,7 +5,7 @@ const args = process.argv.slice(2)
 const libName = args[0]
 
 if (!libName) {
-    console.error('❌ 请输入 lib 名，例如：yarn create:lib DataManager')
+    console.error('❌ Please enter lib name e.g.：yarn install:lib lodash')
     process.exit(1)
 }
 

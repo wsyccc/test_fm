@@ -22,6 +22,6 @@ type Story = StoryObj<typeof {{namePascal}}>;
 
 export const Default: Story = {
   args: {
-    id: '{{namePascal}} Demo',
+    id: '0',
   } as {{namePascal}}PropsInterface
 };
