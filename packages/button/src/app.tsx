@@ -1,4 +1,4 @@
-import {createRoot} from "react-dom/client";
+import { createRoot } from "@hulk/common";
 import Button from "./index.tsx";
 import {ButtonProvider} from "./context.ts";
 

@@ -1,19 +1,27 @@
+/**
+ * This is the entry point for the common package.
+ * Add 3-rd party packages here.
+ * ***********************************************************************
+ * **** 1. Use the specific import for 3-rd package you need. YES: export {Button} from 'antd'; NO: export * from 'antd' *************
+ * **** 2. For  *************
+ * ****
+ * ****
+ * ****
+ * ****************************************************************
+ */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'lodash';
 
-export { React, ReactDOM, _ };
+export { React, _, ReactDOM };
 
-export * from './DataManager';
+export { createRoot } from 'react-dom/client';
 
-export * from './CommonProvider';
+export { getCommonContext } from './src/CommonProvider';
+export type { CommonContextType } from './src/CommonProvider';
 
-export * from './type';
+export type { BaseWidgetDataType } from './type';
 
-export * from './constatns';
+export { WidgetActions } from './constatns';
 
 export { Button, Modal, message } from 'antd';
-
-export { default as dayjs } from 'dayjs';
-
-export { default as classNames } from 'classnames';

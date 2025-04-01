@@ -1,7 +1,7 @@
 {
   "name": "@hulk/common",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "description": "",
   "keywords": [],
   "main": "./dist_common/common.umd.js",
@@ -21,40 +21,12 @@
   "files": [
     "dist_common"
   ],
-  "peerDependencies": {
+  "dependencies": {
     "@vitejs/plugin-react": "4.3.4",
     "antd": "5.24.5",
     "antd-style": "3.7.1",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
     "lodash": "4.17.21",
-    "dayjs": "1.11.13",
-    "classnames": "2.5.1"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": false
-    },
-    "react-dom": {
-      "optional": false
-    },
-    "@vitejs/plugin-react": {
-      "optional": false
-    },
-    "antd": {
-      "optional": false
-    },
-    "antd-style": {
-      "optional": false
-    },
-    "lodash": {
-      "optional": false
-    },
-    "dayjs": {
-      "optional": false
-    },
-    "classnames": {
-      "optional": false
-    }
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   }
 }

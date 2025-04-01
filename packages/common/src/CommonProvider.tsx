@@ -6,8 +6,8 @@ import {
   useRef,
   useEffect
 } from 'react';
-import {BaseWidgetDataType} from './type';
-import {WidgetActions} from "./constatns";
+import {BaseWidgetDataType} from '../type';
+import {WidgetActions} from "../constatns";
 
 export interface CommonContextType<T extends BaseWidgetDataType> {
   widgetData: T | null;
@@ -16,7 +16,7 @@ export interface CommonContextType<T extends BaseWidgetDataType> {
   triggerAction: (actions: WidgetActions[], storybook?: boolean) => void;
 }
 
-export function createCommonContext<T extends BaseWidgetDataType>() {
+export function getCommonContext<T extends BaseWidgetDataType>() {
   const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {
