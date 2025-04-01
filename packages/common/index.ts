@@ -28,3 +28,6 @@ export type { BaseWidgetDataType } from './type';
 export { WidgetActions } from './constatns';
 
 export { Button, Modal, message } from 'antd';
+
+export { default as dayjs } from 'dayjs';
+

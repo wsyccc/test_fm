@@ -55,13 +55,16 @@ copyTemplateFile('tsconfig.json.tpl', 'tsconfig.json')
 copyTemplateFile('type.ts.tpl', 'src/type.ts')
 copyTemplateFile('vite.config.ts.tpl', 'vite.config.ts')
 
-// exec(`cd packages/${nameKebab} && yarn`, (err, stdout, stderr) => {
-//   if (err || stderr) {
-//     console.error(err, stderr)
-//     return
-//   }
-//     console.log(stdout)
-// })
-
 console.log(`✅ packages/${nameKebab} created successfully`);
+
+exec(`git add ${targetDir}`, (err, _stdout, stderr) => {
+  if (err) {
+    console.warn(`⚠️ git add failed: ${err.message}`);
+    return;
+  }
+  if (stderr) {
+    console.warn(`⚠️ git add stderr: ${stderr}`);
+  }
+  console.log(`📦 Added ${nameKebab} to git`);
+});
 

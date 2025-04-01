@@ -1,48 +1,52 @@
-const fs = require('fs');
+#!/usr/bin/env ts-node
+
+const { execSync } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
-const args = process.argv.slice(2)
-const libName = args[0]
+const args = process.argv.slice(2);
 
-if (!libName) {
-    console.error('❌ Please enter lib name e.g.：yarn install:lib lodash')
-    process.exit(1)
+if (args.length === 0) {
+    console.error('❌ Please enter lib name e.g.: yarn install:lib dayjs [-D]');
+    process.exit(1);
 }
 
-const baseDir = path.resolve(__dirname, '../packages/common')
-const libDir = path.join(baseDir, libName)
-const libIndex = path.join(libDir, 'index.ts')
-const commonIndex = path.join(baseDir, 'index.ts')
+const libName = args[0];
+const isDev = args.includes('-D');
 
 
-if (fs.existsSync(libDir)) {
-    console.error(`❌ Exist：${libName}`)
-    process.exit(1)
-}
+const rootDir = path.resolve(__dirname, '..');
+const commonDir = path.join(rootDir, 'packages/common');
+const indexPath = path.join(commonDir, 'index.ts');
 
-fs.mkdirSync(libDir)
-fs.writeFileSync(
-    libIndex,
-    `// ${libName} Lib\n\nexport class ${libName} {\n  static getMessage() {\n    return '${libName} ready';\n  }\n}\n`
-)
-
-console.log(`✅ lib created: ${libDir}`)
-
-console.log(`🚀 add export to common/index.ts`)
-
-const exportLine = `export * from './${libName}';`
-let indexContent = ''
-
-if (fs.existsSync(commonIndex)) {
-    indexContent = fs.readFileSync(commonIndex, 'utf-8')
-    if (indexContent.includes(exportLine)) {
-        console.log(`ℹ️ lib exist in index.ts: ${exportLine}`)
-    } else {
-        indexContent += `\n${exportLine}\n`
-        fs.writeFileSync(commonIndex, indexContent, 'utf-8')
-        console.log(`✅ add export in index.ts success common/index.ts`)
-    }
+if (isDev) {
+    console.log(`📦 install dev dependencies ${libName} to root packages（-D -W）`);
+    execSync(`yarn add ${libName} -D -W`, {
+        cwd: rootDir,
+        stdio: 'inherit'
+    });
 } else {
-    fs.writeFileSync(commonIndex, `${exportLine}\n`)
-    console.log(`✅ created common/index.ts`)
+    console.log(`📦 install ${libName} to packages/common`);
+    execSync(`yarn add ${libName}`, {
+        cwd: commonDir,
+        stdio: 'inherit'
+    });
+
+    const exportLine = `export * from '${libName}';`;
+
+    const content = fs.readFileSync(indexPath, 'utf-8');
+    if (content.includes(exportLine)) {
+        console.log(`✅ exist ${libName} exports in packages/common/index.ts`);
+    } else {
+        fs.appendFileSync(indexPath, `\n${exportLine}\n`);
+        console.log(`✨ 已自动在 index.ts 中添加：\n${exportLine}`);
+        console.warn(`\n❗️ 强提醒：请立即检查并修改该导出方式！`);
+        console.warn(`   当前默认使用 "export * from '${libName}'"，可能不适用于所有库：`);
+        console.warn(`   - 某些库可能是 default 导出（如：dayjs、classnames）`);
+        console.warn(`   - 某些库需要命名导出，或额外封装`);
+        console.warn(`   - 若不修改，组件引用该库可能报错或类型错误 ⚠️`);
+        console.warn(`\n🚨 示例建议修改方式：`);
+        console.warn(`   // 推荐命名导出：\n   import _dayjs from 'dayjs';\n   export const dayjs = _dayjs;`);
+        console.warn(`   // 或默认导出：\n   export { default as dayjs } from 'dayjs';`);
+    }
 }

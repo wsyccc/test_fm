@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "create:widget": "ts-node scripts/create_widget.ts",
-    "install:lib": "ts-node scripts/create_lib.ts",
+    "install:lib": "ts-node scripts/install_lib.ts",
     "build:widget": "ts-node scripts/build_widget.ts",
     "preview:runtime": "serve dist",
     "build": "lerna run build --stream",
