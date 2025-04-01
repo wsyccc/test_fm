@@ -17,9 +17,13 @@ const namePascal = rawName.replace(/^\w/, s => s.toUpperCase())
 const nameKebab = rawName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
 const targetDir = path.join(PACKAGES_DIR, nameKebab)
 
-if (fs.existsSync(targetDir)) {
-  console.error(`❌ Directory ${targetDir} already exists`)
-  process.exit(1)
+const existingWidgets = fs.readdirSync(PACKAGES_DIR)
+  .filter(name => fs.statSync(path.join(PACKAGES_DIR, name)).isDirectory())
+  .map(name => name.toLowerCase());
+
+if (existingWidgets.includes(nameKebab.toLowerCase())) {
+  console.error(`❌ Widget "${nameKebab}" already exists in packages/`);
+  process.exit(1);
 }
 
 const replaceTemplateVars = (content: string) => {
