@@ -20,10 +20,10 @@ export { React, _, ReactDOM };
 
 export { createRoot } from 'react-dom/client';
 
-export { getCommonContext } from './src/CommonProvider';
-export type { CommonContextType } from './src/CommonProvider';
+export { getCommonContext } from './src/provider';
+export type { CommonContextType } from './src/provider';
 
-export type { BaseWidgetDataType } from './type';
+export type { BaseWidgetDataType, BaseWidgetActionType } from './type';
 
 export { WidgetActions } from './constatns';
 
