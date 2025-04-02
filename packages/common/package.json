@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "",
+  "type": "module",
   "keywords": [],
   "main": "./dist_common/common.umd.js",
   "module": "./dist_common/common.es.js",

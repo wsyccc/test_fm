@@ -10,10 +10,9 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-const askYesNo = (question) => {
+const askYesNo = (question: string): Promise<boolean> => {
     return new Promise((resolve) => {
         rl.question(`${question} (y/N): `, (answer) => {
-            rl.close();
             resolve(answer.trim().toLowerCase() === 'y');
         });
     });
@@ -96,6 +95,7 @@ const main = async () => {
         );
         if (!confirmed) {
             console.log('❌ Cancelled.');
+            rl.close();
             process.exit(0);
         }
     }
@@ -137,6 +137,7 @@ const main = async () => {
     }
 
     console.log(`🎉 All Widget Built！${widgetsToBuild.join(', ')}`);
+    rl.close();
     process.exit(0);
 };
 

@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(), dts(), viteStaticCopy({
     targets: [
       {
-        src: 'public/*',
+        src: '../../public/*',
         dest: 'public'
       }
     ]
