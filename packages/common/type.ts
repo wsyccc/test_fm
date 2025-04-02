@@ -5,6 +5,7 @@ export interface BaseWidgetDataType {
   width: number;
   height: number;
   bgColor?: string;
+  isStorybook?: boolean;
 }
 
 /**

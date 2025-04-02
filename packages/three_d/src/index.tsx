@@ -59,7 +59,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   };
 
   // determine isStorybook(Dev) or Production(Built)
-  const isStorybook = data.isStoryBook ?? false;
+  const isStorybook = data.isStorybook ?? false;
 
   const [loading, setLoading] = useState<boolean>(true);
   const mountRef = useRef<HTMLDivElement | null>(null);

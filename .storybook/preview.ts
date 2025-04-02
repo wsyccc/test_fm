@@ -10,7 +10,7 @@ const preview: Preview = {
     },
   },
   argTypes: {
-    isStoryBook: {
+    isStorybook: {
       table: {
         disable: true
       }
