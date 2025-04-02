@@ -9,6 +9,13 @@ const preview: Preview = {
       },
     },
   },
+  argTypes: {
+    isStoryBook: {
+      table: {
+        disable: true
+      }
+    }
+  },
 };
 
 export default preview;

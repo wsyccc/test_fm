@@ -14,12 +14,12 @@ const meta: Meta<typeof ThreeD> = {
     // backgroundColor: { control: 'color' },
   },
   decorators: [
-      (Story) => (
-        <ThreeDProvider>
-          <Story />
-        </ThreeDProvider>
-      )
-    ]
+    (Story) => (
+      <ThreeDProvider>
+        <Story />
+      </ThreeDProvider>
+    )
+  ]
 };
 
 export default meta;
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof ThreeD>;
 
 export const DefaultObj: Story = {
   args: {
-    id:'0',
+    isStoryBook: true,
     width: 1000,
     height: 580,
     externalSourceLink: "/3D/objExample2.obj",
@@ -47,7 +47,7 @@ export const DefaultObj: Story = {
 
 export const SimpleObj: Story = {
   args: {
-    id:'0',
+    isStoryBook: true,
     width: 600,
     height: 300,
     externalSourceLink: "/3D/objExample.obj",
@@ -62,7 +62,7 @@ export const SimpleObj: Story = {
 
 export const CameraObj: Story = {
   args: {
-    id:'0',
+    isStoryBook: true,
     width: 600,
     height: 380,
     externalSourceLink: "/3D/objExample3.obj",
@@ -77,7 +77,7 @@ export const CameraObj: Story = {
 
 export const GLTF: Story = {
   args: {
-    id:'0',
+    isStoryBook: true,
     width: 600,
     height: 380,
     externalSourceLink: "/3D/DamagedHelmet.gltf",
@@ -92,7 +92,7 @@ export const GLTF: Story = {
 
 export const STL: Story = {
   args: {
-    id:'0',
+    isStoryBook: true,
     width: 600,
     height: 380,
     externalSourceLink: "/3D/stlExample.stl",

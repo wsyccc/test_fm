@@ -19,6 +19,7 @@ export type updateConfigObjectType = {
 export interface ThreeDPropsInterface extends BaseWidgetDataType {
   id: string;
 
+  isStoryBook?: boolean;
   externalSourceLink?: string;
   shallowTheme?: boolean;
   wireframe?: boolean;
