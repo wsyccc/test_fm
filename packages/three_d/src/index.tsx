@@ -39,11 +39,27 @@ const domId = '3d-dom'
 const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useThreeDCommon();
 
-  const data = widgetData ?? props as ThreeDPropsInterface;
   const { useState, useRef, useEffect } = React;
 
+  const data = {
+    width: 600,
+    height: 480,
+    externalSourceLink: "/3D/objExample2.obj",
+    shallowTheme: true,
+    wireframe: false,
+    transparent: true,
+    grid: true,
+    ambientLight: 1.5,
+    xScale: 1,
+    yScale: 1,
+    zScale: 1,
+    alarms: [],
+    ...props,
+    ...widgetData,
+  };
+
   // determine isStorybook(Dev) or Production(Built)
-  const isStorybook = props !== undefined && (props as ThreeDPropsInterface).id !== undefined;
+  const isStorybook = data.isStoryBook ?? false;
 
   const [loading, setLoading] = useState<boolean>(true);
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -108,7 +124,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     // TODO
     console.log(key, changed[key])
     updateWidgetData({
-      [key]:changed[key]
+      [key]: changed[key]
     }, isStorybook)
     // setParams(p => {
     //   return {
@@ -318,7 +334,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     if (objectType === 'obj') {
       const materialLoader = new MTLLoader();
       try {
-        if(link)materialLoader.load(link?.replace('.obj', '.mtl'), (materials) => {
+        if (link) materialLoader.load(link?.replace('.obj', '.mtl'), (materials) => {
           materials.preload();
           setCurrentMaterial(materials);
           (loader as OBJLoader).setMaterials(materials);
@@ -326,7 +342,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       } catch (e) {
         console.error(e);
       }
-      if(link)loader.load(
+      if (link) loader.load(
         link,
         (example) => {
           setExternalGeometry(example);
@@ -365,7 +381,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         },
       );
     } else
-      if(link)loader.load(
+      if (link) loader.load(
         link,
         (example) => {
           if (objectType === 'stl') {
