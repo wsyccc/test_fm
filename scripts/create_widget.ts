@@ -14,7 +14,7 @@ if (!rawName) {
 }
 
 const namePascal = rawName.replace(/^\w/, s => s.toUpperCase())
-const nameKebab = rawName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+const nameKebab = rawName.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
 const targetDir = path.join(PACKAGES_DIR, nameKebab)
 
 const existingWidgets = fs.readdirSync(PACKAGES_DIR)

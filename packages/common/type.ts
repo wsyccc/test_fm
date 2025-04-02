@@ -2,6 +2,8 @@ import {WidgetActions} from "./constatns";
 
 export interface BaseWidgetDataType {
   id: string;
+  width: number;
+  height: number;
   bgColor?: string;
 }
 
