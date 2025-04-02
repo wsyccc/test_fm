@@ -2,9 +2,17 @@ import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
 import dts from 'vite-plugin-dts';
 import path from "path";
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  plugins: [react(), dts()],
+  plugins: [react(), dts(), viteStaticCopy({
+    targets: [
+      {
+        src: 'public/*',
+        dest: 'public'
+      }
+    ]
+  })],
   build: {
     lib: {
       entry: {

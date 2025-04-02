@@ -35,6 +35,8 @@ export const DefaultObj: Story = {
     externalSourceLink: "/3D/objExample2.obj",
     shallowTheme: true,
     ambientLight: 1.5,
+    wireframe: false,
+    grid: true,
     xScale: 1,
     yScale: 1,
     zScale: 1,
