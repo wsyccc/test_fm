@@ -17,7 +17,7 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import { React, publicBaseUrl } from '@hulk/common';
+import { React } from '@hulk/common';
 import { useThreeDCommon } from './context';
 import { alarmType, ThreeDPropsInterface, updateConfigObjectType } from "./type.ts";
 import { WidgetActions } from '@hulk/common';
@@ -44,7 +44,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const data = {
     width: 600,
     height: 480,
-    externalSourceLink: `${publicBaseUrl}/3D/objExample2.obj`,
+    externalSourceLink: '/public/3D/objExample2.obj',
     shallowTheme: true,
     wireframe: false,
     transparent: true,

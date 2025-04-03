@@ -136,6 +136,18 @@ const main = async () => {
         buildWidget(widgetName);
     }
 
+    const publicSrc = path.join(rootDir, 'public');
+    const publicDest = path.join(distDir, 'public');
+    if (fs.existsSync(publicSrc)) {
+        if (fs.existsSync(publicDest)) {
+            fs.rmSync(publicDest, { recursive: true, force: true });
+        }
+        fs.cpSync(publicSrc, publicDest, { recursive: true });
+        console.log(`✅ Copied public folder from root to ${publicDest}`);
+    } else {
+        console.log(`⚠️ No public folder found in root directory.`);
+    }
+
     console.log(`🎉 All Widget Built！${widgetsToBuild.join(', ')}`);
     rl.close();
     process.exit(0);

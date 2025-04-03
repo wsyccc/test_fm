@@ -17,7 +17,7 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import {publicBaseUrl, React} from '@hulk/common';
+import {React} from '@hulk/common';
 import { useButtonCommon } from './context';
 import { ButtonPropsInterface } from "./type.ts";
 import { Button as AntdButton } from '@hulk/common';
