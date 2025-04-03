@@ -60,8 +60,6 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     };
   }, [props, widgetData]);
 
-
-  console.log(data, 'data')
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
 
