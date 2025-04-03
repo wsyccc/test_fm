@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import {WebviewMessage} from "./type";
+import {Message} from "./type";
 
 /**
  * 发送消息给宿主（WebView2）
