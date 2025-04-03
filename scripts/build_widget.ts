@@ -18,13 +18,61 @@ const askYesNo = (question: string): Promise<boolean> => {
     });
 };
 
-const args = process.argv.slice(2);
-const specifiedWidget = args[0]; // 可选
+const printHelp = () => {
+    console.log(`
+使用说明:
+
+用法: yarn build:widget [widgetName] [options]
+
+参数说明:
+  [widgetName]         可选。指定要构建的 widget 名称。如果不指定，则构建所有 /packages 目录下（排除 common）。
+  
+  -y                   自动构建 @hulk/common，无需询问。若 dist/dist_common 不存在，则自动构建。
+  -n                   跳过构建 @hulk/common，无需询问。
+  -h, --help           显示本帮助文档。
+
+示例:
+  yarn build:widget                
+      # 构建所有 widget，并询问是否构建 @hulk/common
+
+  yarn build:widget widget1        
+      # 构建指定 widget，并询问是否构建 @hulk/common
+
+  yarn build:widget -y             
+      # 构建所有 widget，并自动构建 @hulk/common
+
+  yarn build:widget widget1 -n       
+      # 构建指定 widget，并跳过构建 @hulk/common
+`);
+};
+
+const rawArgs = process.argv.slice(2);
+if (rawArgs.includes('--help') || rawArgs.includes('-h')) {
+    printHelp();
+    process.exit(0);
+}
+
+let forceBuildCommon: boolean | null = null;
+const nonFlagArgs: string[] = [];
+
+for (const arg of rawArgs) {
+    if (arg === '-y') {
+        forceBuildCommon = true;
+    } else if (arg === '-n') {
+        forceBuildCommon = false;
+    } else {
+        nonFlagArgs.push(arg);
+    }
+}
+
+// 如果用户传入了 widget 名称，则只构建指定的 widget；否则构建所有 widget（排除 common）
+const specifiedWidget = nonFlagArgs[0];
 
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const distCommonDir = path.join(distDir, 'dist_common');
 
+// 如果 dist 目录不存在则创建
 if (!fs.existsSync(distDir)) {
     fs.mkdirSync(distDir, { recursive: true });
     console.log('📁 Created dist in root directory');
@@ -34,16 +82,15 @@ const getAllWidgets = () => {
     const packagesDir = path.join(rootDir, 'packages');
     const widgets = fs
       .readdirSync(packagesDir)
-      .filter((name) => {
+      .filter((name: string) => {
           const fullPath = path.join(packagesDir, name);
           const isDir = fs.statSync(fullPath).isDirectory();
           return isDir && name !== 'common';
       });
-
     return widgets;
 };
 
-const buildWidget = (widgetName) => {
+const buildWidget = (widgetName: string) => {
     console.log(`🚧 building ${widgetName}...`);
     child_process.execSync(`yarn workspace ${widgetName} build`, { stdio: 'inherit' });
 
@@ -88,7 +135,7 @@ const buildWidget = (widgetName) => {
 };
 
 const main = async () => {
-
+    // 如果没有指定 widget，则询问是否构建所有 widget（排除 common）
     if (!specifiedWidget) {
         const confirmed = await askYesNo(
           `⚠️  You are about to build ALL widgets under /packages (excluding 'common'). Confirm to continue?`
@@ -100,13 +147,17 @@ const main = async () => {
         }
     }
 
-    let shouldBuildCommon: unknown = false;
-
-    if (!fs.existsSync(distCommonDir)) {
-        console.log('⚠️ dist_common not exist，creating @hulk/common...');
-        shouldBuildCommon = true;
+    // 判断是否需要构建 @hulk/common：如果命令行传入了 -y 或 -n 则直接使用，否则再进行询问
+    let shouldBuildCommon: boolean;
+    if (forceBuildCommon !== null) {
+        shouldBuildCommon = forceBuildCommon;
     } else {
-        shouldBuildCommon = await askYesNo('rebuild @hulk/common？');
+        if (!fs.existsSync(distCommonDir)) {
+            console.log('⚠️ dist_common not exist，creating @hulk/common...');
+            shouldBuildCommon = true;
+        } else {
+            shouldBuildCommon = await askYesNo('rebuild @hulk/common？');
+        }
     }
 
     if (shouldBuildCommon) {
@@ -128,7 +179,6 @@ const main = async () => {
     } else {
         console.log('✅ skip build @hulk/common');
     }
-
 
     const widgetsToBuild = specifiedWidget ? [specifiedWidget] : getAllWidgets();
 

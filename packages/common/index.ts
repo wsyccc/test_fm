@@ -31,6 +31,7 @@ export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, S
 
 export { default as dayjs } from 'dayjs';
 
+import * as Echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import EchartsStat from 'echarts-stat';
-export { EchartsStat, ReactEcharts };
+export { EchartsStat, ReactEcharts, Echarts };
