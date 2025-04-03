@@ -16,8 +16,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as _ from 'lodash';
 
-export const publicBaseUrl = new URL('../../../public', import.meta.url).href;
-
 export { React, _, ReactDOM };
 
 export { createRoot } from 'react-dom/client';
