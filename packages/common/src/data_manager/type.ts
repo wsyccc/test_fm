@@ -1,20 +1,7 @@
-import {MessageType, WidgetType} from "../../constatns";
+import {MessageType, PayloadType, WidgetType} from "../../constatns";
 
 
-export interface MessagePayload<T> {
-  initialize?: {
-    type: "initialize";
-    payload: T;
-  },
-  updateWidgetData?: {
-    type: "updateWidgetData";
-    payload: T;
-  },
-  triggerAction?: {
-    type: "triggerAction";
-    payload: T;
-  }
-}
+export type MessagePayload<T> = { type: PayloadType; payload: T }
 
 export interface Message<T = any> {
   widgetId: string;

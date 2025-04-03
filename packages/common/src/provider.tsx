@@ -8,6 +8,7 @@ import {
 } from 'react';
 import {BaseWidgetDataType} from '../type';
 import {WidgetActions} from "../constatns";
+import {initializeCommunication, useWebviewListener} from "./data_manager";
 
 export interface CommonContextType<T extends BaseWidgetDataType> {
   widgetData: T | null;
@@ -28,10 +29,25 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
     }, []);
 
     useEffect(() => {
-      if (window.chrome && window.chrome.webview) {
-
-      }
+      initializeCommunication({ message: 'Hello from React!', version: '1.0.0' });
     }, []);
+
+    useWebviewListener((msg: any) => {
+      // 根据消息协议，判断消息类型并处理
+      if (msg.payload?.updateWidgetData) {
+        // 例如：收到更新 widgetData 的消息
+        const newData = msg.payload.updateWidgetData.payload;
+        console.log('Received updateWidgetData:', newData);
+        updateWidgetData(newData);
+      } else if (msg.payload?.triggerAction) {
+        // 例如：收到触发 action 的消息
+        const action = msg.payload.triggerAction.payload.action;
+        console.log('Received triggerAction:', action);
+        triggerAction([action]);
+      } else {
+        console.warn('Received unknown message:', msg);
+      }
+    });
 
     const updateWidgetData = (update: Partial<T>) => {
       const newWidgetData = { ...widgetData, ...update } as T;
