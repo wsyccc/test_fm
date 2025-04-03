@@ -20,7 +20,9 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@storybook/addon-onboarding'),
     getAbsolutePath('@chromatic-com/storybook'),
-    getAbsolutePath("@storybook/experimental-addon-test")
+    getAbsolutePath("@storybook/experimental-addon-test"),
+    getAbsolutePath("@storybook/addon-console"),
+    getAbsolutePath("@storybook/addon-actions"),
   ],
   "framework": {
     "name": getAbsolutePath('@storybook/react-vite'),

@@ -1,3 +1,8 @@
+export enum WidgetType {
+  button,
+  three_d
+}
+
 
 export enum WidgetActions {
   onClick = 'onClick',

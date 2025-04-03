@@ -39,24 +39,28 @@ const domId = '3d-dom'
 const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useThreeDCommon();
 
-  const { useState, useRef, useEffect } = React;
+  const { useState, useRef, useEffect, useMemo } = React;
 
-  const data = {
-    width: 600,
-    height: 480,
-    externalSourceLink: '/public/3D/objExample2.obj',
-    shallowTheme: true,
-    wireframe: false,
-    transparent: true,
-    grid: true,
-    ambientLight: 1.5,
-    xScale: 1,
-    yScale: 1,
-    zScale: 1,
-    alarms: [],
-    ...props,
-    ...widgetData,
-  };
+  const data = useMemo(() => {
+    return {
+      width: 600,
+      height: 480,
+      externalSourceLink: '/public/3D/objExample2.obj',
+      shallowTheme: true,
+      wireframe: false,
+      transparent: true,
+      grid: true,
+      ambientLight: 1.5,
+      xScale: 1,
+      yScale: 1,
+      zScale: 1,
+      alarms: [],
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
+
+
   console.log(data, 'data')
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
@@ -251,7 +255,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const onDocumentMouseClick = (event: MouseEvent, canvasRect: DOMRect) => {
     // enableObjectEdit为false表示处于可选物体和取消可选状态
     // 为true表示物体处于编辑状态
-
+    event.preventDefault();
+    event.stopPropagation();
     if (cameraRef.current && sceneRef.current && !isStorybook) {
       const rect = mountRef.current?.getBoundingClientRect()
       mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / data.width) * 2 - 1;
@@ -478,19 +483,17 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
           clearTimeout(wheelTimeoutRef.current); // 清除之前的超时
         }
 
-        // 设置新的超时，在 500ms 后保存相机位置
-        wheelTimeoutRef.current = window.setTimeout(() => {
-          setCameraPosition({
-            x: camera.position.x,
-            y: camera.position.y,
-            z: camera.position.z,
-          });
-          setControlsTarget({
-            x: controls.target.x,
-            y: controls.target.y,
-            z: controls.target.z,
-          });
-        }, 1000); // 500ms 后视为滚轮停止
+        setCameraPosition({
+          x: camera.position.x,
+          y: camera.position.y,
+          z: camera.position.z,
+        });
+        setControlsTarget({
+          x: controls.target.x,
+          y: controls.target.y,
+          z: controls.target.z,
+        });
+
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);

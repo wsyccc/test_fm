@@ -21,7 +21,7 @@ import { React } from '@hulk/common';
 import { useBarchartCommon } from './context';
 import { BarchartPropsInterface } from "./type.ts";
 import { BarChartCategory, generateBarChartOption } from './utils.ts';
-import ReactEcharts from 'echarts-for-react';
+import { ReactEcharts } from '@hulk/common';
 
 
 const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {

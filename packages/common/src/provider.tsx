@@ -27,6 +27,12 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       originalWidgetData.current = widgetData;
     }, []);
 
+    useEffect(() => {
+      if (window.chrome && window.chrome.webview) {
+
+      }
+    }, []);
+
     const updateWidgetData = (update: Partial<T>) => {
       const newWidgetData = { ...widgetData, ...update } as T;
       console.log(newWidgetData);

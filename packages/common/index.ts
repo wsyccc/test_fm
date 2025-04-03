@@ -30,3 +30,7 @@ export { WidgetActions } from './constatns';
 export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from 'antd';
 
 export { default as dayjs } from 'dayjs';
+
+import ReactEcharts from 'echarts-for-react';
+import EchartsStat from 'echarts-stat';
+export { EchartsStat, ReactEcharts };

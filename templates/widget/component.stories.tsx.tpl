@@ -21,7 +21,16 @@ export default meta;
 type Story = StoryObj<typeof {{namePascal}}>;
 
 export const Default: Story = {
+  // isStorybook is required to be true
+  // add some stories default args here
   args: {
-    id: '0',
+    isStorybook: true,
   } as {{namePascal}}PropsInterface
 };
+
+// can add more stories here with different args
+// export const SecondStory: Story = {
+//   args: {
+//     isStorybook: true,
+//   },
+// };

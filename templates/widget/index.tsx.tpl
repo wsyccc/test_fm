@@ -26,17 +26,20 @@ import { WidgetActions } from '@hulk/common';
 const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = use{{namePascal}}Common();
 
-  const data = {
-    width: 600,
-    height: 400,
-    ...props,
-    ...widgetData,
-  };
+  const { useState, useRef, useEffect, useMemo } = React;
 
-  const isStorybook = data.isStorybook ?? false;
+  const data: {{namePascal}}PropsInterface = useMemo(() => {
+      return {
+        //TODO add default props here above ...props
+        width: 300,
+        height: 300,
+        ...props,
+        ...widgetData,
+      };
+  }, [props, widgetData]);
 
   // determine isStorybook(Dev) or Production(Built)
-  const isStorybook = props !== undefined && (props as {{namePascal}}PropsInterface).id !== undefined;
+  const isStorybook = data.isStorybook ?? false;
 
   return <div>{{namePascal}}</div>
 }
