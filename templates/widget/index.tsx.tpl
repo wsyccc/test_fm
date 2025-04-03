@@ -26,7 +26,14 @@ import { WidgetActions } from '@hulk/common';
 const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = use{{namePascal}}Common();
 
-  const data = widgetData ?? props as {{namePascal}}PropsInterface;
+  const data = {
+    width: 600,
+    height: 400,
+    ...props,
+    ...widgetData,
+  };
+
+  const isStorybook = data.isStorybook ?? false;
 
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = props !== undefined && (props as {{namePascal}}PropsInterface).id !== undefined;

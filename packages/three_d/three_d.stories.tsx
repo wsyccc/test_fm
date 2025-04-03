@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import ThreeD from './src/index';
 import { ThreeDProvider } from "./src/context";
 import { ThreeDPropsInterface } from "./src/type";
+import React from 'react';
 
 const meta: Meta<typeof ThreeD> = {
   title: 'Components/ThreeD',
@@ -32,15 +33,17 @@ export const DefaultObj: Story = {
     isStorybook: true,
     width: 1000,
     height: 580,
+    
     externalSourceLink: "/3D/objExample2.obj",
     shallowTheme: true,
-    ambientLight: 1.5,
     wireframe: false,
+    transparent: true,
     grid: true,
+
+    ambientLight: 1.5,
     xScale: 1,
     yScale: 1,
     zScale: 1,
-    transparent: true,
     alarms: [
       { name: 'obj5', color: 'red' }
     ]

@@ -225,6 +225,29 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     return { octahedronEdges };
   };
 
+  const cancelHighLightedObject = () => {
+    if (highlightedObjectRef.current && highlightedObjectMaterialRef.current) {
+      // @ts-ignore
+      (highlightedObjectRef.current as THREE.Mesh).material =
+        highlightedObjectMaterialRef.current;
+      highlightedObjectMaterialRef.current = null; // 清空原始材质引用
+    } else if (highlightedObjectRef.current) {
+      (
+        (highlightedObjectRef.current as THREE.Mesh).material as THREE.MeshBasicMaterial
+      ).color.set(0xffffff);
+    }
+
+    highlightedObjectRef.current = null; // 清空高亮对象引用
+    if (transformControlsRef.current) {
+      transformControlsRef.current.detach();
+      transformControlsRef.current.visible = false;
+    }
+
+    // 重新打开整个视图的控制
+    if (controlsRef.current) controlsRef.current.enabled = true;
+    setHighlighted(0);
+  }
+
   // 鼠标交互，检查有没有点击到物体
   const onDocumentMouseClick = (event: MouseEvent, canvasRect: DOMRect) => {
     // enableObjectEdit为false表示处于可选物体和取消可选状态
@@ -280,26 +303,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         }
         setHighlighted((p) => (p % 10) + 1);
       } else {
-        if (highlightedObjectRef.current && highlightedObjectMaterialRef.current) {
-          // @ts-ignore
-          (highlightedObjectRef.current as THREE.Mesh).material =
-            highlightedObjectMaterialRef.current;
-          highlightedObjectMaterialRef.current = null; // 清空原始材质引用
-        } else if (highlightedObjectRef.current) {
-          (
-            (highlightedObjectRef.current as THREE.Mesh).material as THREE.MeshBasicMaterial
-          ).color.set(0xffffff);
-        }
-
-        highlightedObjectRef.current = null; // 清空高亮对象引用
-        if (transformControlsRef.current) {
-          transformControlsRef.current.detach();
-          transformControlsRef.current.visible = false;
-        }
-
-        // 重新打开整个视图的控制
-        if (controlsRef.current) controlsRef.current.enabled = true;
-        setHighlighted(0);
+        cancelHighLightedObject()
       }
     }
   };
@@ -878,8 +882,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
               key: '3DController',
               label: (
                 <span className="Card" style={{ width: '100%', display: 'block' }}>
-                    3D Controller
-                  </span>
+                  3D Controller
+                </span>
               ),
               children: highlightedObjectRef.current ? (
                 <>
@@ -916,6 +920,10 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                       >
                         缩放
                       </Button>
+                    </Col>
+                    <Col className="three-controller" span={24}>
+                      <Button size="small"
+                        onClick={() => cancelHighLightedObject()}>取消选择</Button>
                     </Col>
                   </Row>
                 </>
@@ -1051,8 +1059,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                 key: '3DStructure',
                 label: (
                   <span className="Card" style={{ width: '100%', display: 'block' }}>
-                      3D Structure
-                    </span>
+                    3D Structure
+                  </span>
                 ),
                 children:
                   <>
@@ -1191,8 +1199,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                 key: 'Properties',
                 label: (
                   <span className="Card" style={{ width: '100%', display: 'block' }}>
-                      Object Properties
-                    </span>
+                    Object Properties
+                  </span>
                 ),
                 children:
                   <>
