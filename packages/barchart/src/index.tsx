@@ -27,7 +27,9 @@ import ReactEcharts from 'echarts-for-react';
 const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useBarchartCommon();
 
-  const { useMemo } = React;
+  const { useMemo, useEffect, useRef } = React;
+
+  const echartsRef = useRef<ReactEcharts>(null);
 
   const data = {
     width: 600,
@@ -55,8 +57,28 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
     return generateBarChartOption(data, { xData: data.xData, yData: data.yData });
   }, [data]);
 
+  useEffect(() => {
+    const handleChartClick = () => {
+      console.log('图表被点击了');
+      // 这里可以添加你的点击处理逻辑
+    };
+
+    const echartsInstance = echartsRef.current?.getEchartsInstance();
+
+    if (echartsInstance) {
+      echartsInstance.on('mousedown', handleChartClick);
+    }
+
+    return () => {
+      if (echartsInstance) {
+        echartsInstance.off('mousedown', handleChartClick);
+      }
+    };
+  }, []);
+
   return (
     <ReactEcharts
+      ref={echartsRef}
       option={{
         ...option,
         backgroundColor: data.bgColor

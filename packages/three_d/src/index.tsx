@@ -57,7 +57,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     ...props,
     ...widgetData,
   };
-
+  console.log(data, 'data')
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
 
@@ -104,7 +104,6 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     Map<string, THREE.Object3D | THREE.Mesh>
   >(new Map());
   const [highlighted, setHighlighted] = useState<number>(0);
-  const [sceneRender, setSceneRender] = useState<number>(0);
   const highlightedObjectMaterialRef = useRef<THREE.Material | THREE.Material[] | null>(null);
 
   // 选择的物体的八面体
@@ -252,12 +251,13 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const onDocumentMouseClick = (event: MouseEvent, canvasRect: DOMRect) => {
     // enableObjectEdit为false表示处于可选物体和取消可选状态
     // 为true表示物体处于编辑状态
+
     if (cameraRef.current && sceneRef.current && !isStorybook) {
       const rect = mountRef.current?.getBoundingClientRect()
       mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / data.width) * 2 - 1;
       mouse.y =
         -((event.clientY - (rect?.top || 0) - ((rect?.top || 0) - (canvasRect?.top ?? 0)) / 2) / data.height) * 2 + 1;
-
+        
       // 更新 raycaster 的位置和方向
       raycaster.setFromCamera(mouse, cameraRef.current);
 
@@ -403,7 +403,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         },
       );
 
-  }, [data.externalSourceLink, sceneRender]);
+  }, [data.externalSourceLink]);
 
   useEffect(() => {
     if (mountRef.current) {
@@ -500,7 +500,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
       renderer.domElement.addEventListener('mouseup', handleMouseUp);
       renderer.domElement.addEventListener('wheel', handleWheel);
-      renderer.domElement.addEventListener('click', (event) => {
+      renderer.domElement.addEventListener('mousedown', (event) => {
         onDocumentMouseClick(event, renderer.domElement.getBoundingClientRect());
       });
 
@@ -703,7 +703,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         }
       }
     };
-  }, [externalGeometry, sceneRender, data.width, data.height, data.ambientLight, data.shallowTheme, data.wireframe, data.transparent, data.grid, data.xScale, data.yScale, data.zScale, data.alarms]);
+  }, [externalGeometry, data.width, data.height, data.ambientLight, data.shallowTheme, data.wireframe, data.transparent, data.grid, data.xScale, data.yScale, data.zScale, data.alarms]);
 
 
   useEffect(() => {
