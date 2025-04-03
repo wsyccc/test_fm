@@ -122,7 +122,6 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const onChange = (changed: Record<string, any>) => {
     const key = Object.keys(changed)[0];
     // TODO
-    console.log(key, changed[key])
     updateWidgetData({
       [key]: changed[key]
     }, isStorybook)
@@ -861,72 +860,71 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     controlForm.setFieldsValue(data)
   }, [data])
 
-  return <>
-    {!isStorybook ? <>
-      <Row>
-        <Col span={3}>
-          <Collapse
-            collapsible="icon"
-            defaultActiveKey={'3DController'}
-            style={{
-              position: 'absolute',
-              backgroundColor: 'white',
-              padding: '0px 5px',
-              opacity: 0.7,
-              width: '100%',
-            }}
-            items={[
-              {
-                key: '3DController',
-                label: (
-                  <span className="Card" style={{ width: '100%', display: 'block' }}>
+  return (
+    <Row>
+      <Col span={3}>
+        <Collapse
+          collapsible="icon"
+          defaultActiveKey={'3DController'}
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            padding: '0px 5px',
+            opacity: 0.7,
+            width: '100%',
+          }}
+          items={[
+            {
+              key: '3DController',
+              label: (
+                <span className="Card" style={{ width: '100%', display: 'block' }}>
                     3D Controller
                   </span>
-                ),
-                children: highlightedObjectRef.current ? (
-                  <>
-                    <Row>
-                      <Col className="three-controller" span={24}>
-                        <Button
-                          size="small"
-                          disabled={transformControlMode === 'translate'}
-                          onClick={() => {
-                            setTransformControlMode('translate');
-                          }}
-                        >
-                          移动模式
-                        </Button>
-                      </Col>
-                      <Col className="three-controller" span={24}>
-                        <Button
-                          size="small"
-                          disabled={transformControlMode === 'rotate'}
-                          onClick={() => {
-                            setTransformControlMode('rotate');
-                          }}
-                        >
-                          旋转模式
-                        </Button>
-                      </Col>
-                      <Col className="three-controller" span={24}>
-                        <Button
-                          size="small"
-                          disabled={transformControlMode === 'scale'}
-                          onClick={() => {
-                            setTransformControlMode('scale');
-                          }}
-                        >
-                          缩放
-                        </Button>
-                      </Col>
-                    </Row>
-                  </>
-                ) : (
+              ),
+              children: highlightedObjectRef.current ? (
+                <>
                   <Row>
-                    <Col span={24}>
-                      <Form form={controlForm} onValuesChange={onChange}>
-                        <Row>
-                          {/* <Col className="three-controller" span={24}>
+                    <Col className="three-controller" span={24}>
+                      <Button
+                        size="small"
+                        disabled={transformControlMode === 'translate'}
+                        onClick={() => {
+                          setTransformControlMode('translate');
+                        }}
+                      >
+                        移动模式
+                      </Button>
+                    </Col>
+                    <Col className="three-controller" span={24}>
+                      <Button
+                        size="small"
+                        disabled={transformControlMode === 'rotate'}
+                        onClick={() => {
+                          setTransformControlMode('rotate');
+                        }}
+                      >
+                        旋转模式
+                      </Button>
+                    </Col>
+                    <Col className="three-controller" span={24}>
+                      <Button
+                        size="small"
+                        disabled={transformControlMode === 'scale'}
+                        onClick={() => {
+                          setTransformControlMode('scale');
+                        }}
+                      >
+                        缩放
+                      </Button>
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <Row>
+                  <Col span={24}>
+                    <Form form={controlForm} onValuesChange={onChange}>
+                      <Row>
+                        {/* <Col className="three-controller" span={24}>
                             <Form.Item label="x轴移动" name="xScenePosition">
                               <InputNumber size="small" />
                             </Form.Item>
@@ -957,108 +955,108 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                               <InputNumber size="small" step={0.01} />
                             </Form.Item>
                           </Col> */}
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="x轴缩放" name="xScale">
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="y轴缩放" name="yScale">
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="z轴缩放" name="zScale">
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="浅色背景" name="shallowTheme">
-                              <Switch />
-                            </Form.Item>
-                          </Col>
-                          {data.externalSourceLink && (
-                            <>
-                              <Col className="three-controller" span={24}>
-                                <Form.Item label="环境光" name="ambientLight">
-                                  <Slider min={0.01} max={5} step={0.1} />
-                                </Form.Item>
-                              </Col>
-                              {/* <Col className="three-controller" span={24}>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="x轴缩放" name="xScale">
+                            <InputNumber size="small" />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="y轴缩放" name="yScale">
+                            <InputNumber size="small" />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="z轴缩放" name="zScale">
+                            <InputNumber size="small" />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="浅色背景" name="shallowTheme">
+                            <Switch />
+                          </Form.Item>
+                        </Col>
+                        {data.externalSourceLink && (
+                          <>
+                            <Col className="three-controller" span={24}>
+                              <Form.Item label="环境光" name="ambientLight">
+                                <Slider min={0.01} max={5} step={0.1} />
+                              </Form.Item>
+                            </Col>
+                            {/* <Col className="three-controller" span={24}>
                                 <Form.Item label="方向光" name="directionalLight">
                                   <Slider min={0.01} max={5} step={0.1} />
                                 </Form.Item>
                               </Col> */}
-                              <Col className="three-controller" span={24}>
-                                <Form.Item label="线框模式" name="wireframe">
-                                  <Switch />
-                                </Form.Item>
-                              </Col>
-                              <Col className="three-controller" span={24}>
-                                <Form.Item label="透明" name="transparent">
-                                  <Switch />
-                                </Form.Item>
-                              </Col>
-                              <Col className="three-controller" span={24}>
-                                <Form.Item label="网格" name="grid">
-                                  <Switch />
-                                </Form.Item>
-                              </Col>
-                              {/* <Col className="three-controller" span={24}>
+                            <Col className="three-controller" span={24}>
+                              <Form.Item label="线框模式" name="wireframe">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                            <Col className="three-controller" span={24}>
+                              <Form.Item label="透明" name="transparent">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                            <Col className="three-controller" span={24}>
+                              <Form.Item label="网格" name="grid">
+                                <Switch />
+                              </Form.Item>
+                            </Col>
+                            {/* <Col className="three-controller" span={24}>
                                 <Form.Item label="透明度" name="opacityPercent">
                                   <Slider min={0.1} max={1} step={0.1} />
                                 </Form.Item>
                               </Col> */}
-                            </>
-                          )}
+                          </>
+                        )}
 
-                        </Row>
-                      </Form>
-                    </Col>
-                  </Row>
-                ),
-              },
-            ]}
-          />
-        </Col>
-        <Col span={15}>
-          {loading ? <Spin /> : <div
-            ref={mountRef}
-            id={domId}
+                      </Row>
+                    </Form>
+                  </Col>
+                </Row>
+              ),
+            },
+          ]}
+        />
+      </Col>
+      <Col span={15}>
+        {loading ? <Spin /> : <div
+          ref={mountRef}
+          id={domId}
+          style={{
+            width: data.width,
+            height: '100%',
+            alignItems: 'top',
+            justifyContent: 'center',
+            display: 'flex',
+            visibility: loading ? 'hidden' : 'visible',
+          }}
+        />}
+      </Col>
+      {externalObjectType == 'obj' && <>
+        <Col span={3}>
+          <Collapse
+            collapsible="icon"
+            defaultActiveKey={'3DStructure'}
             style={{
+              position: 'absolute',
+              backgroundColor: 'white',
+              padding: '0px 5px',
+              opacity: 0.7,
               width: '100%',
-              height: '100%',
-              alignItems: 'top',
-              justifyContent: 'center',
-              display: 'flex',
-              visibility: loading ? 'hidden' : 'visible',
             }}
-          />}
-        </Col>
-        {externalObjectType == 'obj' && <>
-          <Col span={3}>
-            <Collapse
-              collapsible="icon"
-              defaultActiveKey={'3DStructure'}
-              style={{
-                position: 'absolute',
-                backgroundColor: 'white',
-                padding: '0px 5px',
-                opacity: 0.7,
-                width: '100%',
-              }}
 
-              items={[
-                {
-                  key: '3DStructure',
-                  label: (
-                    <span className="Card" style={{ width: '100%', display: 'block' }}>
+            items={[
+              {
+                key: '3DStructure',
+                label: (
+                  <span className="Card" style={{ width: '100%', display: 'block' }}>
                       3D Structure
                     </span>
-                  ),
-                  children:
-                    <>
-                      {/* <List>
+                ),
+                children:
+                  <>
+                    {/* <List>
                       {children?.map((item) => {
                         return (
                           <List.Item key={`${item.name}`}
@@ -1117,184 +1115,172 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                         );
                       })}
                     </List> */}
-                      <DirectoryTree
-                        treeData={children.length === 0 ? [] : [...children.map((c) => {
-                          return {
-                            title: c.name,
-                            key: c.uuid,
-                            children: c.children.map((cc) => {
-                              return {
-                                title: cc.name,
-                                key: cc.uuid,
-                                objectRef: cc
-                              }
-                            }),
-                            objectRef: c
-                          }
-                        })]}
-                        defaultExpandAll
-                        onSelect={(_, { selectedNodes }) => {
-                          if (selectedNodes[0]?.objectRef) {
-                            const item = selectedNodes[0]?.objectRef;
-                            // 如果有上一个高亮的对象，恢复原色
-                            if (
-                              highlightedObjectRef.current &&
-                              highlightedObjectMaterialRef.current
-                            ) {
-                              // @ts-ignore
-                              (highlightedObjectRef.current as THREE.Mesh).material =
-                                highlightedObjectMaterialRef.current;
-                            } else if (highlightedObjectRef.current) {
-                              (
-                                (highlightedObjectRef.current as THREE.Mesh)
-                                  .material as THREE.MeshBasicMaterial
-                              ).color.set(0xffffff);
+                    <DirectoryTree
+                      treeData={children.length === 0 ? [] : [...children.map((c) => {
+                        return {
+                          title: c.name,
+                          key: c.uuid,
+                          children: c.children.map((cc) => {
+                            return {
+                              title: cc.name,
+                              key: cc.uuid,
+                              objectRef: cc
                             }
-
-                            highlightedObjectMaterialRef.current = item.material.clone();
-                            highlightedObjectRef.current = item;
-                            if (controlsRef.current) controlsRef.current.enabled = false;
-
-
-                            // 设置高亮色
-                            const highlightMaterial = new THREE.MeshBasicMaterial({
-                              color: '#1890ff',
-                              transparent: item.material.transparent,
-                              opacity: item.material.opacity,
-                            });
-
-                            // 将目标对象的材质设置为高亮材质
-                            (item.material as THREE.Material) = highlightMaterial;
-
-                            setHighlighted((p) => (p % 10) + 1);
-                          } else {
-                            highlightedObjectRef.current = null
+                          }),
+                          objectRef: c
+                        }
+                      })]}
+                      defaultExpandAll
+                      onSelect={(_, { selectedNodes }) => {
+                        if (selectedNodes[0]?.objectRef) {
+                          const item = selectedNodes[0]?.objectRef;
+                          // 如果有上一个高亮的对象，恢复原色
+                          if (
+                            highlightedObjectRef.current &&
+                            highlightedObjectMaterialRef.current
+                          ) {
+                            // @ts-ignore
+                            (highlightedObjectRef.current as THREE.Mesh).material =
+                              highlightedObjectMaterialRef.current;
+                          } else if (highlightedObjectRef.current) {
+                            (
+                              (highlightedObjectRef.current as THREE.Mesh)
+                                .material as THREE.MeshBasicMaterial
+                            ).color.set(0xffffff);
                           }
-                        }}
-                      />
-                    </>
-                }]}
-            />
 
-          </Col>
-          <Col span={3}>
-            <Collapse
-              collapsible="icon"
-              defaultActiveKey={'Properties'}
-              style={{
-                position: 'absolute',
-                backgroundColor: 'white',
-                padding: '0px 5px',
-                opacity: 0.7,
-                width: '100%',
-              }}
-              items={[
-                {
-                  key: 'Properties',
-                  label: (
-                    <span className="Card" style={{ width: '100%', display: 'block' }}>
+                          highlightedObjectMaterialRef.current = item.material.clone();
+                          highlightedObjectRef.current = item;
+                          if (controlsRef.current) controlsRef.current.enabled = false;
+
+
+                          // 设置高亮色
+                          const highlightMaterial = new THREE.MeshBasicMaterial({
+                            color: '#1890ff',
+                            transparent: item.material.transparent,
+                            opacity: item.material.opacity,
+                          });
+
+                          // 将目标对象的材质设置为高亮材质
+                          (item.material as THREE.Material) = highlightMaterial;
+
+                          setHighlighted((p) => (p % 10) + 1);
+                        } else {
+                          highlightedObjectRef.current = null
+                        }
+                      }}
+                    />
+                  </>
+              }]}
+          />
+
+        </Col>
+        <Col span={3}>
+          <Collapse
+            collapsible="icon"
+            defaultActiveKey={'Properties'}
+            style={{
+              position: 'absolute',
+              backgroundColor: 'white',
+              padding: '0px 5px',
+              opacity: 0.7,
+              width: '100%',
+            }}
+            items={[
+              {
+                key: 'Properties',
+                label: (
+                  <span className="Card" style={{ width: '100%', display: 'block' }}>
                       Object Properties
                     </span>
-                  ),
-                  children:
-                    <>
-                      <Form form={objectForm} onValuesChange={handleObjectValueChange}>
-                        <Row>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="名称" name={'name'}>
-                              <Input disabled size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="x轴移动" name={['position', 'x']}>
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="y轴移动" name={['position', 'y']}>
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="z轴移动" name={['position', 'z']}>
-                              <InputNumber size="small" />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="x轴旋转" name={['rotation', 'x']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="y轴旋转" name={['rotation', 'y']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="z轴旋转" name={['rotation', 'z']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="x轴缩放" name={['scale', 'x']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="y轴缩放" name={['scale', 'y']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-                          <Col className="three-controller" span={24}>
-                            <Form.Item label="z轴缩放" name={['scale', 'z']}>
-                              <InputNumber size="small" step={0.02} />
-                            </Form.Item>
-                          </Col>
-
-
-                        </Row>
-                      </Form>
-                      {originalMaterial && <Form form={materialForm}>
+                ),
+                children:
+                  <>
+                    <Form form={objectForm} onValuesChange={handleObjectValueChange}>
+                      <Row>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="材质名称" name={'name'}>
+                          <Form.Item label="名称" name={'name'}>
                             <Input disabled size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="材质颜色R" name={['color', 'r']}>
-                            <InputNumber size="small" disabled />
+                          <Form.Item label="x轴移动" name={['position', 'x']}>
+                            <InputNumber size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="材质颜色G" name={['color', 'g']}>
-                            <InputNumber size="small" disabled />
+                          <Form.Item label="y轴移动" name={['position', 'y']}>
+                            <InputNumber size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="材质颜色B" name={['color', 'b']}>
-                            <InputNumber size="small" disabled />
+                          <Form.Item label="z轴移动" name={['position', 'z']}>
+                            <InputNumber size="small" />
                           </Form.Item>
                         </Col>
-                      </Form>}
-                    </>
-                }]}
-            />
-          </Col>
-        </>}
-      </Row>
-    </> : loading ? <Spin /> : <div
-      ref={mountRef}
-      id={domId}
-      style={{
-        width: '100%',
-        height: '100%',
-        alignItems: 'top',
-        justifyContent: 'center',
-        display: 'flex',
-        visibility: loading ? 'hidden' : 'visible',
-      }}
-    />}
-  </>;
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="x轴旋转" name={['rotation', 'x']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="y轴旋转" name={['rotation', 'y']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="z轴旋转" name={['rotation', 'z']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="x轴缩放" name={['scale', 'x']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="y轴缩放" name={['scale', 'y']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+                        <Col className="three-controller" span={24}>
+                          <Form.Item label="z轴缩放" name={['scale', 'z']}>
+                            <InputNumber size="small" step={0.02} />
+                          </Form.Item>
+                        </Col>
+
+
+                      </Row>
+                    </Form>
+                    {originalMaterial && <Form form={materialForm}>
+                      <Col className="three-controller" span={24}>
+                        <Form.Item label="材质名称" name={'name'}>
+                          <Input disabled size="small" />
+                        </Form.Item>
+                      </Col>
+                      <Col className="three-controller" span={24}>
+                        <Form.Item label="材质颜色R" name={['color', 'r']}>
+                          <InputNumber size="small" disabled />
+                        </Form.Item>
+                      </Col>
+                      <Col className="three-controller" span={24}>
+                        <Form.Item label="材质颜色G" name={['color', 'g']}>
+                          <InputNumber size="small" disabled />
+                        </Form.Item>
+                      </Col>
+                      <Col className="three-controller" span={24}>
+                        <Form.Item label="材质颜色B" name={['color', 'b']}>
+                          <InputNumber size="small" disabled />
+                        </Form.Item>
+                      </Col>
+                    </Form>}
+                  </>
+              }]}
+          />
+        </Col>
+      </>}
+    </Row>
+  );
 }
 
-export default ThreeD
+export default ThreeD;
