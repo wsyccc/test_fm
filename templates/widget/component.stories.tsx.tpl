@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import {{namePascal}} from './src/index';
 import { {{namePascal}}Provider } from "./src/context";
 import { {{namePascal}}PropsInterface } from "./src/type";
+import React from 'react';
 
 const meta: Meta<typeof {{namePascal}}> = {
   title: 'Components/{{namePascal}}',
