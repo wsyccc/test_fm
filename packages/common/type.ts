@@ -1,4 +1,4 @@
-import {WidgetActions} from "./constatns";
+import {BaseTriggerActions} from "./constatns";
 
 export interface BaseWidgetDataType {
   id: string;
@@ -26,7 +26,7 @@ export interface BaseWidgetActionType {
   // the source name of the action e.g. button, input, etc.
   source: string;
   // the action type
-  type: WidgetActions;
+  type: BaseTriggerActions;
   description: string;
   // the action payload e.g. the data to be passed to the action
   payload: any;

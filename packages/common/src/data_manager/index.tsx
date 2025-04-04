@@ -1,8 +1,8 @@
 // data_manager/index.tsx
 
 import { useEffect } from 'react';
-import { Message } from './type';
-import {MessageType, PayloadType, WidgetType} from '../../constatns';
+import { Message } from './Message';
+import {MessageSource, BaseMessagePurpose, WidgetType} from '../../constatns';
 
 
 // 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）
@@ -11,13 +11,13 @@ const CHUNK_SIZE = 512 * 1024; // 512KB
 /**
  * 基本的消息发送函数
  */
-export function sendMessage<T>(message: Message<T>): void {
+export function sendMessage<T, S, F>(message: Message<T, S, F>): void {
   if (
     window.chrome &&
     window.chrome.webview &&
     typeof window.chrome.webview.postMessage === 'function'
   ) {
-    window.chrome.webview.postMessage(message);
+    window.chrome.webview.postMessage(message.toJSON());
   } else {
     console.warn('WebView2 API is not available.');
   }
@@ -28,51 +28,49 @@ export function sendMessage<T>(message: Message<T>): void {
  * 如果消息数据量超过 CHUNK_SIZE，就将消息 JSON 化后分块传输，
  * 每个块都采用 updateWidgetData 类型封装 chunk 信息（你可以扩展协议定义专门的 chunk 类型）
  */
-export function sendLargeMessage<T>(message: Message<T>, chunkSize: number = CHUNK_SIZE): void {
-  const jsonString = JSON.stringify(message);
-  const totalLength = jsonString.length;
-
-  if (totalLength <= chunkSize) {
-    // 不超限，直接发送
-    sendMessage(message);
-    return;
-  }
-
-  const totalChunks = Math.ceil(totalLength / chunkSize);
-
-  for (let i = 0; i < totalChunks; i++) {
-    const chunkData = jsonString.slice(i * chunkSize, (i + 1) * chunkSize);
-
-    // 这里仅示例：把分块数据塞到同一个 payload 里
-    // 也可以在你的协议中定义专门的 ChunkPayload
-    const chunkMessage: Message<any> = {
-      widgetId: message.widgetId,
-      widgetType: message.widgetType,
-      messageType: message.messageType,
-      payload: {
-        type: PayloadType.updateWidgetData,
-        payload: {
-          chunkIndex: i,
-          totalChunks,
-          chunkData
-        }
-      }
-    };
-
-    sendMessage(chunkMessage);
-  }
-}
+// export function sendLargeMessage<T, S, F>(message: Message<T, S, F>, chunkSize: number = CHUNK_SIZE): void {
+//   const jsonString = message.toString();
+//   const totalLength = jsonString.length;
+//
+//   if (totalLength <= chunkSize) {
+//     sendMessage(message);
+//     return;
+//   }
+//
+//   const totalChunks = Math.ceil(totalLength / chunkSize);
+//
+//   for (let i = 0; i < totalChunks; i++) {
+//     const chunkData = jsonString.slice(i * chunkSize, (i + 1) * chunkSize);
+//
+//
+//     const chunkMessage: Message = {
+//       widgetId: message.widgetId,
+//       widgetType: message.widgetType,
+//       messageType: message.messageType,
+//       payload: {
+//         type: BaseMessagePurpose.updateWidgetData,
+//         payload: {
+//           chunkIndex: i,
+//           totalChunks,
+//           chunkData
+//         }
+//       }
+//     };
+//
+//     sendMessage(chunkMessage);
+//   }
+// }
 
 /**
  * React Hook：注册 WebView2 消息监听器
  * 传入的 handler 用于处理所有收到的消息
  */
-export function useWebviewListener<T>(handler: (msg: T) => void): void {
+export function useWebviewListener<T, S, F>(handler: (msg: Message<T, S, F>) => void): void {
   useEffect(() => {
     const listener = (event: MessageEvent) => {
       if (event.data) {
         try {
-          handler(event.data as T);
+          handler(Message.toMessage(JSON.stringify(event.data)) as Message<T, S, F>);
         } catch (err) {
           console.error('Error handling message:', err);
         }
@@ -102,9 +100,9 @@ export function initializeCommunication<T>(initPayload: T): void {
   const initMessage: Message<T> = {
     widgetId: 'frontend',
     widgetType: WidgetType.button,
-    messageType: MessageType.request,
+    messageType: MessageSource.request,
     payload: {
-      type: PayloadType.initialize,
+      type: BaseMessagePurpose.initialize,
       payload: initPayload
     }
   };

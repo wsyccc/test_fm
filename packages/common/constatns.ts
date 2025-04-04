@@ -3,19 +3,18 @@ export enum WidgetType {
   three_d
 }
 
-export enum MessageType {
-  response,
-  request
+export enum MessageSource {
+  WebView,
+  Hulk
 }
 
-export enum PayloadType {
+export enum BaseMessagePurpose {
   initialize,
-  updateWidgetData,
-  triggerAction
+  updateWidgetData
 }
 
 
-export enum WidgetActions {
+export enum BaseTriggerActions {
   onClick = 'onClick',
   onMouseEnter = 'onMouseEnter',
   onMouseLeave = 'onMouseLeave',
