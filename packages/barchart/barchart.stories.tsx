@@ -72,3 +72,20 @@ export const Weather: Story = {
     }]
   },
 };
+
+export const Stack: Story = {
+  args: {
+    category: BarChartCategory.Stacked,
+    legendEnabled: true,
+    legendLayout: 'horizontal',
+    labelPosition: 'inside',
+    xData: ['03/24', '03/25', '03/26', '03/27', '03/28', '03/29', '03/30'],
+    yData: [{
+      name: 'Email',
+      data: [8, 10, 7, 12, 5, 12, 6]
+    }, {
+      name: 'Ads',
+      data: [120, 200, 150, 80, 70, 110, 130]
+    }]
+  },
+};

@@ -116,7 +116,7 @@ export const Sector: Story = {
     ],
     value: 50,
     fontSize: 15,
-    prefix: '',
-    suffix: '',
+    prefix: 'T:',
+    suffix: '℃',
   } as GaugechartPropsInterface
 };
