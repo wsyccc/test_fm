@@ -1,0 +1,13 @@
+{
+  "name": "gaugechart",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "@hulk/common": "0.0.0"
+  }
+}

@@ -27,7 +27,7 @@ export type { BaseWidgetDataType, BaseWidgetActionType } from './type';
 
 export { BaseTriggerActions } from './constatns';
 
-export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from 'antd';
+export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree, Splitter, Flex, Typography } from 'antd';
 
 export { default as dayjs } from 'dayjs';
 

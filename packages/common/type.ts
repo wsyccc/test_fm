@@ -1,7 +1,7 @@
 import {BaseTriggerActions} from "./constatns";
 
 export interface BaseWidgetDataType {
-  id: string;
+  id?: string;
   width: number;
   height: number;
   bgColor?: string;
