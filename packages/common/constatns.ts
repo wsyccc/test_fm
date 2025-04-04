@@ -3,6 +3,17 @@ export enum WidgetType {
   three_d
 }
 
+export enum MessageType {
+  response,
+  request
+}
+
+export enum PayloadType {
+  initialize,
+  updateWidgetData,
+  triggerAction
+}
+
 
 export enum WidgetActions {
   onClick = 'onClick',
