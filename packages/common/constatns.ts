@@ -1,16 +1,20 @@
 export enum WidgetType {
+  common,
   button,
   three_d
 }
 
 export enum MessageSource {
+  // The Message is sent from WebView to the React
   WebView,
+  // The Message is sent from React to the WebView
   Hulk
 }
 
 export enum BaseMessagePurpose {
   initialize,
-  updateWidgetData
+  updateWidgetData,
+  triggerAction,
 }
 
 

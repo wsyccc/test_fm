@@ -1,12 +1,23 @@
 import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../../constatns";
 
+/**
+ * Message class
+ * T is the payload type
+ * S is the trigger action type
+ * F is the message purpose type
+ */
 export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMessagePurpose> {
+
   private _widgetId: string;
   private _widgetType: WidgetType;
   private _source: MessageSource;
   private _purpose: BaseMessagePurpose & F;
   private _payload?: T;
   private _triggerAction?: BaseTriggerActions & S;
+  private _sequenceId?: string;
+  private _chunkIndex?: number;
+  private _totalChunks?: number;
+  private _isChunk?: boolean;
 
   constructor(
     widgetId: string,
@@ -14,7 +25,11 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
     source: MessageSource,
     purpose: BaseMessagePurpose & F,
     payload: T,
-    triggerAction?: BaseTriggerActions & S
+    triggerAction?: BaseTriggerActions & S,
+    sequenceId?: string,
+    chunkIndex?: number,
+    totalChunks?: number,
+    isChunk?: boolean
   ) {
     this._widgetId = widgetId;
     this._widgetType = widgetType;
@@ -22,6 +37,74 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
     this._purpose = purpose;
     this._payload = payload;
     this._triggerAction = triggerAction;
+    this._sequenceId = sequenceId;
+    this._chunkIndex = chunkIndex;
+    this._totalChunks = totalChunks;
+    this._isChunk = isChunk;
+  }
+
+  /**
+   * Get sequenceId
+   * @return {string} - Sequence ID
+   */
+  get sequenceId(): string | undefined {
+    return this._sequenceId;
+  }
+
+  /**
+   * Set sequenceId
+   * @param value {string} - Sequence ID
+   */
+  set sequenceId(value: string) {
+    this._sequenceId = value;
+  }
+
+  /**
+   * Get chunkIndex
+   * @return {number} - Chunk Index
+   */
+  get chunkIndex(): number | undefined {
+    return this._chunkIndex;
+  }
+
+  /**
+   * Set chunkIndex
+   * @param value {number} - Chunk Index
+   */
+  set chunkIndex(value: number) {
+    this._chunkIndex = value;
+  }
+
+  /**
+   * Get totalChunks
+   * @return {number} - Total Chunks
+   */
+  get totalChunks(): number | undefined {
+    return this._totalChunks;
+  }
+
+  /**
+   * Set totalChunks
+   * @param value {number} - Total Chunks
+   */
+  set totalChunks(value: number) {
+    this._totalChunks = value;
+  }
+
+  /**
+   * Check if the message is a chunk
+   * @return {boolean} - Is Chunk
+   */
+  get isChunk(): boolean | undefined {
+    return this._isChunk;
+  }
+
+  /**
+   * Set if the message is a chunk
+   * @param value {boolean} - Is Chunk
+   */
+  set isChunk(value: boolean) {
+    this._isChunk = value;
   }
 
   /**
@@ -107,7 +190,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    * e.g. payload: { color: 'red' } means the color is red
    * @return {T} - Message Payload
    */
-  get payload(): T {
+  get payload(): T | undefined {
     return this._payload;
   }
 
@@ -125,7 +208,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    * e.g. triggerAction: 'onClick' means the user clicked the button
    * @return {BaseTriggerActions & S} - Message Trigger Action
    */
-  get triggerAction(): BaseTriggerActions & S {
+  get triggerAction(): (BaseTriggerActions & S) | undefined {
     return this._triggerAction;
   }
 
@@ -155,7 +238,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
     return JSON.stringify(this.toJSON());
   }
 
-  static toMessage(message: string): Message {
+  static toMessage(message: string): Message | undefined {
     try {
       const parsedMessage = JSON.parse(message);
       return new Message(

@@ -7,6 +7,7 @@ import {MessageSource, BaseMessagePurpose, WidgetType} from '../../constatns';
 
 // 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）
 const CHUNK_SIZE = 512 * 1024; // 512KB
+const VERSION = "0.0.0";
 
 /**
  * 基本的消息发送函数
@@ -97,14 +98,17 @@ export function useWebviewListener<T, S, F>(handler: (msg: Message<T, S, F>) => 
  * 前端启动时调用，通知宿主当前客户端信息和版本号（你可以扩展 payload 内容）
  */
 export function initializeCommunication<T>(initPayload: T): void {
-  const initMessage: Message<T> = {
-    widgetId: 'frontend',
-    widgetType: WidgetType.button,
-    messageType: MessageSource.request,
-    payload: {
-      type: BaseMessagePurpose.initialize,
-      payload: initPayload
+  const initMessage: Message<T> = new Message(
+    "initialize",
+    WidgetType.common,
+    MessageSource.Hulk,
+    BaseMessagePurpose.initialize,
+    {
+      payload: initPayload,
+      version: VERSION,
     }
-  };
+
+
+  );
   sendMessage(initMessage);
 }
