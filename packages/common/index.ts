@@ -25,7 +25,7 @@ export type { CommonContextType } from './src/provider';
 
 export type { BaseWidgetDataType, BaseWidgetActionType } from './type';
 
-export { BaseTriggerActions } from './constatns';
+export { BaseTriggerActions } from './constants';
 
 export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree, Splitter, Flex, Typography } from 'antd';
 

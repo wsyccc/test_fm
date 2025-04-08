@@ -2,7 +2,7 @@
 
 import {useEffect} from 'react';
 import {Message} from './Message';
-import {BaseMessagePurpose, MessageSource} from '../../constatns';
+import {BaseMessagePurpose, MessageSource} from '../../constants';
 
 
 // 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）

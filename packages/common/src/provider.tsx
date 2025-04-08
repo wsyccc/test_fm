@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {BaseWidgetDataType} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions, MessageSource} from "../constatns";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource} from "../constants";
 import {initializeCommunication, sendMessage, useWebviewListener} from "./data_manager";
 import {Message} from "./data_manager/Message";
 
@@ -44,7 +44,7 @@ export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTri
       }
     });
 
-    const updateWidgetData = (update: Partial<T>) => {
+    const updateWidgetData = (update: Partial<T>, isStorybook?: boolean, ) => {
       const newWidgetData = { ...widgetData, ...update } as T;
       console.log(newWidgetData);
       setWidgetData(newWidgetData);

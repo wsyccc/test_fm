@@ -1,4 +1,4 @@
-import {BaseTriggerActions, WidgetType} from "./constatns";
+import {BaseTriggerActions, WidgetType} from "./constants";
 
 export interface BaseWidgetDataType {
   id?: string;

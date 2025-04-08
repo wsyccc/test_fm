@@ -1,4 +1,4 @@
-import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../../constatns";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../../constants";
 
 /**
  * Message class
