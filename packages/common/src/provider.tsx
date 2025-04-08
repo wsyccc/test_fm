@@ -7,14 +7,14 @@ import {
   useEffect
 } from 'react';
 import {BaseWidgetDataType} from '../type';
-import {WidgetActions} from "../constatns";
+import {BaseMessagePurpose, BaseTriggerActions} from "../constatns";
 import {initializeCommunication, useWebviewListener} from "./data_manager";
 
-export interface CommonContextType<T extends BaseWidgetDataType> {
+export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseMessagePurpose> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
-  triggerAction: (actions: WidgetActions[], storybook?: boolean) => void;
+  triggerAction: (trigger: F, storybook?: boolean) => void;
 }
 
 export function getCommonContext<T extends BaseWidgetDataType>() {
@@ -60,10 +60,10 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       setWidgetData(originalWidgetData.current);
     };
 
-    const triggerAction = (actions: WidgetActions[]) => {
+    const triggerAction = (actions: BaseTriggerActions[]) => {
       actions.forEach((action) => {
         switch (action) {
-          case WidgetActions.onClick:
+          case BaseTriggerActions.onClick:
             console.log(`onClick on ${widgetData?.id}`);
             // Handle onClick action
             break;

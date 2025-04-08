@@ -1,12 +1,5 @@
-import {MessageType, PayloadType, WidgetType} from "../../constatns";
+export interface InitialMessagePayload {
+  version: string;
+  chunk_size: number;
 
-
-export type MessagePayload<T> = { type: PayloadType; payload: T }
-
-export interface Message<T = any> {
-  widgetId: string;
-  widgetType: WidgetType;
-  messageType: MessageType;
-  payload: MessagePayload<T>;
 }
-

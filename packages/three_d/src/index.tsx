@@ -20,7 +20,7 @@
 import { React } from '@hulk/common';
 import { useThreeDCommon } from './context';
 import { alarmType, ThreeDPropsInterface, updateConfigObjectType } from "./type.ts";
-import { WidgetActions } from '@hulk/common';
+import { BaseTriggerActions } from '@hulk/common';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // 各种加载器

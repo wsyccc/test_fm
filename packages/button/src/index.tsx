@@ -20,7 +20,7 @@
 import { React } from '@hulk/common';
 import { useButtonCommon } from './context';
 import { ButtonPropsInterface } from "./type.ts";
-import { WidgetActions } from '@hulk/common';
+import { BaseTriggerActions } from '@hulk/common';
 
 
 const Button: React.FC = (props: ButtonPropsInterface | {}) => {

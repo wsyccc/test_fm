@@ -1,21 +1,24 @@
 export enum WidgetType {
+  common,
   button,
   three_d
 }
 
-export enum MessageType {
-  response,
-  request
+export enum MessageSource {
+  // The Message is sent from WebView to the React
+  WebView,
+  // The Message is sent from React to the WebView
+  Hulk
 }
 
-export enum PayloadType {
+export enum BaseMessagePurpose {
   initialize,
   updateWidgetData,
-  triggerAction
+  triggerAction,
 }
 
 
-export enum WidgetActions {
+export enum BaseTriggerActions {
   onClick = 'onClick',
   onMouseEnter = 'onMouseEnter',
   onMouseLeave = 'onMouseLeave',
