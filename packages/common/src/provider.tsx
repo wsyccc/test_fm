@@ -1,35 +1,30 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useRef,
-  useEffect
-} from 'react';
+import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {BaseWidgetDataType} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions} from "../constatns";
-import {initializeCommunication, useWebviewListener} from "./data_manager";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource} from "../constatns";
+import {initializeCommunication, sendMessage, useWebviewListener} from "./data_manager";
+import {Message} from "./data_manager/Message";
 
-export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseMessagePurpose> {
+export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseTriggerActions[]> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
   triggerAction: (trigger: F, storybook?: boolean) => void;
 }
 
-export function getCommonContext<T extends BaseWidgetDataType>() {
-  const Context = createContext<CommonContextType<T> | undefined>(undefined);
+export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTriggerActions[]>() {
+  const Context = createContext<CommonContextType<T, F> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {
     const [widgetData, setWidgetData] = useState<T | null>(null);
     const originalWidgetData = useRef<T | null>(null);
 
     useEffect(() => {
+      const path = window.location.pathname;
+      const segments = path.split('/');
+      const distName = segments.find((seg) => seg.startsWith('dist_'));
+      console.log("Widget data initialized:", widgetData, distName);
       originalWidgetData.current = widgetData;
-    }, []);
-
-    useEffect(() => {
-      initializeCommunication({ message: 'Hello from React!', version: '1.0.0' });
+      initializeCommunication();
     }, []);
 
     useWebviewListener((msg: any) => {
@@ -53,6 +48,12 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       const newWidgetData = { ...widgetData, ...update } as T;
       console.log(newWidgetData);
       setWidgetData(newWidgetData);
+      sendMessage(new Message({
+        source: MessageSource.Hulk,
+        purpose: BaseMessagePurpose.updateWidgetData,
+        widgetId: newWidgetData?.id,
+        widgetType: newWidgetData?.type,
+      }));
       // pass the new widget data to pm
     };
 

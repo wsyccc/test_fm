@@ -6,31 +6,41 @@ import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from 
  * S is the trigger action type
  * F is the message purpose type
  */
-export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMessagePurpose> {
-
-  private _widgetId: string;
-  private _widgetType: WidgetType;
+export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = BaseMessagePurpose> {
   private _source: MessageSource;
   private _purpose: BaseMessagePurpose & F;
+  private _widgetId?: string;
+  private _widgetType?: WidgetType;
   private _payload?: T;
-  private _triggerAction?: BaseTriggerActions & S;
+  private _triggerAction?: BaseTriggerActions[] & S;
   private _sequenceId?: string;
   private _chunkIndex?: number;
   private _totalChunks?: number;
   private _isChunk?: boolean;
 
-  constructor(
-    widgetId: string,
-    widgetType: WidgetType,
-    source: MessageSource,
-    purpose: BaseMessagePurpose & F,
-    payload: T,
-    triggerAction?: BaseTriggerActions & S,
-    sequenceId?: string,
-    chunkIndex?: number,
-    totalChunks?: number,
-    isChunk?: boolean
-  ) {
+  constructor({
+                source,
+                purpose,
+                widgetId,
+                widgetType,
+                payload,
+                triggerAction,
+                sequenceId,
+                chunkIndex,
+                totalChunks,
+                isChunk
+              }: {
+    source: MessageSource;
+    purpose: BaseMessagePurpose & F;
+    widgetId?: string;
+    widgetType?: WidgetType;
+    payload?: T;
+    triggerAction?: BaseTriggerActions[] & S;
+    sequenceId?: string;
+    chunkIndex?: number;
+    totalChunks?: number;
+    isChunk?: boolean;
+  }) {
     this._widgetId = widgetId;
     this._widgetType = widgetType;
     this._source = source;
@@ -113,7 +123,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    *
    * @return {string} - Widget ID
    */
-  get widgetId(): string {
+  get widgetId(): string | undefined {
     return this._widgetId;
   }
 
@@ -129,7 +139,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    * Get Widget Type
    * @return {string} - Widget Type
    */
-  get widgetType(): WidgetType {
+  get widgetType(): WidgetType | undefined {
     return this._widgetType;
   }
 
@@ -208,7 +218,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    * e.g. triggerAction: 'onClick' means the user clicked the button
    * @return {BaseTriggerActions & S} - Message Trigger Action
    */
-  get triggerAction(): (BaseTriggerActions & S) | undefined {
+  get triggerAction(): (BaseTriggerActions[] & S) | undefined {
     return this._triggerAction;
   }
 
@@ -216,7 +226,7 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
    * triggerAction is the action that triggered by user or system
    * @param value {BaseTriggerActions & S} - Message Trigger Action
    */
-  set triggerAction(value: BaseTriggerActions & S) {
+  set triggerAction(value: BaseTriggerActions[] & S) {
     this._triggerAction = value;
   }
 
@@ -242,14 +252,20 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions, F = BaseMe
     try {
       const parsedMessage = JSON.parse(message);
       return new Message(
-        parsedMessage.widgetId,
-        parsedMessage.widgetType,
-        parsedMessage.source,
-        parsedMessage.purpose,
-        parsedMessage.payload,
-        parsedMessage.triggerAction
+        {
+          widgetId: parsedMessage.widgetId ?? undefined,
+          widgetType: parsedMessage.widgetType ?? undefined,
+          source: parsedMessage.source ?? undefined,
+          purpose: parsedMessage.purpose ?? undefined,
+          payload: parsedMessage.payload ?? undefined,
+          triggerAction: parsedMessage.triggerAction ?? undefined,
+          sequenceId: parsedMessage.sequenceId ?? undefined,
+          chunkIndex: parsedMessage.chunkIndex ?? undefined,
+          totalChunks: parsedMessage.totalChunks ?? undefined,
+          isChunk: parsedMessage.isChunk ?? false
+        }
       );
-    }catch (JSONError) {
+    } catch (JSONError) {
       console.error('JSON parse error:', JSONError);
       return undefined;
     }

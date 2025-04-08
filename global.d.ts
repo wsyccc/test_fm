@@ -1,3 +1,5 @@
+declare const __APP_VERSION__: string;
+
 declare global {
   interface Window {
     chrome?: {
@@ -7,6 +9,10 @@ declare global {
         removeEventListener?: (event: string, handler: (e: MessageEvent) => void) => void;
       };
     };
+  }
+  
+  interface ImportMeta {
+    readonly env: ImportMetaEnv
   }
 }
 

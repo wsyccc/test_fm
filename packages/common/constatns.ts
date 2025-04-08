@@ -1,5 +1,4 @@
 export enum WidgetType {
-  common,
   button,
   three_d
 }
