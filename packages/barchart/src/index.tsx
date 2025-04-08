@@ -64,6 +64,8 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
     };
 
     const echartsInstance = echartsRef.current?.getEchartsInstance();
+    
+    if (!echartsInstance || echartsInstance.isDisposed?.()) return;
 
     if (echartsInstance) {
       echartsInstance.on('mousedown', handleChartClick);

@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import ThreeD from './src/index';
 import { ThreeDProvider } from "./src/context";
+import React from 'react';
 
 const meta: Meta<typeof ThreeD> = {
   title: 'Components/ThreeD',
