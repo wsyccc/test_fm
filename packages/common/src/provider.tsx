@@ -1,6 +1,6 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {BaseWidgetDataType} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions, MessageSource} from "../constants";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
 import {initializeCommunication, sendMessage, useWebviewListener} from "./data_manager";
 import {Message} from "./data_manager/Message";
 
@@ -19,26 +19,22 @@ export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTri
     const originalWidgetData = useRef<T | null>(null);
 
     useEffect(() => {
+      // Request for initial widget data from PM
       const path = window.location.pathname;
       const segments = path.split('/');
-      const distName = segments.find((seg) => seg.startsWith('dist_'));
-      console.log("Widget data initialized:", widgetData, distName);
-      originalWidgetData.current = widgetData;
-      initializeCommunication();
+      const distName = segments.find((seg) => seg.startsWith('dist_'))?.split('_')[1];
+      if (distName) setWidgetData({ type: WidgetType[distName] } as T)
+      initializeCommunication(distName ? WidgetType[distName] : undefined);
     }, []);
 
-    useWebviewListener((msg: any) => {
-      // 根据消息协议，判断消息类型并处理
-      if (msg.payload?.updateWidgetData) {
-        // 例如：收到更新 widgetData 的消息
-        const newData = msg.payload.updateWidgetData.payload;
+    // received message from PM
+    useWebviewListener((msg: Message) => {
+      if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
+        const newData = msg.payload;
         console.log('Received updateWidgetData:', newData);
-        updateWidgetData(newData);
-      } else if (msg.payload?.triggerAction) {
-        // 例如：收到触发 action 的消息
-        const action = msg.payload.triggerAction.payload.action;
-        console.log('Received triggerAction:', action);
-        triggerAction([action]);
+        updateWidgetData({...widgetData, ...newData} as T);
+      } else if (msg.purpose === BaseMessagePurpose.initialize) {
+        console.warn('Received unknown message:', msg);
       } else {
         console.warn('Received unknown message:', msg);
       }

@@ -240,7 +240,11 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
       source: this._source,
       purpose: this._purpose,
       payload: this._payload,
-      triggerAction: this._triggerAction
+      triggerAction: this._triggerAction,
+      sequenceId: this._sequenceId,
+      chunkIndex: this._chunkIndex,
+      totalChunks: this._totalChunks,
+      isChunk: this._isChunk
     };
   }
 
