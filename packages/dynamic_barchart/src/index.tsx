@@ -17,8 +17,8 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
   const data: DynamicBarchartPropsInterface = useMemo(() => {
     return {
       //TODO add default props here above ...props
-      width: 300,
-      height: 300,
+      width: 600,
+      height: 400,
       category: DynamicBarChartCategory.Dynamic,
       ...props,
       ...widgetData,

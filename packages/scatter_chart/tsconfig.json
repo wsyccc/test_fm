@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist_scatter_chart",
+    "composite": false
+  },
+  "include": ["src"]
+}
