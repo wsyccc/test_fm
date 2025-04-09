@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist_other_charts",
+    "composite": false
+  },
+  "include": ["src"]
+}

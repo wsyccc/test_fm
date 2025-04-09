@@ -33,5 +33,6 @@ export { default as dayjs } from 'dayjs';
 
 import * as Echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
-import EchartsStat from 'echarts-stat';
+import * as EchartsStat from 'echarts-stat';
+import 'echarts-gl';
 export { EchartsStat, ReactEcharts, Echarts };
