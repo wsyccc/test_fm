@@ -1,8 +1,9 @@
 // data_manager/index.tsx
 
-import {useEffect} from 'react';
+import {RefObject, useEffect} from 'react';
 import {Message} from './Message';
 import {BaseMessagePurpose, MessageSource, WidgetType} from '../../constants';
+import {BaseWidgetConfigType, BaseWidgetDataType} from "../../type";
 
 
 // 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）
@@ -89,7 +90,7 @@ export function useWebviewListener<T, S, F>(handler: (msg: Message<T, S, F>) => 
   }, [handler]);
 }
 
-
+// ====== 3-way handshake ======
 /**
  * 初始化与 WebView2 之间的握手通信
  * 前端启动时调用，通知宿主当前客户端信息和版本号（你可以扩展 payload 内容）
@@ -106,4 +107,34 @@ export function initializeCommunication(widgetType: WidgetType): void {
     }
   );
   sendMessage(initMessage);
+}
+
+export function getBaseWidgetData(message: Message, widgetConfig: RefObject<BaseWidgetConfigType>): {
+  type: WidgetType,
+  id: string,
+  width: number,
+  height: number
+} | undefined {
+  if (message.widgetId && message.source === MessageSource.WebView &&
+      message.purpose === BaseMessagePurpose.setWidgetBaseConfig &&
+      message.widgetWidth && message.widgetHeight && message.widgetType) {
+
+    if (message.widgetType !== widgetConfig.current.type) {
+      console.error('Widget type mismatch:', message.widgetType, widgetConfig.current.type);
+      return;
+    }
+    return {
+      type: message.widgetType,
+      id: message.widgetId,
+      width: message.widgetWidth,
+      height: message.widgetHeight,
+    };
+  }
+  console.error('Invalid message for set base widget config:', message);
+  return;
+}
+
+export function sendWidgetDefaultConfigs<T extends BaseWidgetDataType>(widgetData: T): void {
+
+
 }

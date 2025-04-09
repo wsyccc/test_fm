@@ -17,7 +17,11 @@ export enum MessageSource {
 }
 
 export enum BaseMessagePurpose {
+  // === 3-way handshake ===
   initialize,
+  setWidgetBaseConfig,
+  setWidgetDefaultData,
+
   updateWidgetData,
   triggerAction,
 }

@@ -7,10 +7,13 @@ import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from 
  * F is the message purpose type
  */
 export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = BaseMessagePurpose> {
+
   private _source: MessageSource;
   private _purpose: BaseMessagePurpose & F;
   private _widgetId?: string;
   private _widgetType?: WidgetType;
+  private _widgetWidth?: number;
+  private _widgetHeight?: number;
   private _payload?: T;
   private _triggerAction?: BaseTriggerActions[] & S;
   private _sequenceId?: string;
@@ -23,6 +26,8 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
                 purpose,
                 widgetId,
                 widgetType,
+                widgetWidth,
+                widgetHeight,
                 payload,
                 triggerAction,
                 sequenceId,
@@ -34,6 +39,8 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
     purpose: BaseMessagePurpose & F;
     widgetId?: string;
     widgetType?: WidgetType;
+    widgetWidth?: number;
+    widgetHeight?: number;
     payload?: T;
     triggerAction?: BaseTriggerActions[] & S;
     sequenceId?: string;
@@ -43,6 +50,8 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
   }) {
     this._widgetId = widgetId;
     this._widgetType = widgetType;
+    this._widgetWidth = widgetWidth;
+    this._widgetHeight = widgetHeight;
     this._source = source;
     this._purpose = purpose;
     this._payload = payload;
@@ -228,6 +237,22 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
    */
   set triggerAction(value: BaseTriggerActions[] & S) {
     this._triggerAction = value;
+  }
+
+  get widgetWidth(): number | undefined {
+    return this._widgetWidth;
+  }
+
+  set widgetWidth(value: number) {
+    this._widgetWidth = value;
+  }
+
+  get widgetHeight(): number | undefined {
+    return this._widgetHeight;
+  }
+
+  set widgetHeight(value: number) {
+    this._widgetHeight = value;
   }
 
   /**

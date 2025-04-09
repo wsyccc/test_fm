@@ -1,12 +1,17 @@
 import {BaseTriggerActions, WidgetType} from "./constants";
 
 export interface BaseWidgetDataType {
-  id?: string;
-  type: WidgetType;
   width: number;
   height: number;
   bgColor?: string;
   isStorybook?: boolean;
+}
+
+export interface BaseWidgetConfigType {
+  id?: string;
+  type?: WidgetType;
+  width?: number;
+  height?: number;
 }
 
 /**
