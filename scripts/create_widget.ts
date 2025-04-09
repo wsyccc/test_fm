@@ -72,3 +72,36 @@ exec(`git add ${targetDir}`, (err, _stdout, stderr) => {
   console.log(`📦 Added ${nameKebab} to git`);
 });
 
+const CONSTANTS_FILE = path.resolve(__dirname, '../packages/common/constants.ts');
+const ENUM_NAME = 'WidgetType';
+
+try {
+  let constantsText = fs.readFileSync(CONSTANTS_FILE, 'utf-8');
+
+  const enumStart = constantsText.indexOf(`export enum ${ENUM_NAME} {`);
+  if (enumStart === -1) {
+    console.warn(`⚠️ Cannot find "export enum ${ENUM_NAME}" in constants.ts`);
+  } else {
+    const enumEnd = constantsText.indexOf('}', enumStart);
+    if (enumEnd === -1) {
+      console.warn(`⚠️ Cannot find end of enum ${ENUM_NAME}`);
+    } else {
+      const enumBlock = constantsText.slice(enumStart, enumEnd);
+
+      // 判断是否已有该枚举项
+      const alreadyExists = new RegExp(`\\b${nameKebab}\\s*=\\s*['"]${nameKebab}['"]`).test(enumBlock);
+      if (alreadyExists) {
+        console.log(`ℹ️ WidgetType "${nameKebab} Already Exist"`);
+      } else {
+        // 构造要插入的行
+        const insertLine = `  ${nameKebab} = '${nameKebab}',\n`;
+        constantsText = constantsText.slice(0, enumEnd) + insertLine + constantsText.slice(enumEnd);
+        fs.writeFileSync(CONSTANTS_FILE, constantsText, 'utf-8');
+        console.log(`🧩 WidgetType Enum Updated, Add ${nameKebab}`);
+      }
+    }
+  }
+} catch (err) {
+  console.error(`❌ Failed to update WidgetType enum:`, err);
+}
+

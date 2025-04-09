@@ -1,58 +1,55 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useRef,
-  useEffect
-} from 'react';
+import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
 import {BaseWidgetDataType} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions} from "../constatns";
-import {initializeCommunication, useWebviewListener} from "./data_manager";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
+import {initializeCommunication, sendMessage, useWebviewListener} from "./data_manager";
+import {Message} from "./data_manager/Message";
 
-export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseMessagePurpose> {
+export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseTriggerActions[]> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
   triggerAction: (trigger: F, storybook?: boolean) => void;
 }
 
-export function getCommonContext<T extends BaseWidgetDataType>() {
-  const Context = createContext<CommonContextType<T> | undefined>(undefined);
+export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTriggerActions[]>() {
+  const Context = createContext<CommonContextType<T, F> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {
     const [widgetData, setWidgetData] = useState<T | null>(null);
     const originalWidgetData = useRef<T | null>(null);
 
     useEffect(() => {
-      originalWidgetData.current = widgetData;
+      // Request for initial widget data from PM
+      const path = window.location.pathname;
+      const segments = path.split('/');
+      const distName = segments.find((seg) => seg.startsWith('dist_'))?.split('_')[1];
+      if (distName) setWidgetData({ type: WidgetType[distName] } as T)
+      initializeCommunication(distName ? WidgetType[distName] : undefined);
     }, []);
 
-    useEffect(() => {
-      initializeCommunication({ message: 'Hello from React!', version: '1.0.0' });
-    }, []);
-
-    useWebviewListener((msg: any) => {
-      // 根据消息协议，判断消息类型并处理
-      if (msg.payload?.updateWidgetData) {
-        // 例如：收到更新 widgetData 的消息
-        const newData = msg.payload.updateWidgetData.payload;
+    // received message from PM
+    useWebviewListener((msg: Message) => {
+      if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
+        const newData = msg.payload;
         console.log('Received updateWidgetData:', newData);
-        updateWidgetData(newData);
-      } else if (msg.payload?.triggerAction) {
-        // 例如：收到触发 action 的消息
-        const action = msg.payload.triggerAction.payload.action;
-        console.log('Received triggerAction:', action);
-        triggerAction([action]);
+        updateWidgetData({...widgetData, ...newData} as T);
+      } else if (msg.purpose === BaseMessagePurpose.initialize) {
+        console.warn('Received unknown message:', msg);
       } else {
         console.warn('Received unknown message:', msg);
       }
     });
 
-    const updateWidgetData = (update: Partial<T>) => {
+    const updateWidgetData = (update: Partial<T>, isStorybook?: boolean, ) => {
       const newWidgetData = { ...widgetData, ...update } as T;
       console.log(newWidgetData);
       setWidgetData(newWidgetData);
+      sendMessage(new Message({
+        source: MessageSource.Hulk,
+        purpose: BaseMessagePurpose.updateWidgetData,
+        widgetId: newWidgetData?.id,
+        widgetType: newWidgetData?.type,
+      }));
       // pass the new widget data to pm
     };
 

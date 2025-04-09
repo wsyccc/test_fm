@@ -32,9 +32,7 @@
     "noImplicitAny": false,
     "noImplicitThis": true
   },
-  "files": [
-    "global.d.ts"
-  ],
+  "files": ["global.d.ts"],
   "include": [
     "src/**/*",
     "tests/**/*",

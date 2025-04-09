@@ -24,12 +24,8 @@ import { BaseTriggerActions } from '@hulk/common';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // 各种加载器
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from '@hulk/common';
+import type { GLTF } from '@hulk/common';
 import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from '@hulk/common';
 import "./index.css";
 

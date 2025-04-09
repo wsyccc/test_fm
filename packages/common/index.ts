@@ -25,7 +25,7 @@ export type { CommonContextType } from './src/provider';
 
 export type { BaseWidgetDataType, BaseWidgetActionType } from './type';
 
-export { BaseTriggerActions } from './constatns';
+export { BaseTriggerActions } from './constants';
 
 export { Button, Modal, message, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree, Splitter, Flex, Typography } from 'antd';
 
@@ -36,3 +36,12 @@ import ReactEcharts from 'echarts-for-react';
 import * as EchartsStat from 'echarts-stat';
 import 'echarts-gl';
 export { EchartsStat, ReactEcharts, Echarts };
+
+export { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+export { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+export {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+export type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+export { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+export { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+export { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
