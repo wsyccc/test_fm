@@ -57,6 +57,7 @@ copyTemplateFile('index.tsx.tpl', 'src/index.tsx')
 copyTemplateFile('package.json.tpl', 'package.json')
 copyTemplateFile('tsconfig.json.tpl', 'tsconfig.json')
 copyTemplateFile('type.ts.tpl', 'src/type.ts')
+copyTemplateFile('configs.ts.tpl', 'src/configs.ts')
 copyTemplateFile('vite.config.ts.tpl', 'vite.config.ts')
 
 console.log(`✅ packages/${nameKebab} created successfully`);

@@ -1,26 +1,25 @@
 import { React } from '@hulk/common';
 import { useSunburstChartCommon } from './context';
 import { SunburstChartPropsInterface } from "./type.ts";
-import { ReactEcharts, Echarts } from '@hulk/common';
-import { generateBasicSunburstChartOption, SunburstChartCategory } from './utils.ts';
-import { RAWDATA } from './constants.ts';
+import { ReactEcharts } from '@hulk/common';
+import { generateBasicSunburstChartOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 
 const SunburstChart: React.FC = (props: SunburstChartPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useSunburstChartCommon();
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useSunburstChartCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;
 
   const echartsRef = useRef<ReactEcharts>(null);
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    category: SunburstChartCategory.Basic,
-    yData:RAWDATA,
-    ...props,
-    ...widgetData,
-  };
+  const data: SunburstChartPropsInterface = useMemo(() => {
+    return {
+      //TODO add default props here above ...props
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   const option = useMemo(() => {
     return generateBasicSunburstChartOption(data);

@@ -28,6 +28,7 @@ import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoad
 import type { GLTF } from '@hulk/common';
 import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from '@hulk/common';
 import "./index.css";
+import defaultConfigs from './configs.ts';
 
 const { DirectoryTree } = Tree;
 const domId = '3d-dom'
@@ -37,20 +38,9 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
   const { useState, useRef, useEffect, useMemo } = React;
 
-  const data = useMemo(() => {
+  const data: ThreeDPropsInterface = useMemo(() => {
     return {
-      width: 600,
-      height: 480,
-      externalSourceLink: '/public/3D/objExample2.obj',
-      shallowTheme: true,
-      wireframe: false,
-      transparent: true,
-      grid: true,
-      ambientLight: 1.5,
-      xScale: 1,
-      yScale: 1,
-      zScale: 1,
-      alarms: [],
+      ...defaultConfigs,
       ...props,
       ...widgetData,
     };
@@ -256,7 +246,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / data.width) * 2 - 1;
       mouse.y =
         -((event.clientY - (rect?.top || 0) - ((rect?.top || 0) - (canvasRect?.top ?? 0)) / 2) / data.height) * 2 + 1;
-        
+
       // 更新 raycaster 的位置和方向
       raycaster.setFromCamera(mouse, cameraRef.current);
 

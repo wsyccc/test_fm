@@ -20,42 +20,30 @@
 import { React } from '@hulk/common';
 import { useLinechartCommon } from './context';
 import { LinechartPropsInterface } from "./type.ts";
-import { generateLineChartOption, LineChartCategory } from './utils.ts';
+import { generateLineChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 
 const Linechart: React.FC = (props: LinechartPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useLinechartCommon();
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useLinechartCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;
   const echartsRef = useRef<ReactEcharts>(null);
 
-  const data = useMemo(() => {
-      return {
-        width: 600,
-        height: 400,
-        bgColor: '#ffffff',
-        color: '#1890ff',
-        category: LineChartCategory.Basic,
-        legendEnabled: true,
-        legendLayout: 'vertical',
-        labelEnabled: true,
-        labelPosition: 'top',
-        xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        yData: [{
-          name: 'Rainfall',
-          data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }],
-        ...props,
-        ...widgetData,
-      };
+  const data: LinechartPropsInterface = useMemo(() => {
+    return {
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
   }, [props, widgetData]);
 
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
 
   const option = useMemo(() => {
-    return generateLineChartOption(data, { xData: data.xData, yData: data.yData });
+    return generateLineChartOption(data, { xData: data.xData ?? [], yData: data.yData ?? [] });
   }, [data]);
 
   useEffect(() => {

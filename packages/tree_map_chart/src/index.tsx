@@ -2,7 +2,8 @@ import { React } from '@hulk/common';
 import { useTreeMapChartCommon } from './context';
 import { TreeMapChartPropsInterface } from "./type.ts";
 import { ReactEcharts } from '@hulk/common';
-import { generateBasicTreeMapChartOption, TreeMapChartCategory } from './utils.ts';
+import { generateBasicTreeMapChartOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 const TreeMapChart: React.FC = (props: TreeMapChartPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useTreeMapChartCommon();
@@ -10,46 +11,13 @@ const TreeMapChart: React.FC = (props: TreeMapChartPropsInterface | {}) => {
   const { useState, useRef, useEffect, useMemo } = React;
 
   const echartsRef = useRef<ReactEcharts>(null);
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    category: TreeMapChartCategory.Basic,
-    yData: [
-      {
-        name: 'nodeA',
-        value: 10,
-        children: [
-          {
-            name: 'nodeAa',
-            value: 4
-          },
-          {
-            name: 'nodeAb',
-            value: 6
-          }
-        ]
-      },
-      {
-        name: 'nodeB',
-        value: 20,
-        children: [
-          {
-            name: 'nodeBa',
-            value: 20,
-            children: [
-              {
-                name: 'nodeBa1',
-                value: 20
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    ...props,
-    ...widgetData,
-  };
+  const data: TreeMapChartPropsInterface = useMemo(() => {
+    return {
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   const option = useMemo(() => {
     return generateBasicTreeMapChartOption(data);

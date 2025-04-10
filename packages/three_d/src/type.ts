@@ -17,8 +17,6 @@ export type updateConfigObjectType = {
   scale: threeDimensionDataType;
 };
 export interface ThreeDPropsInterface extends BaseWidgetDataType {
-  id: string;
-
   externalSourceLink?: string;
   shallowTheme?: boolean;
   wireframe?: boolean;

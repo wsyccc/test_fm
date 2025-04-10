@@ -1,8 +1,9 @@
 import { React } from '@hulk/common';
 import { useOtherChartsCommon } from './context';
 import { OtherChartsPropsInterface } from "./type.ts";
-import { ReactEcharts, Echarts, EchartsStat } from '@hulk/common';
-import { generateOtherChartsOption, OtherChartsCategory } from './utils.ts';
+import { ReactEcharts } from '@hulk/common';
+import { generateOtherChartsOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 
 const OtherCharts: React.FC = (props: OtherChartsPropsInterface | {}) => {
@@ -11,36 +12,14 @@ const OtherCharts: React.FC = (props: OtherChartsPropsInterface | {}) => {
   const { useState, useRef, useEffect, useMemo } = React;
 
   const echartsRef = useRef<ReactEcharts>(null);
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    category: OtherChartsCategory.SimpleGraph,
-    yData: [
-      {
-        name: 'Node 1',
-        x: 300,
-        y: 300
-      },
-      {
-        name: 'Node 2',
-        x: 800,
-        y: 300
-      },
-      {
-        name: 'Node 3',
-        x: 550,
-        y: 100
-      },
-      {
-        name: 'Node 4',
-        x: 550,
-        y: 500
-      }
-    ],
-    ...props,
-    ...widgetData,
-  };
+  const data: OtherChartsPropsInterface = useMemo(() => {
+    return {
+      //TODO add default props here above ...props
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   const option = useMemo(() => {
     return generateOtherChartsOption(data);

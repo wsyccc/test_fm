@@ -2,7 +2,8 @@ import { React } from '@hulk/common';
 import { useGeoChartCommon } from './context';
 import { GeoChartPropsInterface } from "./type.ts";
 import { ReactEcharts, Echarts } from '@hulk/common';
-import { generateGeoChartOption, GeoChartCategory } from './utils.ts';
+import { generateGeoChartOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 
 const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
@@ -12,15 +13,14 @@ const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
 
   const echartsRef = useRef<ReactEcharts>(null);
   const [ready, setReady] = useState(false);
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    category: GeoChartCategory.SVG,
-    externalSourceLink: '/public/Geo/Veins_Medical_Diagram_clip_art.svg',
-    ...props,
-    ...widgetData,
-  };
+  const data: GeoChartPropsInterface = useMemo(() => {
+    return {
+      //TODO add default props here above ...props
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   const option = useMemo(() => {
     if (!ready) return undefined;

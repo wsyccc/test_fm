@@ -7,6 +7,7 @@ import type { GLTF } from '@hulk/common';
 import { Col, Row, Spin } from '@hulk/common';
 import { alarmType, SpeedThreeDPropsInterface } from './type';
 import { useSpeedThreeDCommon } from './context';
+import defaultConfigs from './configs.ts';
 
 const domId = 'speed-3d-dom'
 
@@ -15,12 +16,9 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
   const { useState, useRef, useEffect, useMemo } = React;
 
-  const data = useMemo(() => {
+  const data: SpeedThreeDPropsInterface = useMemo(() => {
     return {
-      width: 600,
-      height: 480,
-      externalSourceLink: '/public/3D/objExample2.obj',
-      alarms: [],
+      ...defaultConfigs,
       ...props,
       ...widgetData,
     };

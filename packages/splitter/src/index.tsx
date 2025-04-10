@@ -1,26 +1,8 @@
-/**
- * Have to use 3rd-party lib from @hulk/common
- *
- * @description
- * 1. use the script
- * ```sh
- * yarn install:lib <lib_name>
- * ```
- * The script will install the lib to @hulk/common
- *
- * 2. add the lib export in @hulk/common/index.ts, remember to use the specific import for 3-rd package you need.
- * ```ts
- * export { Button } from 'antd';
- * ```
- * 3. add the lib import in the component
- * ```ts
- * import { Button } from '@hulk/common';
- * ```
- */
-import { React } from '@hulk/common';
+import { Button, React } from '@hulk/common';
 import { useSplitterCommon } from './context';
 import { SplitterPropsInterface } from "./type.ts";
 import { Flex, Splitter as AntdSplitter, Typography } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 const Desc: React.FC<Readonly<{ text?: string | number, parentStylish?: {}, childStylish?: {} }>> = (props) => (
   <Flex justify="center" align="center" style={{ height: '100%', ...props.parentStylish }}>
@@ -37,14 +19,7 @@ const Splitter: React.FC = (props: SplitterPropsInterface | {}) => {
 
   const data: SplitterPropsInterface = useMemo(() => {
     return {
-      //TODO add default props here above ...props
-      width: 300,
-      height: 100,
-      direction: '',
-      layout: [
-        { title: 'left' },
-        { title: 'right' },
-      ],
+      ...defaultConfigs,
       ...props,
       ...widgetData,
     };
@@ -100,13 +75,15 @@ const Splitter: React.FC = (props: SplitterPropsInterface | {}) => {
           } else if (typeof item === "object" && item.title) {
             return (
               <AntdSplitter.Panel key={index} {...item}>
-                <Desc
+                {item.title === 'Left' ? <>
+                  <Button type='primary' style={{ width: "100%", height: "100%" }}>{item.title}</Button>
+                </> : <Desc
                   text={item.title}
                   // 把item.style应用到包裹着label的dom里面
                   parentStylish={item.style}
                   // 把item.stylish应用到label自身的dom
                   childStylish={item.stylish}
-                />
+                />}
               </AntdSplitter.Panel>
             );
           } else {

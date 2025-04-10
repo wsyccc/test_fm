@@ -3,6 +3,7 @@ import { useGaugechartCommon } from './context';
 import { GaugechartPropsInterface } from "./type.ts";
 import { ReactEcharts } from '@hulk/common';
 import { generateGaugeChartOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 
 const Gaugechart: React.FC = (props: GaugechartPropsInterface | {}) => {
@@ -12,23 +13,7 @@ const Gaugechart: React.FC = (props: GaugechartPropsInterface | {}) => {
 
   const data: GaugechartPropsInterface = useMemo(() => {
     return {
-      width: 400,
-      height: 400,
-      bgColor: '#ffffff',
-      color: '#1890ff',
-      axisColor: '#fff',
-      progress: false,
-      startAngle: 200,
-      endAngle: -20,
-      splitNumber: 10,
-      labelDistance:-10,
-      min: 0,
-      max: 100,
-      intervals: [],
-      value: 50,
-      fontSize: 15,
-      prefix: '',
-      suffix: '',
+      ...defaultConfigs,
       ...props,
       ...widgetData,
     };

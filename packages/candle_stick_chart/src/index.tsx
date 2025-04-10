@@ -3,6 +3,7 @@ import { useCandleStickChartCommon } from './context';
 import { CandleStickChartPropsInterface } from "./type.ts";
 import { ReactEcharts, Echarts } from '@hulk/common';
 import { CandleStickChartCategory, generateBasicCandleStickChartOption } from './utils.ts';
+import defaultConfigs from './configs.ts';
 
 
 
@@ -12,14 +13,13 @@ const CandleStickChart: React.FC = (props: CandleStickChartPropsInterface | {}) 
   const { useState, useRef, useEffect, useMemo } = React;
 
   const echartsRef = useRef<ReactEcharts>(null);
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    category: CandleStickChartCategory.Basic,
-    ...props,
-    ...widgetData,
-  };
+  const data: CandleStickChartPropsInterface = useMemo(() => {
+    return {
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   const option = useMemo(() => {
     return generateBasicCandleStickChartOption(data);

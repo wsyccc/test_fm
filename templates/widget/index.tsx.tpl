@@ -21,6 +21,7 @@ import { React } from '@hulk/common';
 import { use{{namePascal}}Common } from './context';
 import { {{namePascal}}PropsInterface } from "./type.ts";
 import { WidgetActions } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 
 const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
@@ -31,8 +32,7 @@ const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
   const data: {{namePascal}}PropsInterface = useMemo(() => {
       return {
         //TODO add default props here above ...props
-        width: 300,
-        height: 300,
+        ...defaultConfigs,
         ...props,
         ...widgetData,
       };

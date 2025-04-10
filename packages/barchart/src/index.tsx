@@ -22,6 +22,7 @@ import { useBarchartCommon } from './context';
 import { BarchartPropsInterface } from "./type.ts";
 import { BarChartCategory, generateBarChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 
 const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
@@ -31,30 +32,20 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
 
   const echartsRef = useRef<ReactEcharts>(null);
 
-  const data = {
-    width: 600,
-    height: 400,
-    bgColor: '#ffffff',
-    color: '#1890ff',
-    category: BarChartCategory.Basic,
-    legendEnabled: true,
-    legendLayout: 'vertical',
-    labelEnabled: true,
-    labelPosition: 'top',
-    xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    yData: [{
-      name: 'amount',
-      data: [120, 200, 150, 80, 70, 110, 130]
-    }],
-    ...props,
-    ...widgetData,
-  };
+  const data: BarchartPropsInterface = useMemo(() => {
+    return {
+      //TODO add default props here above ...props
+      ...defaultConfigs,
+      ...props,
+      ...widgetData,
+    };
+  }, [props, widgetData]);
 
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
 
   const option = useMemo(() => {
-    return generateBarChartOption(data, { xData: data.xData, yData: data.yData });
+    return generateBarChartOption(data, { xData: data.xData ?? [], yData: data.yData ?? [] });
   }, [data]);
 
   useEffect(() => {
@@ -64,7 +55,7 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
     };
 
     const echartsInstance = echartsRef.current?.getEchartsInstance();
-    
+
     if (!echartsInstance || echartsInstance.isDisposed?.()) return;
 
     if (echartsInstance) {

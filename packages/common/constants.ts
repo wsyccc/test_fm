@@ -1,12 +1,19 @@
 export enum WidgetType {
-  three_d = 'three_d',
   barchart = 'barchart',
+  button = 'button',
+  candle_stick_chart = 'candle_stick_chart',
   dynamic_barchart = 'dynamic_barchart',
   gaugechart = 'gaugechart',
+  geo_chart = 'geo_chart',
   linechart = 'linechart',
+  other_charts = 'other_charts',
+  scatter_chart = 'scatter_chart',
   speed_three_d = 'speed_three_d',
   splitter = 'splitter',
-  button = 'button',
+  sunburst_chart = 'sunburst_chart',
+  three_d = 'three_d',
+  three_dchart = 'three_dchart',
+  tree_map_chart = 'tree_map_chart',
 }
 
 export enum MessageSource {

@@ -3,6 +3,7 @@ import { useDynamicBarchartCommon } from './context';
 import { DynamicBarchartPropsInterface } from "./type.ts";
 import { DynamicBarChartCategory, generateAnimationBarChartOption, generateDynamicBarChartOption, generateFinanceBarChartOption, generateLargeScaleBarChartOption, generateRaceBarChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 interface DataItem {
   value: number;
@@ -17,9 +18,7 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
   const data: DynamicBarchartPropsInterface = useMemo(() => {
     return {
       //TODO add default props here above ...props
-      width: 600,
-      height: 400,
-      category: DynamicBarChartCategory.Dynamic,
+      ...defaultConfigs,
       ...props,
       ...widgetData,
     };
@@ -112,7 +111,7 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
         ] as DataItem[],
         universalTransition: { enabled: true, divideShape: 'clone' }
       }
-      } : data.category === DynamicBarChartCategory.LargeScale ? generateLargeScaleBarChartOption({ ...data }) : data.category === DynamicBarChartCategory.Finance ? generateFinanceBarChartOption({ ...data }) : generateRaceBarChartOption({ ...data, raceData });
+    } : data.category === DynamicBarChartCategory.LargeScale ? generateLargeScaleBarChartOption({ ...data }) : data.category === DynamicBarChartCategory.Finance ? generateFinanceBarChartOption({ ...data }) : generateRaceBarChartOption({ ...data, raceData });
   }, [data, categories, categories2, barData, lineData, raceData]);
 
   useEffect(() => {

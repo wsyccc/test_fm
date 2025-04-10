@@ -20,7 +20,7 @@
 import { React } from '@hulk/common';
 import { useButtonCommon } from './context';
 import { ButtonPropsInterface } from "./type.ts";
-import { WidgetActions } from '@hulk/common';
+import defaultConfigs from './configs.ts';
 
 
 const Button: React.FC = (props: ButtonPropsInterface | {}) => {
@@ -31,8 +31,7 @@ const Button: React.FC = (props: ButtonPropsInterface | {}) => {
   const data: ButtonPropsInterface = useMemo(() => {
       return {
         //TODO add default props here above ...props
-        width: 300,
-        height: 300,
+        ...defaultConfigs,
         ...props,
         ...widgetData,
       };
