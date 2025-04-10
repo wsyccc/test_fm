@@ -1,21 +1,27 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {BaseWidgetDataType} from '../type';
+import {BaseWidgetConfigType, BaseWidgetDataType} from '../type';
 import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
-import {initializeCommunication, sendMessage, useWebviewListener} from "./data_manager";
+import {
+  getBaseWidgetData,
+  initializeCommunication,
+  sendMessage,
+  useWebviewListener
+} from "./data_manager";
 import {Message} from "./data_manager/Message";
 
-export interface CommonContextType<T extends BaseWidgetDataType, F extends BaseTriggerActions[]> {
+export interface CommonContextType<T extends BaseWidgetDataType> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
-  triggerAction: (trigger: F, storybook?: boolean) => void;
+  triggerAction: (trigger: BaseTriggerActions[], storybook?: boolean) => void;
 }
 
-export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTriggerActions[]>() {
-  const Context = createContext<CommonContextType<T, F> | undefined>(undefined);
+export function getCommonContext<T extends BaseWidgetDataType>() {
+  const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {
     const [widgetData, setWidgetData] = useState<T | null>(null);
+    const widgetConfig = useRef<BaseWidgetConfigType>({});
     const originalWidgetData = useRef<T | null>(null);
 
     useEffect(() => {
@@ -23,20 +29,35 @@ export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTri
       const path = window.location.pathname;
       const segments = path.split('/');
       const distName = segments.find((seg) => seg.startsWith('dist_'))?.split('_')[1];
-      if (distName) setWidgetData({ type: WidgetType[distName] } as T)
-      initializeCommunication(distName ? WidgetType[distName] : undefined);
+      widgetConfig.current = {
+        type: distName ? WidgetType[distName] : undefined,
+        id: undefined
+      }
+      if (widgetConfig.current.type) initializeCommunication(widgetConfig.current.type);
     }, []);
 
     // received message from PM
     useWebviewListener((msg: Message) => {
-      if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
-        const newData = msg.payload;
-        console.log('Received updateWidgetData:', newData);
-        updateWidgetData({...widgetData, ...newData} as T);
-      } else if (msg.purpose === BaseMessagePurpose.initialize) {
-        console.warn('Received unknown message:', msg);
-      } else {
-        console.warn('Received unknown message:', msg);
+      if (msg.source === MessageSource.WebView){
+        if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
+          const newData = msg.payload;
+          console.log('Received updateWidgetData:', newData);
+          updateWidgetData({...widgetData, ...newData} as T);
+        } else if (msg.purpose === BaseMessagePurpose.setWidgetBaseConfig) {
+          const config = getBaseWidgetData(msg, widgetConfig);
+          widgetConfig.current = {
+            ...widgetConfig.current,
+            ...config
+          }
+          setWidgetData({
+            ...widgetData,
+            width: config?.width,
+            height: config?.height,
+          } as T)
+          // sendWidgetDefaultConfigs();
+        } else {
+          console.warn('Received unknown message:', msg);
+        }
       }
     });
 
@@ -44,12 +65,15 @@ export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTri
       const newWidgetData = { ...widgetData, ...update } as T;
       console.log(newWidgetData);
       setWidgetData(newWidgetData);
-      sendMessage(new Message({
-        source: MessageSource.Hulk,
-        purpose: BaseMessagePurpose.updateWidgetData,
-        widgetId: newWidgetData?.id,
-        widgetType: newWidgetData?.type,
-      }));
+      if (!isStorybook) {
+        sendMessage(new Message({
+          source: MessageSource.Hulk,
+          purpose: BaseMessagePurpose.updateWidgetData,
+          widgetId: widgetConfig.current.id,
+          widgetType: widgetConfig.current.type,
+          payload: newWidgetData,
+        }));
+      }
       // pass the new widget data to pm
     };
 
@@ -61,7 +85,7 @@ export function getCommonContext<T extends BaseWidgetDataType, F extends BaseTri
       actions.forEach((action) => {
         switch (action) {
           case BaseTriggerActions.onClick:
-            console.log(`onClick on ${widgetData?.id}`);
+            console.log(`onClick on ${widgetConfig.current.id}`);
             // Handle onClick action
             break;
         }
