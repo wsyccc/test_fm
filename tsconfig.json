@@ -2,7 +2,8 @@
   "compilerOptions": {
     "types": ["node", "react", "jest"],
     "paths": {
-      "@hulk/common": ["packages/common/index.ts"]
+      "@hulk/common": ["packages/common/index.ts"],
+      "@packages/*": ["packages/*"]
     },
     "target": "es2022",
     "module": "es2022",

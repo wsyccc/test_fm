@@ -134,7 +134,7 @@ export function getBaseWidgetData(message: Message, widgetConfig: RefObject<Base
   return;
 }
 
-export function sendWidgetDefaultConfigs<T extends BaseWidgetDataType>(widgetData: T): void {
-
-
-}
+// export function sendWidgetDefaultConfigs<T extends BaseWidgetDataType>(widgetData: T): void {
+//
+//
+// }

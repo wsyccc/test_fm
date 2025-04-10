@@ -8,9 +8,6 @@ interface NodeData {
   children?: NodeData[]
 }
 export interface TreeMapChartPropsInterface extends BaseWidgetDataType {
-  id?: string;
-  bgColor?: string;
-  // add more props here
   category?: TreeMapChartCategory;
   yData?: NodeData[]
 }

@@ -5,7 +5,6 @@ export type alarmType = {
   color: string;
 }
 export interface SpeedThreeDPropsInterface extends BaseWidgetDataType {
-  id?: string;
   externalSourceLink?: string;
   alarms?: alarmType[];
 }

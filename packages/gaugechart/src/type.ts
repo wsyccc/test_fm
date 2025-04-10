@@ -19,8 +19,6 @@ export type GaugeChartRawDataType = {
 };
 
 export interface GaugechartPropsInterface extends BaseWidgetDataType {
-  id?: string;
-  bgColor?: string;
   category?: GaugeChartCategory;
   color?: string,
   axisColor?: string,

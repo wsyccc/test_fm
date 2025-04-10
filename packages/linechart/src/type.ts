@@ -2,9 +2,6 @@ import {BaseWidgetDataType} from "@hulk/common";
 import { LineChartCategory } from "./utils";
 
 export interface LinechartPropsInterface extends BaseWidgetDataType{
-  id?: string;
-  bgColor?: string;
-  // add more props here
   category?: LineChartCategory;
   legendEnabled?: boolean;
   legendLayout?: 'vertical' | 'horizontal';
