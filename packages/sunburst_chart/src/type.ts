@@ -13,9 +13,6 @@ interface NodeData {
 }
 
 export interface SunburstChartPropsInterface extends BaseWidgetDataType {
-  id?: string;
-  bgColor?: string;
-  // add more props here
   category?: SunburstChartCategory;
   yData?: NodeData[]
 }
