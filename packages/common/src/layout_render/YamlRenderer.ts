@@ -1,11 +1,9 @@
 import { parseDocument } from 'yaml';
 import {BaseWidgetConfigType} from "../../type";
+import {CSSProperties} from "react";
 
-export type StackType = 'vertical-stack' | 'horizontal-stack';
 
-export interface StyleConfig {
-  [key: string]: string | number;
-}
+
 
 export interface YamlWidget extends BaseWidgetConfigType {
   style?: StyleConfig;

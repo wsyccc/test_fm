@@ -1,8 +1,14 @@
 import {BaseTriggerActions, WidgetType} from "./constants";
+import {CSSProperties} from "react";
+
+export interface StyleConfig extends CSSProperties {
+  [key: string]: any;
+}
 
 export interface BaseWidgetDataType {
   width: number;
   height: number;
+  style?: StyleConfig;
   bgColor?: string;
   isStorybook?: boolean;
 }
@@ -10,8 +16,11 @@ export interface BaseWidgetDataType {
 export interface BaseWidgetConfigType {
   id?: string;
   type?: WidgetType;
-  width?: number;
-  height?: number;
+}
+
+export enum StackType {
+  vertical = 'vertical',
+  horizontal = 'horizontal',
 }
 
 /**

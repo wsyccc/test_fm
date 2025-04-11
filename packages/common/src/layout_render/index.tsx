@@ -1,9 +1,9 @@
 // YamlPreviewer.tsx
-import React from 'react';
 import {CardConfig, StackCard, StyleConfig, YamlWidget} from "./YamlRenderer";
-const applyStyle = (style?: StyleConfig): React.CSSProperties => style || {};
+import {CSSProperties, ReactNode} from "react";
+const applyStyle = (style?: StyleConfig): CSSProperties => style || {};
 
-const renderCard = (card: CardConfig, key?: number): React.ReactNode => {
+const renderCard = (card: CardConfig, key?: number): ReactNode => {
   if (card.type === 'vertical-stack' || card.type === 'horizontal-stack') {
     const flexDirection = card.type === 'vertical-stack' ? 'column' : 'row';
     const stack = card as StackCard;
