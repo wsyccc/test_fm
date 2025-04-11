@@ -53,7 +53,7 @@ const preview: Preview = {
       return (
         <div>
           <Row justify={'center'}><Story /></Row>
-          <Row><a href={link} style={{ maxWidth: 600, overflow: 'hidden', textOverflow: 'ellipsis' }} target="_blank" rel="noopener noreferrer">{link}</a></Row>
+          <Row><a href={link} style={{ maxWidth: 600, overflow: 'hidden', textOverflow: 'ellipsis' }} target="_blank" rel="noopener noreferrer">{link.slice(0,50)}</a></Row>
         </div>
       );
     },
