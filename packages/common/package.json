@@ -33,6 +33,7 @@
     "echarts-gl": "^2.0.9",
     "echarts-stat": "1.2.0",
     "lodash": "4.17.21",
+    "openai": "^4.93.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "three": "0.168.0"

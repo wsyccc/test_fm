@@ -20,7 +20,7 @@
 import { React } from '@hulk/common';
 import { useBarchartCommon } from './context';
 import { BarchartPropsInterface } from "./type.ts";
-import { BarChartCategory, generateBarChartOption } from './utils.ts';
+import { BarChartCategory, convertDBDataThroughOpenAI, debouncedConvertDBDataThroughOpenAI, generateBarChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
 import defaultConfigs from './configs.ts';
 
@@ -61,6 +61,19 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
     if (echartsInstance) {
       echartsInstance.on('mousedown', handleChartClick);
     }
+
+    async function runConversion() {
+
+      try {
+        const chartData = await debouncedConvertDBDataThroughOpenAI([]);
+        console.log("转换后的图表数据：", chartData);
+        
+      } catch (error) {
+        console.error("调用转换函数失败：", error);
+      }
+    }
+
+    // runConversion();
 
     return () => {
       if (echartsInstance) {

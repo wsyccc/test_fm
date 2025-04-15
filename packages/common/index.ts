@@ -38,6 +38,8 @@ import * as Echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import * as EchartsStat from 'echarts-stat';
 import 'echarts-gl';
+export { OpenAI } from 'openai';
+
 export { EchartsStat, ReactEcharts, Echarts };
 
 export { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
@@ -48,3 +50,4 @@ export { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 export { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 export { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
