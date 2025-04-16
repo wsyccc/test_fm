@@ -17,7 +17,7 @@ export const SAMPLE_PAGES = [
     footer: {
       pageNo: {
         visible: true,
-        align: 'right'
+        align: 'end'
       },
       title: '',
       logo: '',
@@ -88,7 +88,7 @@ export const SAMPLE_PAGES = [
     footer: {
       pageNo: {
         visible: true,
-        align: 'right'
+        align: 'end'
       },
       width: 600,
       height: 100,
