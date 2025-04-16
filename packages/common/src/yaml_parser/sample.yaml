@@ -1,0 +1,42 @@
+report:
+  orientation: "portrait"
+  header:
+    title: "Header Title"
+    subtitle: "Header Subtitle"
+    logo: "public/logo.png"
+  footer:
+    title: "Footer Title"
+    subtitle: "Footer Subtitle"
+    logo: "public/logo.png"
+  pages:
+      width: 800
+      height: 600
+      content:
+        - horizontal:
+            - table:
+                width: 400
+                height: 300
+                disable: false
+                number_of_columns: 2
+                number_of_rows: 2
+            - vertical:
+                - horizontal:
+                    - text:
+                        text: "Hello"
+                        font_size: 12
+                        color: "#000000"
+                    - text:
+                        text: "World"
+                        font_size: 12
+                        color: "#000000"
+        - horizontal:
+            - table:
+                width: 400
+                height: 300
+                disable: false
+                number_of_columns: 2
+                number_of_rows: 2
+        - image:
+            width: 400
+            height: 300
+            source: "public/image.png"

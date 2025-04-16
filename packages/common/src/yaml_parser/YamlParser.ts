@@ -52,7 +52,7 @@ export interface Page {
   horizontalStack?: StackLoader;
 }
 
-export class YamlCardRenderer {
+export class YamlParser {
   private config: CardConfig | null = null;
   private error: string | null = null;
 

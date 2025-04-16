@@ -1,31 +1,25 @@
-import React from 'react';
-import { StackType } from '../../type';
-import { WidgetType } from '../../constants';
-import { Page } from '../layout_render/YamlRenderer';
-
-export const SAMPLE_PAGES = [
+[
   {
-    name:'page_1',
-    width: 600,
-    height: 800,
-    header: {
-      title: "page 1",
-      logo: <img src="" alt="logo" />,
-      width: 600,
-      height: 100,
+    "name":"page_1",
+    "width": 600,
+    "height": 800,
+    "header": {
+      "title": "page 1",
+      "logo": "/public/logo.png",
+      "width": 600,
+      "height": 100
     },
     footer: {
       pageNo: {
         visible: true,
-        align: 'end'
+        align: 'right'
       },
       title: '',
       logo: '',
       width: 600,
       height: 100,
     },
-    content: {
-      type: StackType.vertical,
+    verticalStack: {
       width: 600,
       height: 600,
       content: [
@@ -88,7 +82,7 @@ export const SAMPLE_PAGES = [
     footer: {
       pageNo: {
         visible: true,
-        align: 'end'
+        align: 'right'
       },
       width: 600,
       height: 100,
@@ -149,4 +143,4 @@ export const SAMPLE_PAGES = [
       ]
     }
   }
- ] as Page[]
+]
