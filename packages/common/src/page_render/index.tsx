@@ -1,33 +1,33 @@
 import { useMemo, useState } from "react";
 import React from 'react';
-import { SAMPLE_PAGES } from "../page_render/sample";
+import { SAMPLE_REPORT } from "../page_render/sample";
 import { Button, Row } from "antd";
 
 export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
-  const pages = SAMPLE_PAGES;
+  const { header, footer, pages, width, height, orientation } = SAMPLE_REPORT;
+
   console.log(pages)
 
   const [pageControl, setPageControl] = useState<boolean>(pages.length > 1);
-  const direction = 'vertical';
 
   const scrollToPage = (pageId) => {
     const element = document.getElementById(pageId);
     if (element) {
       element.scrollIntoView({
         behavior: 'smooth',
-        block: direction === 'vertical' ? 'start' : 'nearest',
-        inline: direction === 'vertical' ? 'nearest' : 'start'
+        block: orientation === 'vertical' ? 'start' : 'nearest',
+        inline: orientation === 'horizontal' ? 'start' : 'nearest'
       });
     }
   };
 
   // 处理导航按钮点击
-  const handleNavClick = (currentPageId, direction) => {
+  const handleNavClick = (currentPageId, orientation) => {
     const currentIndex = pages.findIndex(p => `page_${currentPageId}` === `page_${pages.indexOf(p) + 1}`);
-    if (direction === 'prev' && currentIndex > 0) {
+    if (orientation === 'prev' && currentIndex > 0) {
       scrollToPage(`page_${currentIndex}`); // 上一页
-    } else if (direction === 'next' && currentIndex < pages.length - 1) {
+    } else if (orientation === 'next' && currentIndex < pages.length - 1) {
       scrollToPage(`page_${currentIndex + 2}`); // 下一页
     }
   };
@@ -45,27 +45,36 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
 
         {/* 页面header */}
-        {page.header && <div style={{ width: page.header.width ?? 600, height: page.header.height ?? 100 }}>
+        {header && <div style={{ width: header.width ?? 600, height: header.height ?? 100 }}>
           <Row justify={'space-around'}>
-            <span>{page.header.title}</span>
-            <span>{page.header.logo}</span>
+            <span>{header.title}</span>
+            <span>{header.logo}</span>
           </Row>
         </div>}
 
         {/* 页面内容 */}
-        {page.name}
-        
+        {pageInd}
+
         {/* 页面footer */}
-        {page.footer && <div style={{ width: page.footer.width ?? 600, height: page.footer.height ?? 100 }}>
-          {(page.footer.title || page.footer.logo) && <Row justify={'space-around'}>
-            <span>{page.footer.title}</span>
-            <span>{page.footer.logo}</span>
+        {footer && <div style={{ width: footer.width ?? 600, height: footer.height ?? 100 }}>
+          {(footer.title || footer.logo) && <Row justify={'space-around'}>
+            <span>{footer.title}</span>
+            <span>{footer.logo}</span>
           </Row>}
-          {page.footer.pageNo.visible && <Row justify={page.footer.pageNo.align}>{pageInd + 1}</Row>}
+          {footer.pageNo.visible && <Row justify={footer.pageNo.align}>{pageInd + 1}</Row>}
         </div>}
       </div>
     })
   }, [])
 
-  return <div>{pageLoader}</div>;
+  return <div style={{
+    display: orientation === 'horizontal' ? 'flex' : 'block',
+    overflowX: orientation === 'horizontal' ? 'auto' : 'visible',
+    overflowY: orientation === 'vertical' ? 'auto' : 'visible',
+    height,
+    width,
+    scrollSnapType: orientation === 'horizontal' ? 'x mandatory' : 'y mandatory'
+  }}>
+    {pageLoader}
+  </div>;
 };

@@ -21,20 +21,19 @@ export interface StackCard {
   // style是这个layout或者widget的背景图片、背景颜色等等
   style?: StyleConfig;
 }
-
-export interface StackLoader {
+export interface Page {
   width?: string | number;
   height?: string | number;
-  content: StackCard[]
+  // 要注意page里面content的StackCard长度应该为1，且类型大概率为StackType，如果类型不为StackType，那表示整个page只有一个Widget
+  content?: StackCard[];
 }
 
-export interface Page {
-  name: string;
+export interface Report {
   width?: string | number;
   height?: string | number;
   header?: {
-    title?: string | React.ReactNode;
-    logo?: string | React.ReactNode;
+    title?: string;
+    logo?: string;
     width?: string | number;
     height?: string | number;
   },
@@ -43,13 +42,13 @@ export interface Page {
       visible: boolean;
       align?: 'start' | 'end' | 'center'
     },
-    title?: string | React.ReactNode;
-    logo?: string | React.ReactNode;
+    title?: string;
+    logo?: string;
     width?: string | number;
     height?: string | number;
   },
-  verticalStack?: StackLoader;
-  horizontalStack?: StackLoader;
+  orientation: "horizontal" | "vertical",
+  pages: Page[]
 }
 
 export class YamlParser {
