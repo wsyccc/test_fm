@@ -1,6 +1,5 @@
 import { parseDocument } from 'yaml';
 import { BaseWidgetConfigType, StackType, StyleConfig } from "../../type";
-import { CSSProperties } from "react";
 import { WidgetType } from '../../constants';
 
 export interface YamlWidget extends BaseWidgetConfigType {
@@ -21,6 +20,8 @@ export interface StackCard {
   // style是这个layout或者widget的背景图片、背景颜色等等
   style?: StyleConfig;
 }
+
+
 export interface Page {
   width?: string | number;
   height?: string | number;
