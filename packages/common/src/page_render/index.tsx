@@ -5,7 +5,7 @@ import { Button, Row } from "antd";
 
 export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
-  const { header, footer, pages, width, height, orientation } = SAMPLE_REPORT;
+  const { header, footer, pages, orientation } = SAMPLE_REPORT;
 
   console.log(pages)
 
@@ -71,8 +71,8 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
     display: orientation === 'horizontal' ? 'flex' : 'block',
     overflowX: orientation === 'horizontal' ? 'auto' : 'visible',
     overflowY: orientation === 'vertical' ? 'auto' : 'visible',
-    height,
-    width,
+    height:'auto',
+    width:'auto',
     scrollSnapType: orientation === 'horizontal' ? 'x mandatory' : 'y mandatory'
   }}>
     {pageLoader}

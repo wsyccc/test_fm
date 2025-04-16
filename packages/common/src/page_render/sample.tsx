@@ -4,8 +4,6 @@ import { WidgetType } from '../../constants';
 import { Page, Report } from '../yaml_parser/YamlParser';
 
 export const SAMPLE_REPORT = {
-  width: 800,
-  height: 600,
   header: {
     title: "Report",
     logo: "/",

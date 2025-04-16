@@ -29,8 +29,6 @@ export interface Page {
 }
 
 export interface Report {
-  width?: string | number;
-  height?: string | number;
   header?: {
     title?: string;
     logo?: string;
