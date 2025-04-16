@@ -41,7 +41,7 @@ export interface Page {
   footer?: {
     pageNo: {
       visible: boolean;
-      align?: 'right' | 'left' | 'middle'
+      align?: 'start' | 'end' | 'center'
     },
     title?: string | React.ReactNode;
     logo?: string | React.ReactNode;
