@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import React from 'react';
 import { SAMPLE_REPORT } from "../page_render/sample";
-import { Button, Row } from "antd";
+import { Button, Col, Row } from "antd";
+
+const MARGIN_CONSTANT = '20px';
 
 export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
@@ -10,6 +12,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
   console.log(pages)
 
   const [pageControl, setPageControl] = useState<boolean>(pages.length > 1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const scrollToPage = (pageId) => {
     const element = document.getElementById(pageId);
@@ -26,53 +29,108 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
   const handleNavClick = (currentPageId, orientation) => {
     const currentIndex = pages.findIndex(p => `page_${currentPageId}` === `page_${pages.indexOf(p) + 1}`);
     if (orientation === 'prev' && currentIndex > 0) {
-      scrollToPage(`page_${currentIndex}`); // 上一页
+      // scrollToPage(`page_${currentIndex}`); // 上一页
+      setCurrentPage(p => p - 1);
     } else if (orientation === 'next' && currentIndex < pages.length - 1) {
-      scrollToPage(`page_${currentIndex + 2}`); // 下一页
+      // scrollToPage(`page_${currentIndex + 2}`); // 下一页
+      setCurrentPage(p => p + 1);
     }
   };
 
   const pageLoader = useMemo(() => {
     return pages.map((page, pageInd) => {
-      return <div
+      // 如果显示控制，那么只显示一页，就是currentPage = pageInd+1
+      // 如果不显示控制，那就显示所有页
+      return (pageControl && currentPage === (pageInd + 1) || !pageControl) ? <div
         id={`page_${pageInd + 1}`}
-        style={{ width: page.width ?? 600, height: page.height ?? 800, border: 'solid black 1px' }}>
+        style={{
+          width: page.width ?? 600,
+          height: page.height ?? 800,
+          border: 'solid black 1px',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
+        }}>
         {/* 上一页下一页锚点 */}
-        {pageControl && <Row justify={pageInd === 0 ? 'end' : pageInd === (pages.length - 1) ? 'start' : 'space-around'}>
-          {pageInd !== 0 && <Button onClick={() => handleNavClick(pageInd + 1, 'prev')}>上一页</Button>}
-          {pageInd !== (pages.length - 1) && <Button onClick={() => handleNavClick(pageInd + 1, 'next')}>下一页</Button>}
-        </Row>}
+        <Row justify={'space-between'}>
+          <Button
+            style={{
+              visibility: pageInd !== 0 && pageControl ? 'visible' : 'hidden',
+              marginLeft: MARGIN_CONSTANT
+            }}
+            onClick={() => handleNavClick(pageInd + 1, 'prev')}>上一页</Button>
+          <Button onClick={() => setPageControl(p => !p)}>{pageControl ? '隐藏控制' : '显示控制'}</Button>
+          <Button
+            style={{ visibility: pageInd !== (pages.length - 1) && pageControl ? 'visible' : 'hidden' }}
 
+            onClick={() => handleNavClick(pageInd + 1, 'next')}>下一页</Button>
+        </Row>
 
-        {/* 页面header */}
-        {header && <div style={{ width: header.width ?? 600, height: header.height ?? 100 }}>
-          <Row justify={'space-around'}>
-            <span>{header.title}</span>
-            <span>{header.logo}</span>
-          </Row>
-        </div>}
+        <div style={{
+          flex: 1,  // 占据剩余所有空间
+          overflow: 'auto', // 内容超出时滚动
+          position: 'relative'
+        }}>
+          {/* 页面header */}
+          {header && <div style={{ width: header.width ?? 600, height: header.height ?? 100 }}>
+            <Row justify={'space-between'}>
+              <Col style={{ marginLeft: MARGIN_CONSTANT }}>
+                <h2 style={{ width: "100%" }}>{header.title}</h2>
+                {header.subtitle && <h4 style={{ width: "100%" }}>{header.subtitle}</h4>}
+              </Col>
+              <Col style={{ marginRight: MARGIN_CONSTANT }}>
+                <span>{header.logo}</span>
+              </Col>
+            </Row>
+          </div>}
 
-        {/* 页面内容 */}
-        {pageInd}
+          {/* 页面内容 */}
+          {pageInd}
+        </div>
 
         {/* 页面footer */}
-        {footer && <div style={{ width: footer.width ?? 600, height: footer.height ?? 100 }}>
-          {(footer.title || footer.logo) && <Row justify={'space-around'}>
-            <span>{footer.title}</span>
-            <span>{footer.logo}</span>
-          </Row>}
-          {footer.pageNo.visible && <Row justify={footer.pageNo.align}>{pageInd + 1}</Row>}
+        {footer && <div
+          style={{
+            width: footer.width ?? 600,
+            height: footer.height ?? 100,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto'
+          }}>
+          <div style={{
+            flex: 1,
+            overflow: 'auto',
+            position: 'relative'
+          }}>
+            {(footer.title || footer.subtitle || footer.logo) && <Row justify={'space-between'}>
+              <Col style={{ marginLeft: MARGIN_CONSTANT }}>
+                {footer.subtitle && <h2 style={{ width: "100%" }}>{footer.title}</h2>}
+                {footer.subtitle && <h4 style={{ width: "100%" }}>{footer.subtitle}</h4>}
+              </Col>
+              <Col style={{ marginRight: MARGIN_CONSTANT }}>
+                <span>{footer.logo}</span>
+              </Col>
+            </Row>}
+          </div>
+          {footer.pageNo.visible &&
+            <Row justify={footer.pageNo.align}>
+              <Col style={
+                (footer.pageNo.align === 'start' ? { marginLeft: '20px' } : footer.pageNo.align === 'end' ? { marginRight: '20px', marginBottom: '10px' } : {})
+              }>
+                {pageInd + 1}
+              </Col>
+            </Row>}
         </div>}
-      </div>
+      </div > : null
     })
-  }, [])
+  }, [pageControl, currentPage])
 
   return <div style={{
     display: orientation === 'horizontal' ? 'flex' : 'block',
     overflowX: orientation === 'horizontal' ? 'auto' : 'visible',
     overflowY: orientation === 'vertical' ? 'auto' : 'visible',
-    height:'auto',
-    width:'auto',
+    height: 'auto',
+    width: 'auto',
     scrollSnapType: orientation === 'horizontal' ? 'x mandatory' : 'y mandatory'
   }}>
     {pageLoader}

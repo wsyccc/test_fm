@@ -6,6 +6,7 @@ import { Page, Report } from '../yaml_parser/YamlParser';
 export const SAMPLE_REPORT = {
   header: {
     title: "Report",
+    subtitle: "Report builder Sample code",
     logo: "/",
     width: 600,
     height: 100,
@@ -15,10 +16,11 @@ export const SAMPLE_REPORT = {
       visible: true,
       align: 'end'
     },
-    title: '',
+    title: 'Report Builder',
+    subtitle: "Copyright by Cermate Software Inc.",
     logo: '',
     width: 600,
-    height: 100,
+    height:140,
   },
   orientation: 'horizontal',
   pages: [
@@ -86,7 +88,7 @@ export const SAMPLE_REPORT = {
     },
     {
       width: 600,
-      height: 800,
+      height: 400,
       content: [{
         type: StackType.horizontal,
         width: 600,

@@ -31,6 +31,7 @@ export interface Page {
 export interface Report {
   header?: {
     title?: string;
+    subtitle?: string;
     logo?: string;
     width?: string | number;
     height?: string | number;
@@ -41,6 +42,7 @@ export interface Report {
       align?: 'start' | 'end' | 'center'
     },
     title?: string;
+    subtitle?: string;
     logo?: string;
     width?: string | number;
     height?: string | number;
