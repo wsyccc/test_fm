@@ -1,39 +1,42 @@
 // YamlPreviewer.tsx
-import {CardConfig, StackCard, StyleConfig, YamlWidget} from "./YamlRenderer";
+import {CardConfig, StackCard, YamlCardRenderer, YamlWidget} from "./YamlRenderer";
 import {CSSProperties, ReactNode} from "react";
 const applyStyle = (style?: StyleConfig): CSSProperties => style || {};
+import React from 'react';
+import { StyleConfig } from "../../type";
 
 const renderCard = (card: CardConfig, key?: number): ReactNode => {
-  if (card.type === 'vertical-stack' || card.type === 'horizontal-stack') {
-    const flexDirection = card.type === 'vertical-stack' ? 'column' : 'row';
-    const stack = card as StackCard;
-    return (
-      <div key={key} style={{ display: 'flex', flexDirection, gap: '8px', ...applyStyle(stack.style) }}>
-        {stack.cards.map((child, idx) => renderCard(child, idx))}
-      </div>
-    );
-  }
+  // if (card.type === 'vertical-stack' || card.type === 'horizontal-stack') {
+  //   const flexDirection = card.type === 'vertical-stack' ? 'column' : 'row';
+  //   const stack = card as StackCard;
+  //   return (
+  //     <div key={key} style={{ display: 'flex', flexDirection, gap: '8px', ...applyStyle(stack.style) }}>
+  //       {stack.cards.map((child, idx) => renderCard(child, idx))}
+  //     </div>
+  //   );
+  // }
 
-  const base = card as YamlWidget;
-  if (base.type === 'weather-card') {
-    return (
-      <div key={key} style={{ border: '1px solid #ccc', padding: '10px', ...applyStyle(base.style) }}>
-        <strong>🌤 Weather Card</strong>
-        <div>Entity: {base.entity}</div>
-      </div>
-    );
-  }
+  // const base = card as YamlWidget;
+  // if (base.type === 'weather-card') {
+  //   return (
+  //     <div key={key} style={{ border: '1px solid #ccc', padding: '10px', ...applyStyle(base.style) }}>
+  //       <strong>🌤 Weather Card</strong>
+  //       <div>Entity: {base.entity}</div>
+  //     </div>
+  //   );
+  // }
 
-  if (base.type === 'gauge-card') {
-    return (
-      <div key={key} style={{ border: '1px solid #ccc', padding: '10px', ...applyStyle(base.style) }}>
-        <strong>🧭 Gauge Card</strong>
-        <div>Entity: {base.entity}</div>
-      </div>
-    );
-  }
+  // if (base.type === 'gauge-card') {
+  //   return (
+  //     <div key={key} style={{ border: '1px solid #ccc', padding: '10px', ...applyStyle(base.style) }}>
+  //       <strong>🧭 Gauge Card</strong>
+  //       <div>Entity: {base.entity}</div>
+  //     </div>
+  //   );
+  // }
 
-  return <div key={key}>❓ Unknown card type: {base.type}</div>;
+  // return <div key={key}>❓ Unknown card type: {base.type}</div>;
+  return;
 };
 
 export const YamlPreviewer: React.FC<{ yamlText: string }> = ({ yamlText }) => {

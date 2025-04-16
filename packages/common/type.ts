@@ -20,7 +20,7 @@ export interface BaseWidgetConfigType {
 
 export enum StackType {
   vertical = 'vertical',
-  horizontal = 'horizontal',
+  horizontal = 'horizontal'
 }
 
 /**
