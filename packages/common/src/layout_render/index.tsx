@@ -53,20 +53,12 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
       height: child.height,
       ...child.configs
     }
-    // 这里应该return cardLoader
-    return <div id={`${child.type}_${level}`
-    } style={{
-      width: child.width,
-      height: child.height,
-      flexShrink: 0,
-      border: '1px green solid',
-    }}>
-      <Suspense fallback={<div>Loading {child.type}…</div>}>
-        <Provider>
-          {Widget ? <Widget {...configs} /> : <div>Widget not found</div>}
-        </Provider>
-      </Suspense>
-    </div>
+
+    return <Suspense fallback={<div>Loading {child.type}…</div>}>
+      <Provider>
+        {Widget ? <Widget {...configs} /> : <div>Widget not found</div>}
+      </Provider>
+    </Suspense>;
 
   })
 };

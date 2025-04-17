@@ -134,7 +134,8 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
               }>
                 {pageInd + 1}
               </Col>
-            </Row>}
+            </Row>
+          }
         </div>}
       </div > : null
     })
