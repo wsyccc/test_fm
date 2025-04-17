@@ -1,4 +1,3 @@
-import React from 'react';
 import { StackType } from '../../type';
 import { WidgetType } from '../../constants';
 import { Page, Report } from '../yaml_parser/YamlParser';

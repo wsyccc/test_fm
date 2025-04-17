@@ -1,6 +1,5 @@
 import { parseDocument } from 'yaml';
 import { BaseWidgetConfigType, StackType, StyleConfig } from "../../type";
-import { CSSProperties } from "react";
 import { WidgetType } from '../../constants';
 
 export interface YamlWidget extends BaseWidgetConfigType {
@@ -23,6 +22,8 @@ export interface StackCard {
   // 内容里面stackCard之间的间距
   gap?: number
 }
+
+
 export interface Page {
   width?: string | number;
   height?: string | number;
