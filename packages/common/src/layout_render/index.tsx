@@ -1,9 +1,15 @@
-// YamlPreviewer.tsx
-import {CardConfig, StackCard, YamlCardRenderer, YamlWidget} from "./YamlRenderer";
-import {CSSProperties, ReactNode} from "react";
+// LayoutRender.tsx
+
+import { CSSProperties, lazy, ReactNode, useMemo } from "react";
 const applyStyle = (style?: StyleConfig): CSSProperties => style || {};
 import React from 'react';
-import { StyleConfig } from "../../type";
+import { StackType, StyleConfig } from "../../type";
+import { Row } from "antd";
+import { CardConfig, StackCard } from "../yaml_parser/YamlParser";
+import { WidgetStore } from "../yaml_parser/types";
+import { BarchartProvider } from "../../../barchart/src/context";
+import { WidgetType } from "../../constants";
+import { getCommonContext } from "../provider";
 
 const renderCard = (card: CardConfig, key?: number): ReactNode => {
   // if (card.type === 'vertical-stack' || card.type === 'horizontal-stack') {
@@ -39,18 +45,65 @@ const renderCard = (card: CardConfig, key?: number): ReactNode => {
   return;
 };
 
-export const YamlPreviewer: React.FC<{ yamlText: string }> = ({ yamlText }) => {
-  const renderer = new YamlCardRenderer(yamlText);
-  const config = renderer.getConfig();
-  const error = renderer.getError();
+export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = ({ content, level }) => {
+  console.log(content)
+  const { Provider, useCommon } = getCommonContext();
 
-  if (error) {
-    return <pre style={{ color: 'red' }}>{error}</pre>;
-  }
+  const stackCardRender = useMemo(() => {
+    return content.map((child, childInd) => {
+      // 如果是horizontal的话，那高度顶满
+      if (child.type === StackType.horizontal) {
+        const { content: childContent, gap } = child;
 
-  if (!config) {
-    return <div>⚠️ 没有可渲染的内容</div>;
-  }
+        return childContent ? <div id={`${child.type}_${level}`} style={{
+          height: 'auto',
+          width: 'auto',
+          border: '1px red solid',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          gap,
+        }}>
+          <LayoutRender content={childContent} level={level + 1} />
+        </div> : <></>
+      }
+      if (child.type === StackType.vertical) {
+        const { content: childContent, gap } = child;
 
-  return <div>{renderCard(config)}</div>;
+        return childContent ? <div id={`${child.type}_${level}`} style={{
+          height: 'auto',
+          width: child.width,
+          border: '1px #1890ff solid',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          gap,
+
+        }}><LayoutRender content={childContent} level={level + 1} /></div> : <></>
+      }
+      const CachedWidget = WidgetStore.current?.[child.type];
+      console.log(WidgetStore.current, child.type, CachedWidget)
+
+      // 这里应该return cardLoader
+      return <div id={`${child.type}_${level}`
+      } style={{
+        width: child.width,
+        height: child.height,
+        flexShrink: 0,
+        border: '1px green solid',
+
+      }}>
+        {child.type === WidgetType.barchart ? <Provider>
+          <CachedWidget />
+        </Provider>
+          : child.type}
+      </div>
+
+    })
+
+  }, [content, WidgetStore.current])
+
+  return stackCardRender;
 };

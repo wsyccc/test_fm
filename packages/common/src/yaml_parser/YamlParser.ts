@@ -20,6 +20,8 @@ export interface StackCard {
   height?: string | number;
   // style是这个layout或者widget的背景图片、背景颜色等等
   style?: StyleConfig;
+  // 内容里面stackCard之间的间距
+  gap?: number
 }
 export interface Page {
   width?: string | number;

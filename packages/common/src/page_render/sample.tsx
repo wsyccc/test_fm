@@ -20,7 +20,7 @@ export const SAMPLE_REPORT = {
     subtitle: "Copyright by Cermate Software Inc.",
     logo: '',
     width: 600,
-    height:140,
+    height: 140,
   },
   orientation: 'horizontal',
   pages: [
@@ -32,6 +32,7 @@ export const SAMPLE_REPORT = {
           type: StackType.vertical,
           width: 600,
           height: 600,
+          gap: 10,
           content: [
             {
               type: StackType.horizontal,
@@ -44,7 +45,7 @@ export const SAMPLE_REPORT = {
                 {
                   type: WidgetType.gaugechart,
                   width: 200,
-                  height: 200
+                  height: 400
                 },
                 {
                   type: WidgetType.linechart,
@@ -53,7 +54,8 @@ export const SAMPLE_REPORT = {
                 },
               ],
               width: 600,
-              height: 200
+              height: 200,
+              gap: 20
             },
             {
               type: WidgetType.protable,
@@ -88,7 +90,7 @@ export const SAMPLE_REPORT = {
     },
     {
       width: 600,
-      height: 400,
+      height: 900,
       content: [{
         type: StackType.horizontal,
         width: 600,
