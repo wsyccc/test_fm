@@ -23,7 +23,7 @@ import { ButtonPropsInterface } from "./type.ts";
 import defaultConfigs from './configs.ts';
 
 
-const Button: React.FC = (props: ButtonPropsInterface | {}) => {
+const Button: React.FC<ButtonPropsInterface> = (props) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useButtonCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;

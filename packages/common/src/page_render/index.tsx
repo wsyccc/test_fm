@@ -28,21 +28,19 @@ async function loadConfigStore() {
 export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
 
-  // const renderer = new YamlParser(yamlText);
-  // const config = renderer.getConfig();
-  // const error = renderer.getError();
+  const renderer = new YamlParser(yamlText);
+  const config = renderer.getConfig();
+  const error = renderer.getError();
 
-  // if (error) {
-  //   return <pre style={{ color: 'red' }}>{error}</pre>;
-  // }
+  if (error) {
+    return <pre style={{ color: 'red' }}>{error}</pre>;
+  }
 
-  // if (!config) {
-  //   return <div>⚠️ 没有可渲染的内容</div>;
-  // }
+  if (!config) {
+    return <div>⚠️ 没有可渲染的内容</div>;
+  }
 
-  const { header, footer, pages, orientation } = SAMPLE_REPORT;
-
-  console.log(pages)
+  const { header, footer, pages, orientation } = config;
 
   const [pageControl, setPageControl] = useState<boolean>(pages.length > 1);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -79,8 +77,8 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
       return (pageControl && currentPage === (pageInd + 1) || !pageControl) ? <div
         id={`page_${pageInd + 1}`}
         style={{
-          width: page.width ?? 600,
-          height: page.height ?? 800,
+          width: page.width ?? "100%",
+          height: page.height ?? "100%",
           border: 'solid black 1px',
           display: 'flex',
           flexDirection: 'column',
@@ -115,7 +113,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
               </Col>
               <Col span={11} style={{ marginRight: MARGIN_CONSTANT }}>
                 <span>{header.logo}</span>
-                <span>现在horizontal排列用红色border，vertical用蓝色border，单独组件用绿色border</span>
+                <span>现在horizontal排列用红色outline，vertical用蓝色outline，单独组件用绿色outline</span>
               </Col>
             </Row>
           </div>}
@@ -159,7 +157,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
         </div>}
       </div > : null
     })
-  }, [pageControl, currentPage, loading])
+  }, [pageControl, currentPage, loading, config])
 
   useEffect(() => {
     async function initProject() {
@@ -179,8 +177,8 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
     display: orientation === 'horizontal' ? 'flex' : 'block',
     overflowX: orientation === 'horizontal' ? 'auto' : 'visible',
     overflowY: orientation === 'vertical' ? 'auto' : 'visible',
-    height: 'auto',
-    width: 'auto',
+    height: '100%',
+    width: '100%',
     scrollSnapType: orientation === 'horizontal' ? 'x mandatory' : 'y mandatory'
   }}>
     {pageLoader}

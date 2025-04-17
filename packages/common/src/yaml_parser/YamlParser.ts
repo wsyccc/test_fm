@@ -55,7 +55,7 @@ export interface Report {
 }
 
 export class YamlParser {
-  private config: CardConfig | null = null;
+  private config: Report | null = null;
   private error: string | null = null;
 
   constructor(yamlText: string) {
@@ -65,7 +65,7 @@ export class YamlParser {
   private parseYaml(yamlStr: string) {
     try {
       const doc = parseDocument(yamlStr);
-      const parsed = doc.toJSON() as CardConfig;
+      const parsed = doc.toJSON() as Report;
       this.config = parsed;
       this.error = null;
     } catch (err: any) {
@@ -74,7 +74,7 @@ export class YamlParser {
     }
   }
 
-  public getConfig(): CardConfig | null {
+  public getConfig(): Report | null {
     return this.config;
   }
 

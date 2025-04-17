@@ -3,5 +3,5 @@ import { BarchartPropsInterface } from './type';
 
 export const {
   Provider: BarchartProvider,
-  useCommon: useBarchartCommon
+  useCommon
 } = getCommonContext<BarchartPropsInterface>();

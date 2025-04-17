@@ -18,16 +18,15 @@
  * ```
  */
 import { React } from '@hulk/common';
-import { useBarchartCommon } from './context';
+import { useCommon } from './context';
 import { BarchartPropsInterface } from "./type.ts";
 import { BarChartCategory, generateBarChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
 import defaultConfigs from './configs.ts';
 
 
-const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useBarchartCommon();
-
+const Barchart: React.FC<BarchartPropsInterface> = (props) => {
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useCommon();
   const { useMemo, useEffect, useRef } = React;
 
   const echartsRef = useRef<ReactEcharts>(null);
@@ -51,6 +50,9 @@ const Barchart: React.FC = (props: BarchartPropsInterface | {}) => {
   useEffect(() => {
     const handleChartClick = () => {
       console.log('图表被点击了');
+      updateWidgetData({
+        width:1000,
+      }, isStorybook)
       // 这里可以添加你的点击处理逻辑
     };
 
