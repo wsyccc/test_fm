@@ -35,9 +35,8 @@
     "lodash": "4.17.21",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "three": "0.168.0"
-  },
-  "devDependencies": {
+    "three": "0.168.0",
+    "barchart": "0.0.0",
     "@ant-design/pro-components": "^2.8.7"
   }
 }

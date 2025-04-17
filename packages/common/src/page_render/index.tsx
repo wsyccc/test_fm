@@ -1,28 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import React from 'react';
-import { SAMPLE_REPORT } from "../page_render/sample";
 import { Button, Col, Row } from "antd";
 import { LayoutRender } from "../layout_render";
 import { YamlParser } from "../yaml_parser/YamlParser";
 
-import { WidgetType } from "../../constants";
-import { WidgetStore } from "../yaml_parser/types";
-
 const MARGIN_CONSTANT = '20px';
-
-async function loadConfigStore() {
-  for (const type of Object.values(WidgetType)) {
-    if (!WidgetStore.current[type]) {
-      try {
-        WidgetStore.current[type] = (
-          await import(`@/packages/${type}/src/index.tsx`)
-        ).default;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-}
 
 
 export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
@@ -44,7 +26,6 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
   const [pageControl, setPageControl] = useState<boolean>(pages.length > 1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const scrollToPage = (pageId) => {
     const element = document.getElementById(pageId);
@@ -70,7 +51,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
   };
 
   const pageLoader = useMemo(() => {
-    return !loading && pages.map((page, pageInd) => {
+    return pages.map((page, pageInd) => {
       // 如果显示控制，那么只显示一页，就是currentPage = pageInd+1
       // 如果不显示控制，那就显示所有页
       const { content } = page;
@@ -157,21 +138,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
         </div>}
       </div > : null
     })
-  }, [pageControl, currentPage, loading, config])
-
-  useEffect(() => {
-    async function initProject() {
-      setLoading(true)
-      await loadConfigStore();
-    }
-
-    initProject().then(() => {
-      setLoading(false);
-    });
-
-    // 清理函数
-    return () => { };
-  }, []);
+  }, [pageControl, currentPage, config])
 
   return <div style={{
     display: orientation === 'horizontal' ? 'flex' : 'block',
