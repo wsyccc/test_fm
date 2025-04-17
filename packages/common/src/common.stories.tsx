@@ -1,6 +1,4 @@
 import { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
-import { Page } from './layout_render/YamlRenderer';
 import { PageRender } from './page_render';
 
 const meta: Meta<typeof PageRender> = {

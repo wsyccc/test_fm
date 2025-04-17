@@ -101,3 +101,12 @@ export const convertOriginDataToRawData = (
 
   return { xData, yData, xDataName, yDataName, organizedData };
 };
+
+
+export function toPascalCase(name: string): string {
+  return name
+    .split(/[_-]/g)
+    .filter(Boolean)
+    .map(w => w[0].toUpperCase() + w.slice(1))
+    .join('');
+}
