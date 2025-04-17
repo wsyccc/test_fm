@@ -15,6 +15,7 @@ export enum WidgetType {
   three_dchart = 'three_dchart',
   tree_map_chart = 'tree_map_chart',
   protable = 'protable',
+  text = 'text',
 }
 
 export enum MessageSource {

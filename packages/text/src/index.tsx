@@ -18,19 +18,20 @@
  * ```
  */
 import { React } from '@hulk/common';
-import { use{{namePascal}}Common } from './context';
-import { {{namePascal}}PropsInterface } from "./type.ts";
+import { useTextCommon } from './context';
+import { TextPropsInterface } from "./type.ts";
 import { WidgetActions } from '@hulk/common';
 import defaultConfigs from './configs.ts';
 
 
-const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = use{{namePascal}}Common();
+const Text: React.FC = (props: TextPropsInterface | {}) => {
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useTextCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;
 
-  const data: {{namePascal}}PropsInterface = useMemo(() => {
+  const data: TextPropsInterface = useMemo(() => {
       return {
+        //TODO add default props here above ...props
         ...defaultConfigs,
         ...props,
         ...widgetData,
@@ -40,7 +41,7 @@ const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;
 
-  return <div>{{namePascal}}</div>
+  return <div>Text</div>
 }
 
-export default {{namePascal}}
+export default Text
