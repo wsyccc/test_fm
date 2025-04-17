@@ -1,10 +1,12 @@
 import { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
 import { PageRender } from './page_render';
 
 const meta: Meta<typeof PageRender> = {
   title: 'Components/PageRender',
   component: PageRender,
+  argTypes: {
+    yamlText: { control: { type: 'object' } },
+  },
   tags: ['autodocs'],
   decorators: [
     (Story) => (
