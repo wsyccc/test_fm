@@ -86,7 +86,10 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
           position: 'relative'
         }}>
           {/* 页面header */}
-          {header && <div style={{ width: header.width ?? 600, height: header.height ?? 100 }}>
+          {header && <div style={{
+            width: header.width ?? "100%",
+            height: header.height ?? "100%",
+          }}>
             <Row justify={'space-between'}>
               <Col style={{ marginLeft: MARGIN_CONSTANT }}>
                 <h2 style={{ width: "100%" }}>{header.title}</h2>
@@ -106,8 +109,8 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
         {/* 页面footer */}
         {footer && <div
           style={{
-            width: footer.width ?? 600,
-            height: footer.height ?? 100,
+            width: footer.width ?? "100%",
+            height: footer.height ?? "100%",
             display: 'flex',
             flexDirection: 'column',
             overflow: 'auto'
