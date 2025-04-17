@@ -48,15 +48,13 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
     // 拿到已经同步加载好的 widget 组件
     const Widget = getLazyWidget(child.type as WidgetType);
 
-    const configs = {
-      width: child.width,
-      height: child.height,
-      ...child.configs
-    }
+    const {type, ...rest} = child
+
+
 
     return <Suspense fallback={<div>Loading {child.type}…</div>}>
       <Provider>
-        {Widget ? <Widget {...configs} /> : <div>Widget not found</div>}
+        {Widget ? <Widget {...rest} /> : <div>Widget not found</div>}
       </Provider>
     </Suspense>;
 

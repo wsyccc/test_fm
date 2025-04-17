@@ -1,6 +1,8 @@
 import { parseDocument } from 'yaml';
 import { BaseWidgetConfigType, StackType, StyleConfig } from "../../type";
 import { WidgetType } from '../../constants';
+import { TextPropsInterface } from '@packages/text/src/type';
+import { ImagePropsInterface } from '@packages/image/src/type';
 
 export interface YamlWidget extends BaseWidgetConfigType {
   style?: StyleConfig;
@@ -31,22 +33,28 @@ export interface Page {
   content?: StackCard[];
 }
 
+interface Text extends TextPropsInterface {
+  type: WidgetType.text;
+}
+
+interface Image extends ImagePropsInterface {
+  type: WidgetType.image;
+}
+
 export interface Report {
   header?: {
-    title?: string;
-    subtitle?: string;
-    logo?: string;
-    width?: string | number;
-    height?: string | number;
+    title?: Text;
+    subtitle?: Text;
+    logo?: Image;
   },
   footer?: {
     pageNo: {
       visible: boolean;
       align?: 'start' | 'end' | 'center'
     },
-    title?: string;
-    subtitle?: string;
-    logo?: string;
+    title?: Text;
+    subtitle?: Text;
+    logo?: Image;
     width?: string | number;
     height?: string | number;
   },
