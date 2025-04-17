@@ -73,13 +73,15 @@ pages:
               align: "start"
             content:
               - type: "barchart"
-                width: 180
+                width: "33%"
                 height: 200
+                configs:
+                  color: "red"
               - type: "gaugechart"
-                width: 180
+                width: "33%"
                 height: 400
               - type: "linechart"
-                width: 180
+                width: "33%"
                 height: 200
           - type: "protable"
             width: 580
