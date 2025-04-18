@@ -51,7 +51,7 @@ const Barchart: React.FC<BarchartPropsInterface> = (props) => {
     const handleChartClick = () => {
       console.log('图表被点击了');
       updateWidgetData({
-        width:1000,
+        color: "green",
       }, isStorybook)
       // 这里可以添加你的点击处理逻辑
     };

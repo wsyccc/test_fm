@@ -33,9 +33,9 @@ export interface Page {
 
 export interface Report {
   header?: {
-    title?: string;
-    subtitle?: string;
-    logo?: string;
+    title?: StackCard;
+    subtitle?: StackCard;
+    logo?: StackCard;
     width?: string | number;
     height?: string | number;
   },
@@ -44,9 +44,9 @@ export interface Report {
       visible: boolean;
       align?: 'start' | 'end' | 'center'
     },
-    title?: string;
-    subtitle?: string;
-    logo?: string;
+    title?: StackCard;
+    subtitle?: StackCard;
+    logo?: StackCard;
     width?: string | number;
     height?: string | number;
   },

@@ -13,34 +13,40 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
     // 如果是horizontal的话，那高度顶满
     if (child.type === StackType.horizontal) {
       const { content: childContent, gap, style } = child;
-      return childContent ? <div id={`${child.type}_${level}`} style={{
-        height: child.height ?? '100%',
-        width: child.width ?? '100%',
-        outline: '1px red solid',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: child.style?.align ?? 'center',
-        flexWrap: 'nowrap',
-        gap,
-        ...style,
-      }}>
+      return childContent ? <div
+        key={`${child.type}_${level}_${childInd}`}
+        id={`${child.type}_${level}_${childInd}`}
+        style={{
+          height: child.height ?? '100%',
+          width: child.width ?? '100%',
+          outline: '1px red solid',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: child.style?.align ?? 'center',
+          flexWrap: 'nowrap',
+          gap,
+          ...style,
+        }}>
         <LayoutRender content={childContent} level={level + 1} />
       </div> : <></>
     }
     if (child.type === StackType.vertical) {
       const { content: childContent, gap, style } = child;
 
-      return childContent ? <div id={`${child.type}_${level}`} style={{
-        height: 'auto',
-        width: child.width,
-        border: '1px #1890ff solid',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        flexWrap: 'nowrap',
-        gap,
+      return childContent ? <div
+        key={`${child.type}_${level}_${childInd}`}
+        id={`${child.type}_${level}_${childInd}`}
+        style={{
+          height: 'auto',
+          width: child.width,
+          border: '1px#18ffd8 solid',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          gap,
 
-      }}><LayoutRender content={childContent} level={level + 1} /></div> : <></>
+        }}><LayoutRender content={childContent} level={level + 1} /></div> : <></>
     }
 
     // 拿到对应的 LazyProvider
@@ -54,7 +60,9 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
       ...child.configs
     }
 
-    return <Suspense fallback={<div>Loading {child.type}…</div>}>
+    return <Suspense
+      key={`${child.type}_${level}_${childInd}`}
+      fallback={<div>Loading {child.type}…</div>}>
       <Provider>
         {Widget ? <Widget {...configs} /> : <div>Widget not found</div>}
       </Provider>
