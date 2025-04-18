@@ -1,6 +1,8 @@
 import { parseDocument } from 'yaml';
 import { BaseWidgetConfigType, StackType, StyleConfig } from "../../type";
 import { WidgetType } from '../../constants';
+// import { TextPropsInterface } from '@packages/text/src/type';
+// import { ImagePropsInterface } from '@packages/image/src/type';
 
 export interface YamlWidget extends BaseWidgetConfigType {
   style?: StyleConfig;
@@ -30,6 +32,14 @@ export interface Page {
   // 要注意page里面content的StackCard长度应该为1，且类型大概率为StackType，如果类型不为StackType，那表示整个page只有一个Widget
   content?: StackCard[];
 }
+
+// interface Text extends TextPropsInterface {
+//   type: WidgetType.text;
+// }
+
+// interface Image extends ImagePropsInterface {
+//   type: WidgetType.image;
+// }
 
 export interface Report {
   header?: {
