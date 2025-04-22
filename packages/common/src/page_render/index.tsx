@@ -1,8 +1,10 @@
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import React from 'react';
 import { Button, Col, Row } from "antd";
 import { LayoutRender } from "../layout_render";
 import { YamlParser } from "../yaml_parser/YamlParser";
+import { WidgetType } from "../../constants";
+import { getLazyProvider, getLazyWidget } from "../layout_render/cache";
 
 const MARGIN_CONSTANT = '20px';
 
@@ -50,12 +52,29 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
     }
   };
 
+  // 获取header title/subtitle/logo的属性
+  const HeaderTitleProvider = getLazyProvider(header?.title?.type as WidgetType);
+  const HeaderTitleWidget = getLazyWidget(header?.title?.type as WidgetType);
+  const HeaderSubTitleProvider = getLazyProvider(header?.title?.type as WidgetType);
+  const HeaderSubTitleWidget = getLazyWidget(header?.title?.type as WidgetType);
+  const HeaderLogoProvider = getLazyProvider(header?.logo?.type as WidgetType);
+  const HeaderLogoWidget = getLazyWidget(header?.logo?.type as WidgetType);
+
+  // 获取footer title/subtitle的属性
+  const FooterTitleProvider = getLazyProvider(footer?.title?.type as WidgetType);
+  const FooterTitleWidget = getLazyWidget(footer?.title?.type as WidgetType);
+  const FooterSubTitleProvider = getLazyProvider(footer?.title?.type as WidgetType);
+  const FooterSubTitleWidget = getLazyWidget(footer?.title?.type as WidgetType);
+  const FooterLogoProvider = getLazyProvider(footer?.logo?.type as WidgetType);
+  const FooterLogoWidget = getLazyWidget(footer?.logo?.type as WidgetType);
+
   const pageLoader = useMemo(() => {
     return pages.map((page, pageInd) => {
       // 如果显示控制，那么只显示一页，就是currentPage = pageInd+1
       // 如果不显示控制，那就显示所有页
       const { content } = page;
       return (pageControl && currentPage === (pageInd + 1) || !pageControl) ? <div
+        key={`page_${pageInd + 1}`}
         id={`page_${pageInd + 1}`}
         style={{
           width: page.width ?? "100%",
@@ -92,12 +111,30 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
           }}>
             <Row justify={'space-between'}>
               <Col style={{ marginLeft: MARGIN_CONSTANT }}>
-                <h2 style={{ width: "100%" }}>{header.title}</h2>
-                {header.subtitle && <h4 style={{ width: "100%" }}>{header.subtitle}</h4>}
+                {header.title && <Suspense
+                  fallback={<div>Loading {header.title?.type}…</div>}>
+                  <HeaderTitleProvider>
+                    {HeaderTitleWidget ? <HeaderTitleWidget {...header.title} /> : <div>Widget not found</div>}
+                  </HeaderTitleProvider>
+                </Suspense>}
+                {header.subtitle && <Suspense
+                  fallback={<div>Loading {header.subtitle?.type}…</div>}>
+                  <HeaderSubTitleProvider>
+                    {HeaderSubTitleWidget ? <HeaderSubTitleWidget {...header.subtitle} /> : <div>Widget not found</div>}
+                  </HeaderSubTitleProvider>
+                </Suspense>}
               </Col>
-              <Col span={11} style={{ marginRight: MARGIN_CONSTANT }}>
-                <span>{header.logo}</span>
-                <span>现在horizontal排列用红色outline，vertical用蓝色outline，单独组件用绿色outline</span>
+              <Col span={11} style={{
+                marginRight: MARGIN_CONSTANT,
+                display: "flex",
+                justifyContent: "end"
+              }}>
+                {header.logo && <Suspense
+                  fallback={<div>Loading {header.logo?.type}…</div>}>
+                  <HeaderLogoProvider>
+                    {HeaderLogoWidget ? <HeaderLogoWidget {...header.logo} /> : <div>Widget not found</div>}
+                  </HeaderLogoProvider>
+                </Suspense>}
               </Col>
             </Row>
           </div>}
@@ -122,19 +159,40 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
           }}>
             {(footer.title || footer.subtitle || footer.logo) && <Row justify={'space-between'}>
               <Col style={{ marginLeft: MARGIN_CONSTANT }}>
-                {footer.subtitle && <h2 style={{ width: "100%" }}>{footer.title}</h2>}
-                {footer.subtitle && <h4 style={{ width: "100%" }}>{footer.subtitle}</h4>}
+                {footer.title && <Suspense
+                  fallback={<div>Loading {footer.title?.type}…</div>}>
+                  <FooterTitleProvider>
+                    {FooterTitleWidget ? <FooterTitleWidget {...footer.title} /> : <div>Widget not found</div>}
+                  </FooterTitleProvider>
+                </Suspense>}
+                {footer.subtitle && <Suspense
+                  fallback={<div>Loading {footer.subtitle?.type}…</div>}>
+                  <FooterSubTitleProvider>
+                    {FooterSubTitleWidget ? <FooterSubTitleWidget {...footer.subtitle} /> : <div>Widget not found</div>}
+                  </FooterSubTitleProvider>
+                </Suspense>}
               </Col>
-              <Col style={{ marginRight: MARGIN_CONSTANT }}>
-                <span>{footer.logo}</span>
+              <Col style={{
+                marginRight: MARGIN_CONSTANT,
+                display: "flex",
+                justifyContent: "end"
+              }}>
+                {footer.logo && <Suspense
+                  fallback={<div>Loading {footer.logo?.type}…</div>}>
+                  <FooterLogoProvider>
+                    {FooterLogoWidget ? <FooterLogoWidget {...footer.logo} /> : <div>Widget not found</div>}
+                  </FooterLogoProvider>
+                </Suspense>}
               </Col>
             </Row>}
           </div>
           {footer.pageNo.visible &&
             <Row justify={footer.pageNo.align}>
-              <Col style={
-                (footer.pageNo.align === 'start' ? { marginLeft: '20px' } : footer.pageNo.align === 'end' ? { marginRight: '20px', marginBottom: '10px' } : {})
-              }>
+              <Col style={{
+                marginBottom: '10px',
+                ...(footer.pageNo.align === 'start' ? { marginLeft: '20px' } : footer.pageNo.align === 'end' ? { marginRight: '20px', } : {}),
+
+              }}>
                 {pageInd + 1}
               </Col>
             </Row>

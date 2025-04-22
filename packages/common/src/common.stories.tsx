@@ -1,18 +1,40 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { PageRender } from './page_render';
+import { Button, Modal } from 'antd';
 
 const meta: Meta<typeof PageRender> = {
   title: 'Components/PageRender',
   component: PageRender,
-  argTypes: {
-    yamlText: { control: { type: 'object' } },
-  },
   tags: ['autodocs'],
+  argTypes: {
+    yamlText: {
+      control: 'text', // 使用文本框
+    },
+  },
   decorators: [
-    (Story) => (
-      <>
-        <style>
-          {`
+    (Story, context) => {
+      const [modalVisible, setModalVisible] = useState<boolean>(false);
+      const [yamlText, setYamlText] = useState<string>(context.args.yamlText || ''); // 从 args 中获取初始值
+      const [editedYamlText, setEditedYamlText] = useState<string>(yamlText);
+
+      // 保存编辑后的 YAML
+      const handleSave = () => {
+        try {
+
+          // const parsed = yaml.load(editedYamlText);
+
+          context.args.yamlText = editedYamlText;
+          setYamlText(editedYamlText);
+          setModalVisible(false);
+        } catch (error) {
+          console.error('Invalid YAML:', error);
+        }
+      };
+
+      return (
+        <>
+          <style>
+            {`
                 /* 隐藏 第二、第三 列（如果不需要隐藏，删掉下面这段即可） */
                 .sbdocs .docblock-argstable thead th:nth-child(2),
                 .sbdocs .docblock-argstable tbody td:nth-child(2) {
@@ -28,10 +50,24 @@ const meta: Meta<typeof PageRender> = {
                   width: 450px !important;
                 }
               `}
-        </style>
-        <Story />
-      </>
-    )
+          </style>
+          <Story />
+          <Button type="primary" onClick={() => setModalVisible(true)}>Edit YAML code</Button>
+          <Modal
+            onCancel={() => setModalVisible(false)}
+            onOk={handleSave}
+            open={modalVisible}>
+              在这里改没啥意义，虽然能apply上，但是操作逻辑和其他组件不一样了
+            <textarea
+              value={editedYamlText}
+              onChange={(e) => setEditedYamlText(e.target.value)}
+              rows={10}
+              style={{ width: '100%' }}
+            />
+          </Modal>
+        </>
+      )
+    }
   ]
 };
 
@@ -44,21 +80,48 @@ export const Default: Story = {
   // add some stories default args here
   args: {
     yamlText: `header:
-  title: "Report"
-  subtitle: "Report builder Sample code"
-  logo: "/"
-  width: 600
-  height: 100
+  title: 
+    type: "text"
+    value: "Header"
+    color: "red"
+    fontSize: 32
+    border:
+      style: "dashed"
+      size: 2
+      color: "grey"
+  subtitle: 
+    type: "text"
+    width: "100%"
+    value: "Report builder Sample code"
+  logo: 
+    type: "text"
+    value: "Please input your logo path"
+    width: "100%"
+    justifyContent: "end"
 
 footer:
   pageNo:
     visible: true
     align: "end"
-  title: "Report Builder"
-  subtitle: "Copyright by Cermate Software Inc."
-  logo: ""
-  width: 600
-  height: 140
+  title:
+    type: "text"
+    value: "Report Builder"
+    width: "100%"
+    color: "pink"
+    fontSize: 24
+    border:
+      style: "dashed"
+      size: 1
+      color: "pink"
+  subtitle:
+    type: "text"
+    width: "100%"
+    value: "Copyright by @Cermate Software Inc."
+  logo:
+    type: "text"
+    value: "Here is your footer logo"
+    width: "100%"
+    justifyContent: "end"
 
 orientation: "horizontal"
 
@@ -82,6 +145,8 @@ pages:
               - type: "gaugechart"
                 width: "33%"
                 height: 400
+                configs:
+                  bgColor: "#18ffd8"
               - type: "linechart"
                 width: "33%"
                 height: 200
@@ -139,5 +204,5 @@ pages:
                 width: 600
                 height: 200
 `
-  }
+  },
 };

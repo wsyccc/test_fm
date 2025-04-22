@@ -24,7 +24,7 @@ export function getLazyProvider(widgetType: WidgetType): LazyExoticComponent<Pro
         if (!Provider) {
           throw new Error(`Module @packages/${widgetType}/src/context.ts does not export ${exportName}`);
         }
-        console.log(`Loaded ${exportName} from @packages/${widgetType}/src/context.ts`);
+        
         return { default: Provider };
       })
     );
