@@ -1,8 +1,5 @@
 import type { Preview } from '@storybook/react'
 import { Row } from '../packages/common';
-import {useEffect, useState} from "react";
-import {Editor} from "@monaco-editor/react";
-import { parse as yamlParse, stringify as yamlStringify } from 'yaml';
 
 
 const preview: Preview = {
@@ -25,19 +22,7 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const params = context.args;
-      const initialObj = params.yamlText ?? {};
-      const [code, setCode] = useState<string>(() =>
-        yamlStringify(initialObj, { indent: 2 })
-      );
 
-      useEffect(() => {
-        try {
-          const parsed = yamlParse(code);
-          context.updateArgs({ yamlText: parsed });
-        } catch {
-          // 解析错误时忽略
-        }
-      }, [code]);
       const link = `/#/${context.kind.replace('Components/', '')}?${Object.keys(params)
         .flatMap((k) => {
           const value = params[k];
@@ -68,19 +53,6 @@ const preview: Preview = {
         .join('&')}`
       return (
         <div style={{ padding: 16 }}>
-          {/* YAML 编辑器 */}
-          <Editor
-            height="200px"
-            defaultLanguage="yaml"
-            value={code}
-            onChange={(v) => setCode(v ?? '')}
-            options={{
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              wordWrap: 'on',
-            }}
-          />
-
           {/* 渲染 Story 和链接 */}
           <Row justify="center" style={{ margin: '16px 0' }}>
             <Story />
