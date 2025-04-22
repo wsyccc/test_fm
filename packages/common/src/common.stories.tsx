@@ -137,6 +137,7 @@ pages:
             gap: 20
             style:
               align: "start"
+              align-items: center
             content:
               - type: "barchart"
                 width: "33%"

@@ -41,7 +41,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
   };
 
   // 处理导航按钮点击
-  const handleNavClick = (currentPageId, orientation) => {
+  const handleNavClick = (currentPageId: number, orientation: string) => {
     const currentIndex = pages.findIndex(p => `page_${currentPageId}` === `page_${pages.indexOf(p) + 1}`);
     if (orientation === 'prev' && currentIndex > 0) {
       // scrollToPage(`page_${currentIndex}`); // 上一页

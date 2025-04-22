@@ -16,7 +16,6 @@ export function getLazyProvider(widgetType: WidgetType): LazyExoticComponent<Pro
   if (!providerCache[widgetType]) {
     providerCache[widgetType] = lazy<ProvComp>(() =>
       import(
-        /* webpackChunkName: "provider-[request]" */
         `@packages/${widgetType}/src/context.ts`
         ).then(mod => {
         const exportName = `${toPascalCase(widgetType)}Provider`;

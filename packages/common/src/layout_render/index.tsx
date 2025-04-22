@@ -45,6 +45,7 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
           alignItems: 'center',
           flexWrap: 'nowrap',
           gap,
+          ...style
 
         }}><LayoutRender content={childContent} level={level + 1} /></div> : <></>
     }
@@ -55,7 +56,6 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
     const Widget = getLazyWidget(child.type as WidgetType);
 
     const {type, ...rest} = child
-
 
 
     return <Suspense
