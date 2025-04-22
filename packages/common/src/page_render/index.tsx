@@ -73,6 +73,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
       // 如果显示控制，那么只显示一页，就是currentPage = pageInd+1
       // 如果不显示控制，那就显示所有页
       const { content } = page;
+      console.log(pageInd, content)
       return (pageControl && currentPage === (pageInd + 1) || !pageControl) ? <div
         key={`page_${pageInd + 1}`}
         id={`page_${pageInd + 1}`}
@@ -82,7 +83,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
           border: 'solid black 1px',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden'
+          overflow: 'auto'
         }}>
         {/* 上一页下一页锚点 */}
         <Row justify={'space-between'}>
@@ -99,58 +100,52 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
             onClick={() => handleNavClick(pageInd + 1, 'next')}>下一页</Button>
         </Row>
 
-        <div style={{
-          flex: 1,  // 占据剩余所有空间
-          overflow: 'auto', // 内容超出时滚动
-          position: 'relative'
-        }}>
-          {/* 页面header */}
-          {header && <div style={{
-            width: header.width ?? "100%",
-            height: header.height ?? "100%",
-          }}>
-            <Row justify={'space-between'}>
-              <Col style={{ marginLeft: MARGIN_CONSTANT }}>
-                {header.title && <Suspense
-                  fallback={<div>Loading {header.title?.type}…</div>}>
-                  <HeaderTitleProvider>
-                    {HeaderTitleWidget ? <HeaderTitleWidget {...header.title} /> : <div>Widget not found</div>}
-                  </HeaderTitleProvider>
-                </Suspense>}
-                {header.subtitle && <Suspense
-                  fallback={<div>Loading {header.subtitle?.type}…</div>}>
-                  <HeaderSubTitleProvider>
-                    {HeaderSubTitleWidget ? <HeaderSubTitleWidget {...header.subtitle} /> : <div>Widget not found</div>}
-                  </HeaderSubTitleProvider>
-                </Suspense>}
-              </Col>
-              <Col span={11} style={{
-                marginRight: MARGIN_CONSTANT,
-                display: "flex",
-                justifyContent: "end"
-              }}>
-                {header.logo && <Suspense
-                  fallback={<div>Loading {header.logo?.type}…</div>}>
-                  <HeaderLogoProvider>
-                    {HeaderLogoWidget ? <HeaderLogoWidget {...header.logo} /> : <div>Widget not found</div>}
-                  </HeaderLogoProvider>
-                </Suspense>}
-              </Col>
-            </Row>
-          </div>}
 
-          {/* 页面内容 */}
-          {content && <LayoutRender content={content} level={0} />}
-        </div>
+        {/* 页面header */}
+        {header && <header style={{
+          width: header.width ?? "100%",
+          height: header.height ?? "100%",
+        }}>
+          <Row justify={'space-between'}>
+            <Col style={{ marginLeft: MARGIN_CONSTANT }}>
+              {header.title && <Suspense
+                fallback={<div>Loading {header.title?.type}…</div>}>
+                <HeaderTitleProvider>
+                  {HeaderTitleWidget ? <HeaderTitleWidget {...header.title} /> : <div>Widget not found</div>}
+                </HeaderTitleProvider>
+              </Suspense>}
+              {header.subtitle && <Suspense
+                fallback={<div>Loading {header.subtitle?.type}…</div>}>
+                <HeaderSubTitleProvider>
+                  {HeaderSubTitleWidget ? <HeaderSubTitleWidget {...header.subtitle} /> : <div>Widget not found</div>}
+                </HeaderSubTitleProvider>
+              </Suspense>}
+            </Col>
+            <Col span={11} style={{
+              marginRight: MARGIN_CONSTANT,
+              display: "flex",
+              justifyContent: "end"
+            }}>
+              {header.logo && <Suspense
+                fallback={<div>Loading {header.logo?.type}…</div>}>
+                <HeaderLogoProvider>
+                  {HeaderLogoWidget ? <HeaderLogoWidget {...header.logo} /> : <div>Widget not found</div>}
+                </HeaderLogoProvider>
+              </Suspense>}
+            </Col>
+          </Row>
+        </header>}
+
+        {/* 页面内容 */}
+        {content && <main style={{ flex: 1 }}><LayoutRender content={content} level={0} /></main>}
 
         {/* 页面footer */}
-        {footer && <div
+        {footer && <footer
           style={{
             width: footer.width ?? "100%",
             height: footer.height ?? "100%",
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto'
           }}>
           <div style={{
             flex: 1,
@@ -197,7 +192,7 @@ export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
               </Col>
             </Row>
           }
-        </div>}
+        </footer>}
       </div > : null
     })
   }, [pageControl, currentPage, config])
