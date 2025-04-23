@@ -1,16 +1,15 @@
-import {FC, Suspense, useMemo, useState} from "react";
-import { Button, Col, Row } from "antd";
+import {React, WidgetType, YamlParser} from "@hulk/common";
+import { Button, Col, Row } from "@hulk/common";
 import { LayoutRender } from "../layout_render";
 import { getLazyProvider, getLazyWidget } from "../layout_render/cache";
-
-import {YamlParser} from "@packages/common/src/yaml_parser/YamlParser.ts";
-import {WidgetType} from "@hulk/common";
 
 const MARGIN_CONSTANT = '20px';
 
 
-export const PageRender: FC<{ yamlText: string }> = ({ yamlText }) => {
+export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
 
+
+  const {Suspense, useMemo, useState} = React;
 
   const renderer = new YamlParser({reportText: yamlText});
   const config = renderer.getReport();

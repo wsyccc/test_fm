@@ -29,7 +29,7 @@ import {LayoutRender} from "@packages/report_builder/src/layout_render";
 const MARGIN_CONSTANT = '20px';
 
 
-const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props) => {
+const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
 
   const { useState, useMemo, Suspense } = React;

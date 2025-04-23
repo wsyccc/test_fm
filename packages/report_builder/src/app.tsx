@@ -8,7 +8,7 @@ if (rootElement) {
   const root = createRoot(rootElement);
   root.render(
     <ReportBuilderProvider>
-      <ReportBuilder />
+      <ReportBuilder yamlText={""} width={"100%"} height={"100%"} />
     </ReportBuilderProvider>
   );
 }
