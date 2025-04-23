@@ -1,5 +1,5 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {BaseWidgetConfigType, BaseWidgetDataType} from '../type';
+import {ActionPayload, BaseWidgetConfigType, BaseWidgetDataType} from '../type';
 import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
 import {
   getBaseWidgetData,
@@ -13,7 +13,7 @@ export interface CommonContextType<T extends BaseWidgetDataType> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
-  triggerAction: (trigger: BaseTriggerActions[], storybook?: boolean) => void;
+  triggerAction: (trigger: BaseTriggerActions[], payload: ActionPayload, storybook?: boolean) => void;
 }
 
 export function getCommonContext<T extends BaseWidgetDataType>() {

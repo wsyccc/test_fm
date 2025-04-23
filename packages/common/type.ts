@@ -46,3 +46,9 @@ export interface BaseWidgetActionType {
   // the action payload e.g. the data to be passed to the action
   payload: any;
 }
+
+export interface ActionPayload {
+  widgetId: string;
+  pageNumber?: number;
+  pageContentLimit?: number;
+}
