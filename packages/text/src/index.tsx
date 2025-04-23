@@ -23,7 +23,7 @@ const Text: React.FC = (props: TextPropsInterface | {}) => {
   const { width, height, isStorybook, ...rest } = data;
   const currentIsStorybook = isStorybook ?? false;
   const stylish = textFormFormatter(rest);
-
+  
   return <div
     style={{
       ...stylish,

@@ -21,8 +21,9 @@ export const LayoutRender: FC<{ content: StackCard[], level: number }> = ({ cont
           outline: '1px red solid',
           display: 'flex',
           flexDirection: 'row',
-          alignItems: child.style?.align ?? 'center',
+          alignItems: style?.align ?? 'center',
           flexWrap: 'nowrap',
+          overflow: level === 0 ? "auto" : '',
           gap,
           ...style,
         }}>
@@ -41,8 +42,9 @@ export const LayoutRender: FC<{ content: StackCard[], level: number }> = ({ cont
           border: '1px#18ffd8 solid',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: style?.align ?? 'center',
           flexWrap: 'nowrap',
+          overflow: level === 0 ? "auto" : '',
           gap,
           ...style
 
@@ -54,12 +56,11 @@ export const LayoutRender: FC<{ content: StackCard[], level: number }> = ({ cont
     // 拿到已经同步加载好的 widget 组件
     const Widget = getLazyWidget(child.type as WidgetType);
 
-    const {type, ...rest} = child
-
+    const { type, ...rest } = child
 
     return <Suspense
-      key={`${child.type}_${level}_${childInd}`}
-      fallback={<div>Loading {child.type}…</div>}>
+      key={`${type}_${level}_${childInd}`}
+      fallback={<div>Loading {type}…</div>}>
       <Provider>
         {Widget ? <Widget {...rest} /> : <div>Widget not found</div>}
       </Provider>

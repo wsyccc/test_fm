@@ -4,6 +4,7 @@ import { BarchartProvider } from "./src/context";
 import { BarchartPropsInterface } from "./src/type";
 import { BarChartCategory } from './src/utils';
 import React from 'react';
+import { ORIGINDATA } from './src/constants';
 
 const meta: Meta<typeof Barchart> = {
   title: 'Components/Barchart',
@@ -24,6 +25,15 @@ const meta: Meta<typeof Barchart> = {
       control: 'select',
       options: ['top', 'inside']
     },
+    rawData:{
+      description: '数据表读取到的数据'
+    },
+    xColumn: {
+      description: '指定一个column的名字作为x轴数据，字符串，如果为空，会自动查找时间戳类型作为x轴，如果没有时间戳类型数据，会默认以获取到的第一个column'
+    },
+    yColumns: {
+      description: '指定多个column的名字作为y轴数据，字符串数组，如果为空数组，会默认所有除x轴外的数据都作为y轴数据'
+    },
   },
   decorators: [
     (Story) => (
@@ -40,6 +50,8 @@ type Story = StoryObj<typeof Barchart>;
 
 export const Default: Story = {
   args: {
+    width: 800,
+    height: 400,
     bgColor: 'white',
     // add more props here
     color: '#1890ff',
@@ -48,11 +60,9 @@ export const Default: Story = {
     legendLayout: 'vertical',
     labelEnabled: true,
     labelPosition: 'top',
-    xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    yData: [{
-      name: 'amount',
-      data: [120, 200, 150, 80, 70, 110, 130]
-    }],
+    rawData: ORIGINDATA,
+    xColumn: 'Date_Time',
+    yColumns: ['灌装4', '灌装5'],
   }
 }
 

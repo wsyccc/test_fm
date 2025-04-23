@@ -1,5 +1,7 @@
-import {BaseWidgetDataType} from "@hulk/common";
+import { BaseWidgetDataType } from "@hulk/common";
 
-export interface ImagePropsInterface extends BaseWidgetDataType{
+export interface ImagePropsInterface extends BaseWidgetDataType {
   // add more props here
+  src?: string;
+  alt?: string;
 }

@@ -27,6 +27,7 @@ export interface WidgetCard {
 
 
 export interface Page {
+  // 宽高设置了会有问题，TODO
   width?: string | number;
   height?: string | number;
   // 要注意page里面content的StackCard长度应该为1，且类型大概率为StackType，如果类型不为StackType，那表示整个page只有一个Widget

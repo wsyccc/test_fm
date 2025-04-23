@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react'
 import { Row } from '../packages/common';
-
+import React from 'react';
 
 const preview: Preview = {
   parameters: {
@@ -17,7 +17,8 @@ const preview: Preview = {
         disable: true
       }
     },
-    yamlText: { control: { type: 'object' } },
+    // 这里如果加了，所有组件都会有
+    // yamlText: { control: { type: 'object' } },
   },
   decorators: [
     (Story, context) => {
