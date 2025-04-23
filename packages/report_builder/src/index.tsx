@@ -17,13 +17,12 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import {React, WidgetType, Row, Button, Col} from '@hulk/common';
+import {React, WidgetType, Row, Button, Col, YamlParser, } from '@hulk/common';
 import { useReportBuilderCommon } from './context';
 import { ReportBuilderPropsInterface } from "./type.ts";
 import defaultConfigs from './configs.ts';
-import {YamlParser} from "@packages/common/src/yaml_parser/YamlParser.ts";
-import {getLazyProvider, getLazyWidget} from "@packages/report_builder/src/layout_render/cache.tsx";
-import {LayoutRender} from "@packages/report_builder/src/layout_render";
+import {getLazyProvider, getLazyWidget} from "./layout_render/cache.tsx";
+import {LayoutRender} from "./layout_render";
 
 
 const MARGIN_CONSTANT = '20px';

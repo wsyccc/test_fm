@@ -1,4 +1,4 @@
-// widget‑loader.ts
+/// <reference types="vite/client" />
 import { WidgetType, toPascalCase, React } from '@hulk/common';
 
 type ProvComp = React.ComponentType<{ children: React.ReactNode }>;
@@ -21,7 +21,7 @@ export function getLazyProvider(widgetType: WidgetType): React.LazyExoticCompone
         if (!Provider) {
           throw new Error(`Module @packages/${widgetType}/src/context.ts does not export ${exportName}`);
         }
-        
+
         return { default: Provider };
       })
     );
@@ -47,3 +47,4 @@ export function getLazyWidget(widgetType: WidgetType): React.LazyExoticComponent
   }
   return widgetCache[widgetType]!;
 }
+

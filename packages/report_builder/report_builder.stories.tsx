@@ -2,7 +2,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Button, FloatButton, Modal } from 'antd';
 import { Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks';
 import { useEffect, useState } from 'react';
-import React from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { configureMonacoYaml } from "monaco-yaml";
 import * as monacoYaml from "monaco-yaml";

@@ -10,6 +10,7 @@ export default defineConfig(({}) => {
     resolve: {
       alias: {
         '@hulk/common': path.resolve(__dirname, '../../dist/dist_common/common.es.js'),
+        '@packages': path.resolve(__dirname, '../../packages'),
       }
     },
     build: {

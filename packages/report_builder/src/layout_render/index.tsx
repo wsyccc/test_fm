@@ -1,6 +1,6 @@
 // LayoutRender.tsx
 import { getLazyProvider, getLazyWidget } from "./cache";
-import {CardConfig, StackType} from "@packages/report_builder/src/type.ts";
+import {CardConfig, StackType} from "../type.ts";
 import { React, WidgetType } from "@hulk/common";
 
 export const LayoutRender: React.FC<{ content: CardConfig[], level: number }> = ({ content, level }) => {
