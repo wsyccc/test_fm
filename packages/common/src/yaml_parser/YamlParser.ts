@@ -1,22 +1,17 @@
 import { parseDocument } from 'yaml';
-import { BaseWidgetConfigType, StackType, StyleConfig } from "../../type";
+import {BaseWidgetConfigType, BaseWidgetDataType, StackType, StyleConfig} from "../../type";
 import { WidgetType } from '../../constants';
 // import { TextPropsInterface } from '@packages/text/src/type';
 // import { ImagePropsInterface } from '@packages/image/src/type';
 
-export interface YamlWidget extends BaseWidgetConfigType {
-  style?: StyleConfig;
-}
-
-
-export type CardConfig = YamlWidget | StackCard;
+export type CardConfig = WidgetCard | StackCard;
 
 export interface StackCard {
-  type: StackType | WidgetType;
+  type: StackType;
   // 如果type是StackType.widget的话，content应该没有东西，
   content?: StackCard[];
   // 如果type不是StackType.widget的话，说明还是layout，还没到widget，所以configs应该是undefined
-  configs?: Record<string, any>;
+  // configs?: BaseWidgetDataType;
   width?: string | number;
   height?: string | number;
   // style是这个layout或者widget的背景图片、背景颜色等等
@@ -25,12 +20,17 @@ export interface StackCard {
   gap?: number
 }
 
+export interface WidgetCard {
+  type: WidgetType;
+  configs?: BaseWidgetDataType;
+}
+
 
 export interface Page {
   width?: string | number;
   height?: string | number;
   // 要注意page里面content的StackCard长度应该为1，且类型大概率为StackType，如果类型不为StackType，那表示整个page只有一个Widget
-  content?: StackCard[];
+  content?: CardConfig[];
 }
 
 // interface Text extends TextPropsInterface {
@@ -43,9 +43,9 @@ export interface Page {
 
 export interface Report {
   header?: {
-    title?: StackCard;
-    subtitle?: StackCard;
-    logo?: StackCard;
+    title?: WidgetCard;
+    subtitle?: WidgetCard;
+    logo?: WidgetCard;
     width?: string | number;
     height?: string | number;
   },
@@ -54,9 +54,9 @@ export interface Report {
       visible: boolean;
       align?: 'start' | 'end' | 'center'
     },
-    title?: StackCard;
-    subtitle?: StackCard;
-    logo?: StackCard;
+    title?: WidgetCard;
+    subtitle?: WidgetCard;
+    logo?: WidgetCard;
     width?: string | number;
     height?: string | number;
   },
@@ -65,27 +65,27 @@ export interface Report {
 }
 
 export class YamlParser {
-  private config: Report | null = null;
+  private report: Report | null = null;
   private error: string | null = null;
 
-  constructor(yamlText: string) {
-    this.parseYaml(yamlText);
+  constructor({ reportText }: { reportText: string }) {
+    this.parseText2Json(reportText);
   }
 
-  private parseYaml(yamlStr: string) {
+  private parseText2Json(yamlStr: string) {
     try {
       const doc = parseDocument(yamlStr);
       const parsed = doc.toJSON() as Report;
-      this.config = parsed;
+      this.report = parsed;
       this.error = null;
     } catch (err: any) {
-      this.config = null;
+      this.report = null;
       this.error = err.message || 'YAML Parse Error';
     }
   }
 
-  public getConfig(): Report | null {
-    return this.config;
+  public getReport(): Report | null {
+    return this.report;
   }
 
   public getError(): string | null {

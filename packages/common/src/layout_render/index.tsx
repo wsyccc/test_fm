@@ -1,12 +1,11 @@
 // LayoutRender.tsx
-import { Suspense } from "react";
-import React from 'react';
+import {FC, Suspense} from "react";
 import { StackType } from "../../type";
 import { StackCard } from "../yaml_parser/YamlParser";
 import { WidgetType } from "../../constants";
 import { getLazyProvider, getLazyWidget } from "./cache";
 
-export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = ({ content, level }) => {
+export const LayoutRender: FC<{ content: StackCard[], level: number }> = ({ content, level }) => {
 
 
   return content.map((child, childInd) => {

@@ -1,5 +1,4 @@
-import { Suspense, useMemo, useState } from "react";
-import React from 'react';
+import {FC, Suspense, useMemo, useState} from "react";
 import { Button, Col, Row } from "antd";
 import { LayoutRender } from "../layout_render";
 import { YamlParser } from "../yaml_parser/YamlParser";
@@ -9,11 +8,11 @@ import { getLazyProvider, getLazyWidget } from "../layout_render/cache";
 const MARGIN_CONSTANT = '20px';
 
 
-export const PageRender: React.FC<{ yamlText: string }> = ({ yamlText }) => {
+export const PageRender: FC<{ yamlText: string }> = ({ yamlText }) => {
 
 
-  const renderer = new YamlParser(yamlText);
-  const config = renderer.getConfig();
+  const renderer = new YamlParser({reportText: yamlText});
+  const config = renderer.getReport();
   const error = renderer.getError();
 
   if (error) {
