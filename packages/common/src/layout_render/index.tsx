@@ -47,6 +47,7 @@ export const LayoutRender: React.FC<{ content: StackCard[], level: number }> = (
           flexWrap: 'nowrap',
           overflow: level === 0 ? "auto" : '',
           gap,
+          ...style
 
         }}><LayoutRender content={childContent} level={level + 1} /></div> : <></>
     }
