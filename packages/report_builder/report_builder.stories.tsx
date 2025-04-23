@@ -1,12 +1,37 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { Button, FloatButton, Modal } from 'antd';
+import { Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import Editor, { useMonaco } from '@monaco-editor/react';
+import { configureMonacoYaml } from "monaco-yaml";
+import * as monacoYaml from "monaco-yaml";
 import ReportBuilder from './src/index';
-import { ReportBuilderPropsInterface } from "./src/type";
-import {Description, Primary, Subtitle, Title} from "@storybook/blocks";
-import {useState} from "react";
-import Editor from "@monaco-editor/react";
-import {Button, Modal} from "@hulk/common";
-import {ReportBuilderProvider} from "./src/context";
+import { ReportBuilderProvider } from "./src/context";
 import configs from "./src/configs";
+
+window.MonacoEnvironment = {
+  getWorker: function (moduleId, label) {
+    switch (label) {
+      case 'yaml':
+        return new Worker(
+          new URL('monaco-yaml/yaml.worker.js', import.meta.url),
+          { type: 'module' }
+        );
+      case 'json':
+        return new Worker(
+          new URL('monaco-editor/esm/vs/language/json/json.worker.js', import.meta.url),
+          { type: 'module' }
+        );
+      case 'editorWorkerService':
+      default:
+        return new Worker(
+          new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url),
+          { type: 'module' }
+        );
+    }
+  }
+};
 
 const meta: Meta<typeof ReportBuilder> = {
   title: 'Components/ReportBuilder',
@@ -34,8 +59,67 @@ const meta: Meta<typeof ReportBuilder> = {
   decorators: [
     (Story, context: { args: { yamlText?: string } }) => {
       const [modalVisible, setModalVisible] = useState<boolean>(false);
-      const [yamlText, setYamlText] = useState<string>(context.args.yamlText || ''); // 从 args 中获取初始值
+      const [yamlText, setYamlText] = useState<string>(`type: barchart
+width: 400
+height: 300
+unknownProp: true`); // 从 args 中获取初始值
       const [editedYamlText, setEditedYamlText] = useState<string>(yamlText);
+
+      const monaco = useMonaco();
+
+      const componentSchema = {
+        type: "object",
+        required: ["type"],
+        properties: {
+          type: { enum: ["barchart", "gaugechart", "linechart"] },
+          width: { type: ["number", "string"] },
+          height: { type: ["number", "string"] },
+          configs: { type: "object", additionalProperties: false },
+          style: { type: "object", additionalProperties: false },
+          content: {
+            type: "array",
+            items: { $ref: "#/definitions/component" } // ✅ 递归嵌套
+          }
+        },
+        allOf: [
+          {
+            if: { properties: { type: { const: "barchart" } } },
+            then: {
+              required: ["width", "height"],
+              additionalProperties: false, // ✅ 限制最外层属性
+              properties: {
+                type: { const: "barchart" },
+                width: { type: ["string", "number"] },
+                height: { type: ["string", "number"] },
+                configs: {
+                  type: "object",
+                  properties: {
+                    color: { type: "string" }
+                  },
+                  additionalProperties: false
+                }
+              }
+            }
+          },
+          {
+            if: { properties: { type: { const: "protable" } } },
+            then: {
+              required: ["width", "height"]
+            }
+          }
+        ]
+      };
+
+      const schema = {
+        type: "object",
+        properties: {
+          type: { const: "barchart" },
+          width: { type: "number" },
+          height: { type: "number" }
+        },
+        required: ["type", "width", "height"],
+        additionalProperties: false
+      };
 
       // 保存编辑后的 YAML
       const handleSave = () => {
@@ -51,6 +135,27 @@ const meta: Meta<typeof ReportBuilder> = {
         }
       };
 
+
+      const handleEditorMount = async (editor: any, monacoInstance: any) => {
+        const model = editor.getModel();
+        if (!model) return;
+        const uri = model.uri.toString(); // e.g. inmemory://model/1
+
+        // ✅ 正确使用 configureMonacoYaml（v5.3.1）
+        configureMonacoYaml(monacoInstance, {
+          enableSchemaRequest: false,
+          validate: true,
+          hover: true,
+          completion: true,
+          schemas: [
+            {
+              uri: "inmemory://schema/barchart-schema",
+              fileMatch: [uri], // ⛳️ 关键：必须绑定 model 的 URI
+              schema
+            }
+          ]
+        });
+      };
       return (
         <>
           <style>
@@ -105,6 +210,7 @@ const meta: Meta<typeof ReportBuilder> = {
                 folding: true,
                 lineNumbers: 'on'
               }}
+              onMount={handleEditorMount}
             />
           </Modal>
         </>
@@ -123,12 +229,5 @@ export const Default: Story = {
   args: {
     yamlText: configs.yamlText,
     isStorybook: true,
-  } as ReportBuilderPropsInterface
+  },
 };
-
-// can add more stories here with different args
-// export const SecondStory: Story = {
-//   args: {
-//     isStorybook: true,
-//   },
-// };
