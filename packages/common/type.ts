@@ -13,14 +13,9 @@ export interface BaseWidgetDataType {
   isStorybook?: boolean;
 }
 
-export interface BaseWidgetConfigType {
-  id?: string;
+export interface WidgetIdentityType {
+  widgetId?: string;
   type?: WidgetType;
-}
-
-export enum StackType {
-  vertical = 'vertical',
-  horizontal = 'horizontal'
 }
 
 /**

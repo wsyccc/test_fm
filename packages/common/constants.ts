@@ -17,6 +17,7 @@ export enum WidgetType {
   protable = 'protable',
   text = 'text',
   image = 'image',
+  report_builder = 'report_builder',
 }
 
 export enum MessageSource {

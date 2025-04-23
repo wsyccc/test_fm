@@ -1,14 +1,16 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { PageRender } from './page_render';
-import { Button, FloatButton, Modal } from 'antd';
-import { Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks';
-import { useState } from 'react';
-import React from 'react';
-import Editor from '@monaco-editor/react';
+import ReportBuilder from './src/index';
+import { ReportBuilderPropsInterface } from "./src/type";
+import {Description, Primary, Subtitle, Title} from "@storybook/blocks";
+import {useState} from "react";
+import Editor from "@monaco-editor/react";
+import {Button, Modal} from "@hulk/common";
+import {ReportBuilderProvider} from "./src/context";
+import configs from "./src/configs";
 
-const meta: Meta<typeof PageRender> = {
-  title: 'Components/PageRender',
-  component: PageRender,
+const meta: Meta<typeof ReportBuilder> = {
+  title: 'Components/ReportBuilder',
+  component: ReportBuilder,
   tags: ['autodocs'],
   argTypes: {
     yamlText: {
@@ -30,7 +32,7 @@ const meta: Meta<typeof PageRender> = {
     },
   },
   decorators: [
-    (Story, context) => {
+    (Story, context: { args: { yamlText?: string } }) => {
       const [modalVisible, setModalVisible] = useState<boolean>(false);
       const [yamlText, setYamlText] = useState<string>(context.args.yamlText || ''); // 从 args 中获取初始值
       const [editedYamlText, setEditedYamlText] = useState<string>(yamlText);
@@ -69,7 +71,9 @@ const meta: Meta<typeof PageRender> = {
                 }
               `}
           </style>
-          <Story />
+          <ReportBuilderProvider>
+            <Story />
+          </ReportBuilderProvider>
           {/* <FloatButton
             type="primary"
             onClick={() => setModalVisible(true)}
@@ -111,138 +115,20 @@ const meta: Meta<typeof PageRender> = {
 
 export default meta;
 
-type Story = StoryObj<typeof PageRender>;
+type Story = StoryObj<typeof ReportBuilder>;
 
 export const Default: Story = {
   // isStorybook is required to be true
   // add some stories default args here
   args: {
-    yamlText: `header:
-  title:
-    type: text
-    value: Header
-    color: red
-    fontSize: 32
-    border:
-      style: dashed
-      size: 2
-      color: grey
-  subtitle:
-    type: text
-    width: 100%
-    value: Report builder Sample code
-  logo:
-    type: image
-    src: "/public/Image/CE_Logo_Icon.png"
-    width: 100%
-    height: 120
-footer:
-  pageNo:
-    visible: true
-    align: end
-  title:
-    type: text
-    value: Report Builder
-    width: 100%
-    color: pink
-    fontSize: 24
-    border:
-      style: dashed
-      size: 1
-      color: pink
-  subtitle:
-    type: text
-    width: 100%
-    value: Copyright by @Cermate Software Inc.
-  logo:
-    type: image
-    src: "/public/Image/CE_Logo_Web.png"
-    width: 60
-    height: 60
-orientation: horizontal
-pages:
-- width: 600
-  height: auto
-  content:
-  - type: vertical
-    gap: 10
-    style:
-      backgroundColor: grey
-    content:
-    - type: horizontal
-      gap: 20
-      style:
-        align: start
-      content:
-      - type: barchart
-        width: 33%
-        height: 200
-        configs:
-          color: red
-      - type: gaugechart
-        width: 33%
-        height: 400
-        configs:
-          bgColor: "#18ffd8"
-      - type: linechart
-        width: 33%
-        height: 200
-    - type: protable
-      width: 580
-      height: 200
-    - type: vertical
-      style:
-        align: center
-      content:
-      - type: barchart
-        width: 400
-        height: 200
-      - type: gaugechart
-        width: 300
-        height: 200
-      - type: linechart
-        width: 580
-        height: 200
-- content:
-  - type: horizontal
-    width: 1800
-    height: 400
-    style:
-      align: start
-    content:
-    - type: horizontal
-      width: 600
-      height: 200
-      content:
-      - type: barchart
-        width: 33%
-        height: 200
-        configs:
-          color: red
-      - type: gaugechart
-        width: 33%
-        height: 400
-        configs:
-          bgColor: "#18ffd8"
-      - type: linechart
-        width: 33%
-        height: 200
-    - type: protable
-      width: 600
-      height: 200
-    - type: vertical
-      width: 600
-      height: 200
-      content:
-      - type: barchart
-        width: 400
-        height: 200
-      - type: gaugechart
-        width: 300
-        height: 200
-      - type: linechart
-        width: 580
-        height: 200
-`
-  },
+    yamlText: configs.yamlText,
+    isStorybook: true,
+  } as ReportBuilderPropsInterface
 };
+
+// can add more stories here with different args
+// export const SecondStory: Story = {
+//   args: {
+//     isStorybook: true,
+//   },
+// };

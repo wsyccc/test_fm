@@ -3,7 +3,7 @@
 import {RefObject, useEffect} from 'react';
 import {Message} from './Message';
 import {BaseMessagePurpose, MessageSource, WidgetType} from '../../constants';
-import {BaseWidgetConfigType, BaseWidgetDataType} from "../../type";
+import {WidgetIdentityType} from "../../type";
 
 
 // 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）
@@ -109,7 +109,7 @@ export function initializeCommunication(widgetType: WidgetType): void {
   sendMessage(initMessage);
 }
 
-export function getBaseWidgetData(message: Message, widgetConfig: RefObject<BaseWidgetConfigType>): {
+export function getBaseWidgetData(message: Message, widgetConfig: RefObject<WidgetIdentityType>): {
   type: WidgetType,
   id: string,
   width: number,

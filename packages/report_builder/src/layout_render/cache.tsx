@@ -1,7 +1,6 @@
 // widget‑loader.ts
 import { lazy, LazyExoticComponent, ComponentType, ReactNode } from 'react';
-import { WidgetType } from '../../constants';
-import {toPascalCase} from "../../utils";
+import { WidgetType, toPascalCase } from '@hulk/common';
 
 type ProvComp = ComponentType<{ children: ReactNode }>;
 

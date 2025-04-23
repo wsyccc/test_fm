@@ -8,6 +8,22 @@ const PACKAGES_DIR = path.resolve(__dirname, '../packages')
 const args = process.argv.slice(2)
 const rawName = args[0]
 
+const isValidRawName = (name: string) => {
+  if (!/^[a-zA-Z]+$/.test(name)) return false; // 禁止含有非字母字符
+
+  if (name === name.toLowerCase()) {
+    return true;
+  }
+
+  return /^[a-z]+(?:[A-Z][a-z]*)+$/.test(name);
+};
+
+if (!isValidRawName(rawName)) {
+  console.error('❌ Invalid widget name format.');
+  console.error('   Use camel-style: e.g., textBox, barChartView, reportPanel');
+  process.exit(1);
+}
+
 if (!rawName) {
   console.error('❌ Widget name is required，e.g. yarn create:widget button')
   process.exit(1)

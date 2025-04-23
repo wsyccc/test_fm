@@ -1,5 +1,5 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {ActionPayload, BaseWidgetConfigType, BaseWidgetDataType} from '../type';
+import {ActionPayload, WidgetIdentityType, BaseWidgetDataType} from '../type';
 import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
 import {
   getBaseWidgetData,
@@ -21,7 +21,7 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
 
   const Provider = ({ children }: { children: ReactNode }) => {
     const [widgetData, setWidgetData] = useState<T | null>(null);
-    const widgetConfig = useRef<BaseWidgetConfigType>({});
+    const widgetIdentity = useRef<WidgetIdentityType>({});
     const originalWidgetData = useRef<T | null>(null);
 
     useEffect(() => {
@@ -29,11 +29,11 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       const path = window.location.pathname;
       const segments = path.split('/');
       const distName = segments.find((seg) => seg.startsWith('dist_'))?.split('_')[1];
-      widgetConfig.current = {
+      widgetIdentity.current = {
         type: distName ? WidgetType[distName] : undefined,
-        id: undefined
+        widgetId: undefined
       }
-      if (widgetConfig.current.type) initializeCommunication(widgetConfig.current.type);
+      if (widgetIdentity.current.type) initializeCommunication(widgetIdentity.current.type);
     }, []);
 
     // received message from PM
@@ -44,9 +44,9 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
           console.log('Received updateWidgetData:', newData);
           updateWidgetData({...widgetData, ...newData} as T);
         } else if (msg.purpose === BaseMessagePurpose.setWidgetBaseConfig) {
-          const config = getBaseWidgetData(msg, widgetConfig);
-          widgetConfig.current = {
-            ...widgetConfig.current,
+          const config = getBaseWidgetData(msg, widgetIdentity);
+          widgetIdentity.current = {
+            ...widgetIdentity.current,
             ...config
           }
           setWidgetData({
@@ -69,8 +69,8 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
         sendMessage(new Message({
           source: MessageSource.Hulk,
           purpose: BaseMessagePurpose.updateWidgetData,
-          widgetId: widgetConfig.current.id,
-          widgetType: widgetConfig.current.type,
+          widgetId: widgetIdentity.current.widgetId,
+          widgetType: widgetIdentity.current.type,
           payload: newWidgetData,
         }));
       }
@@ -85,7 +85,7 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       actions.forEach((action) => {
         switch (action) {
           case BaseTriggerActions.onClick:
-            console.log(`onClick on ${widgetConfig.current.id}`);
+            console.log(`onClick on ${widgetIdentity.current.widgetId}`);
             // Handle onClick action
             break;
         }

@@ -1,17 +1,51 @@
-import {FC, Suspense, useMemo, useState} from "react";
-import { Button, Col, Row } from "antd";
-import { LayoutRender } from "../layout_render";
-import { YamlParser } from "../yaml_parser/YamlParser";
-import { WidgetType } from "../../constants";
-import { getLazyProvider, getLazyWidget } from "../layout_render/cache";
+/**
+ * Have to use 3rd-party lib from @hulk/common
+ *
+ * @description
+ * 1. use the script
+ * ```sh
+ * yarn install:lib <lib_name>
+ * ```
+ * The script will install the lib to @hulk/common
+ *
+ * 2. add the lib export in @hulk/common/index.ts, remember to use the specific import for 3-rd package you need.
+ * ```ts
+ * export { Button } from 'antd';
+ * ```
+ * 3. add the lib import in the component
+ * ```ts
+ * import { Button } from '@hulk/common';
+ * ```
+ */
+import {React, WidgetType, Row, Button, Col} from '@hulk/common';
+import { useReportBuilderCommon } from './context';
+import { ReportBuilderPropsInterface } from "./type.ts";
+import defaultConfigs from './configs.ts';
+import {YamlParser} from "@packages/common/src/yaml_parser/YamlParser.ts";
+import {getLazyProvider, getLazyWidget} from "@packages/report_builder/src/layout_render/cache.tsx";
+import {LayoutRender} from "@packages/report_builder/src/layout_render";
+
 
 const MARGIN_CONSTANT = '20px';
 
 
-export const PageRender: FC<{ yamlText: string }> = ({ yamlText }) => {
+const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props) => {
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
 
+  const { useState, useMemo, Suspense } = React;
 
-  const renderer = new YamlParser({reportText: yamlText});
+  const data: ReportBuilderPropsInterface = useMemo(() => {
+      return {
+        ...defaultConfigs,
+        ...props,
+        ...widgetData,
+      };
+  }, [props, widgetData]);
+
+  // determine isStorybook(Dev) or Production(Built)
+  // const isStorybook = data.isStorybook ?? false;
+
+  const renderer = new YamlParser({reportText: data.yamlText});
   const config = renderer.getReport();
   const error = renderer.getError();
 
@@ -28,16 +62,16 @@ export const PageRender: FC<{ yamlText: string }> = ({ yamlText }) => {
   const [pageControl, setPageControl] = useState<boolean>(pages.length > 1);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const scrollToPage = (pageId) => {
-    const element = document.getElementById(pageId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: orientation === 'vertical' ? 'start' : 'nearest',
-        inline: orientation === 'horizontal' ? 'start' : 'nearest'
-      });
-    }
-  };
+  // const scrollToPage = (pageId) => {
+  //   const element = document.getElementById(pageId);
+  //   if (element) {
+  //     element.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: orientation === 'vertical' ? 'start' : 'nearest',
+  //       inline: orientation === 'horizontal' ? 'start' : 'nearest'
+  //     });
+  //   }
+  // };
 
   // 处理导航按钮点击
   const handleNavClick = (currentPageId: number, orientation: string) => {
@@ -206,4 +240,6 @@ export const PageRender: FC<{ yamlText: string }> = ({ yamlText }) => {
   }}>
     {pageLoader}
   </div>;
-};
+}
+
+export default ReportBuilder
