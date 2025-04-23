@@ -1,7 +1,7 @@
 export const convertOriginDataToRawData = (
   originData,
-  indicateXData?: string,
-  indicateYData?: string[],
+  indicateXData?: string, // column名字
+  indicateYData?: string[], // column名字组，多个column显示多个线（linechart)
 ) => {
   const xData: string[] = [];
   const xDataName: string[] = [];

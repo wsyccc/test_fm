@@ -11,7 +11,16 @@ export interface BarchartPropsInterface extends BaseWidgetDataType{
 
   labelEnabled?: boolean;
   labelPosition?: 'top' | 'inside';
-
+  rawData?: {
+    rows: {
+      columns: {
+        name: string;
+        value: string;
+      }[];
+    }[];
+  },
+  xColumn?: string,
+  yColumns?: string[],
   xData?: string[];
   yData?: {
     name: string;

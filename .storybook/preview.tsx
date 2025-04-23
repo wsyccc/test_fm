@@ -1,7 +1,6 @@
 import type { Preview } from '@storybook/react'
-import React from 'react';
 import { Row } from '../packages/common';
-
+import React from 'react';
 
 const preview: Preview = {
   parameters: {
@@ -17,11 +16,14 @@ const preview: Preview = {
       table: {
         disable: true
       }
-    }
+    },
+    // 这里如果加了，所有组件都会有
+    // yamlText: { control: { type: 'object' } },
   },
   decorators: [
     (Story, context) => {
       const params = context.args;
+
       const link = `/#/${context.kind.replace('Components/', '')}?${Object.keys(params)
         .flatMap((k) => {
           const value = params[k];
@@ -51,9 +53,21 @@ const preview: Preview = {
         })
         .join('&')}`
       return (
-        <div>
-          <Row justify={'center'}><Story /></Row>
-          <Row><a href={link} style={{ maxWidth: 600, overflow: 'hidden', textOverflow: 'ellipsis' }} target="_blank" rel="noopener noreferrer">{link.slice(0,50)}</a></Row>
+        <div style={{ padding: 16 }}>
+          {/* 渲染 Story 和链接 */}
+          <Row justify="center" style={{ margin: '16px 0' }}>
+            <Story />
+          </Row>
+          <Row>
+            <a
+              href={link}
+              style={{ maxWidth: 600, overflow: 'hidden', textOverflow: 'ellipsis' }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.slice(0, 50)}…
+            </a>
+          </Row>
         </div>
       );
     },

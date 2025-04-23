@@ -1,8 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
-import React, { useState } from 'react';
 import { PageRender } from './page_render';
-import { Button, Modal } from 'antd';
+import { Button, FloatButton, Modal } from 'antd';
 import { Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks';
+import { useState } from 'react';
+import React from 'react';
+import Editor from '@monaco-editor/react';
 
 const meta: Meta<typeof PageRender> = {
   title: 'Components/PageRender',
@@ -15,14 +17,16 @@ const meta: Meta<typeof PageRender> = {
   },
   parameters: {
     docs: {
-      page: () => (
-        <>
-          <Title />
-          <Subtitle />
-          <Description />
-          <Primary />
-        </>
-      ),
+      page: () => {
+        return (
+          <>
+            <Title />
+            <Subtitle />
+            <Description />
+            <Primary />
+          </>
+        )
+      },
     },
   },
   decorators: [
@@ -66,17 +70,37 @@ const meta: Meta<typeof PageRender> = {
               `}
           </style>
           <Story />
-          <Button type="primary" onClick={() => setModalVisible(true)}>Edit YAML code</Button>
+          {/* <FloatButton
+            type="primary"
+            onClick={() => setModalVisible(true)}
+            shape="square"
+            description="Edit YAML"
+            style={{ right: 24 }}
+          /> */}
+          <Button
+            type="primary"
+            style={{
+              marginTop: '30px'
+            }}
+            onClick={() => setModalVisible(true)}>
+            Edit YAML code
+          </Button>
           <Modal
             onCancel={() => setModalVisible(false)}
             onOk={handleSave}
+            width='60vw'
             open={modalVisible}>
-            在这里改没啥意义，虽然能apply上，但是操作逻辑和其他组件不一样了
-            <textarea
-              value={editedYamlText}
-              onChange={(e) => setEditedYamlText(e.target.value)}
-              rows={10}
-              style={{ width: '100%' }}
+            <Editor
+              height="500px"
+              defaultLanguage="yaml"
+              defaultValue={editedYamlText}
+              onChange={(v) => v && setEditedYamlText(v)}
+              options={{
+                automaticLayout: true,
+                scrollBeyondLastColumn: 0,
+                folding: true,
+                lineNumbers: 'on'
+              }}
             />
           </Modal>
         </>

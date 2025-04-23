@@ -4,6 +4,7 @@ import { LinechartProvider } from "./src/context";
 import { LinechartPropsInterface } from "./src/type";
 import React from 'react';
 import { LineChartCategory } from './src/utils';
+import { ORIGINDATA } from './src/constants';
 
 const meta: Meta<typeof Linechart> = {
   title: 'Components/Linechart',
@@ -24,6 +25,15 @@ const meta: Meta<typeof Linechart> = {
       control: 'select',
       options: ['top', 'inside']
     },
+    rawData: {
+      description: '数据表读取到的数据'
+    },
+    xColumn: {
+      description: '指定一个column的名字作为x轴数据，字符串，如果为空，会自动查找时间戳类型作为x轴，如果没有时间戳类型数据，会默认以获取到的第一个column'
+    },
+    yColumns: {
+      description: '指定多个column的名字作为y轴数据，字符串数组，如果为空数组，会默认所有除x轴外的数据都作为y轴数据'
+    },
   },
   decorators: [
     (Story) => (
@@ -41,6 +51,8 @@ type Story = StoryObj<typeof Linechart>;
 export const Default: Story = {
   args: {
     isStorybook: true,
+    width: 800,
+    height: 400,
     bgColor: '#ffffff',
     color: '#1890ff',
     category: LineChartCategory.Basic,
@@ -48,11 +60,10 @@ export const Default: Story = {
     legendLayout: 'vertical',
     labelEnabled: true,
     labelPosition: 'top',
-    xData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    yData: [{
-      name: 'Rainfall',
-      data: [820, 932, 901, 934, 1290, 1330, 1320]
-    }],
+    rawData: ORIGINDATA,
+    xColumn: '',
+    yColumns: ['灌装1', '灌装2','灌装3'],
+
   }
 };
 

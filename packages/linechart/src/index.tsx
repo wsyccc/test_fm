@@ -17,12 +17,13 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import { React } from '@hulk/common';
+import { convertOriginDataToRawData, React } from '@hulk/common';
 import { useLinechartCommon } from './context';
 import { LinechartPropsInterface } from "./type.ts";
 import { generateLineChartOption } from './utils.ts';
 import { ReactEcharts } from '@hulk/common';
 import defaultConfigs from './configs.ts';
+import { ORIGINDATA } from './constants.ts';
 
 
 const Linechart: React.FC = (props: LinechartPropsInterface | {}) => {
@@ -43,7 +44,9 @@ const Linechart: React.FC = (props: LinechartPropsInterface | {}) => {
   const isStorybook = data.isStorybook ?? false;
 
   const option = useMemo(() => {
-    return generateLineChartOption(data, { xData: data.xData ?? [], yData: data.yData ?? [] });
+    const tableData = data.rawData ? convertOriginDataToRawData(data.rawData.rows, data.xColumn, data.yColumns) : undefined;
+
+    return tableData !== undefined ? generateLineChartOption({ ...data, tableData }, { xData: tableData.xData ?? [], yData: tableData.yData ?? [] }) : generateLineChartOption(data, { xData: data.xData ?? [], yData: data.yData ?? [] });
   }, [data]);
 
   useEffect(() => {
