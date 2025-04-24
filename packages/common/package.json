@@ -5,14 +5,14 @@
   "description": "",
   "type": "module",
   "keywords": [],
-  "main": "./dist_common/common.umd.js",
-  "module": "./dist_common/common.es.js",
-  "types": "./dist_common/index.d.ts",
+  "main": "./dist_common/common.index.es.js",
+  "module": "./dist_common/common.index.es.js",
+  "types": "./dist_common/common.index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist_common/index.d.ts",
-      "import": "./dist_common/common.es.js",
-      "require": "./dist_common/common.umd.js"
+      "types": "./dist_common/common.index.d.ts",
+      "import": "./dist_common/common.index.es.js",
+      "require": "./dist_common/common.index.es.js"
     }
   },
   "scripts": {

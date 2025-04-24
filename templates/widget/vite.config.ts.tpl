@@ -17,7 +17,16 @@ export default defineConfig(({}) => {
       outDir: 'dist_{{nameKebab}}',
       rollupOptions: {
         input: path.resolve(__dirname, 'index.html'),
-        external: ['@hulk/common']
+        external: ['@hulk/common'],
+        output: {
+          entryFileNames: 'assets/index.js',
+          chunkFileNames: 'assets/[name].js',
+          manualChunks(id) {
+            if (id.endsWith('/src/index.tsx'))  return 'component'
+            if (id.endsWith('/src/context.ts')) return 'context'
+            return undefined
+          }
+        }
       },
     },
   }

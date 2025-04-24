@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { WidgetType, toPascalCase, React } from '@hulk/common';
+import {WidgetType, toPascalCase, React} from '@hulk/common';
 
 type ProvComp = React.ComponentType<{ children: React.ReactNode }>;
 
@@ -22,7 +22,7 @@ export function getLazyProvider(widgetType: WidgetType): React.LazyExoticCompone
           throw new Error(`Module @packages/${widgetType}/src/context.ts does not export ${exportName}`);
         }
 
-        return { default: Provider };
+        return {default: Provider};
       })
     );
   }
@@ -41,10 +41,9 @@ export function getLazyWidget(widgetType: WidgetType): React.LazyExoticComponent
             `Module @packages/${widgetType}/src/index.tsx has no default export`
           );
         }
-        return { default: Component };
+        return {default: Component};
       })
     );
   }
   return widgetCache[widgetType]!;
 }
-

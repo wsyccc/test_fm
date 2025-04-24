@@ -51,6 +51,7 @@
     "@storybook/react-vite": "8.6.12",
     "@storybook/test": "8.6.12",
     "@types/echarts": "5.0.0",
+    "@types/lodash": "^4.17.16",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "@types/three": "0.168.0",
