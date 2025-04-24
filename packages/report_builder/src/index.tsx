@@ -106,7 +106,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props) => {
       // 如果显示控制，那么只显示一页，就是currentPage = pageInd+1
       // 如果不显示控制，那就显示所有页
       const { content } = page;
-      console.log(pageInd, content)
+      // console.log(pageInd, content)
       return (pageControl && currentPage === (pageInd + 1) || !pageControl) ? <div
         key={`page_${pageInd + 1}`}
         id={`page_${pageInd + 1}`}

@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react'
 import { Row } from '../packages/common';
 import React from 'react';
+import '/public/yaml.worker.js';
 
 const preview: Preview = {
   parameters: {

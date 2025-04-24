@@ -1,37 +1,36 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Button, FloatButton, Modal } from 'antd';
-import { Title, Subtitle, Description, Primary, Stories } from '@storybook/blocks';
-import { useEffect, useState } from 'react';
+import { Button, Modal } from 'antd';
+import { Title, Subtitle, Description, Primary } from '@storybook/blocks';
+import { useEffect, useState, useRef } from 'react';
 import React from 'react';
-import Editor, { useMonaco } from '@monaco-editor/react';
-import { configureMonacoYaml } from "monaco-yaml";
-import * as monacoYaml from "monaco-yaml";
 import ReportBuilder from './src/index';
 import { ReportBuilderProvider } from "./src/context";
 import configs from "./src/configs";
+import Editor from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
+import { configureMonacoYaml } from 'monaco-yaml';
+import { WidgetType } from '../common';
 
-window.MonacoEnvironment = {
-  getWorker: function (moduleId, label) {
-    switch (label) {
-      case 'yaml':
+if (typeof window !== 'undefined') {
+  self.MonacoEnvironment = {
+    getWorker: function (_, label) {
+
+      if (label === 'yaml' || label === 'editorWorkerService') {
         return new Worker(
           new URL('monaco-yaml/yaml.worker.js', import.meta.url),
           { type: 'module' }
         );
-      case 'json':
-        return new Worker(
-          new URL('monaco-editor/esm/vs/language/json/json.worker.js', import.meta.url),
-          { type: 'module' }
-        );
-      case 'editorWorkerService':
-      default:
-        return new Worker(
-          new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url),
-          { type: 'module' }
-        );
+      }
+
+      // 默认回退
+      return new Worker(
+        new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url),
+        { type: 'module' }
+      );
     }
-  }
-};
+  };
+}
+
 
 const meta: Meta<typeof ReportBuilder> = {
   title: 'Components/ReportBuilder',
@@ -39,62 +38,53 @@ const meta: Meta<typeof ReportBuilder> = {
   tags: ['autodocs'],
   argTypes: {
     yamlText: {
-      control: 'text', // 使用文本框
+      control: 'text',
     },
   },
   parameters: {
     docs: {
-      page: () => {
-        return (
-          <>
-            <Title />
-            <Subtitle />
-            <Description />
-            <Primary />
-          </>
-        )
-      },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+        </>
+      ),
     },
   },
   decorators: [
-    (Story, context: { args: { yamlText?: string } }) => {
-      const [modalVisible, setModalVisible] = useState<boolean>(false);
-      const [yamlText, setYamlText] = useState<string>(`type: barchart
-width: 400
-height: 300
-unknownProp: true`); // 从 args 中获取初始值
-      const [editedYamlText, setEditedYamlText] = useState<string>(yamlText);
-
-      const monaco = useMonaco();
+    (Story, context) => {
+      const [modalVisible, setModalVisible] = useState(false);
+      const [yamlText, setYamlText] = useState(context.args.yamlText || '');
+      const [editedYamlText, setEditedYamlText] = useState(yamlText);
+      const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
       const componentSchema = {
-        type: "object",
-        required: ["type"],
+        type: 'object',
+        required: ['type'],
         properties: {
-          type: { enum: ["barchart", "gaugechart", "linechart"] },
-          width: { type: ["number", "string"] },
-          height: { type: ["number", "string"] },
-          configs: { type: "object", additionalProperties: false },
-          style: { type: "object", additionalProperties: false },
+          type: { enum: Object.values(WidgetType) },
+          width: { type: ['number', 'string'] },
+          height: { type: ['number', 'string'] },
+          configs: { type: 'object', additionalProperties: false },
+          style: { type: 'object', additionalProperties: false },
           content: {
-            type: "array",
-            items: { $ref: "#/definitions/component" } // ✅ 递归嵌套
+            type: 'array',
+            items: { $ref: '#/definitions/component' }
           }
         },
+        additionalProperties: false,
         allOf: [
           {
-            if: { properties: { type: { const: "barchart" } } },
+            if: { properties: { type: { const: 'barchart' } } },
             then: {
-              required: ["width", "height"],
-              additionalProperties: false, // ✅ 限制最外层属性
+              required: ['width', 'height'],
               properties: {
-                type: { const: "barchart" },
-                width: { type: ["string", "number"] },
-                height: { type: ["string", "number"] },
                 configs: {
-                  type: "object",
+                  type: 'object',
                   properties: {
-                    color: { type: "string" }
+                    color: { type: 'string' }
                   },
                   additionalProperties: false
                 }
@@ -102,119 +92,144 @@ unknownProp: true`); // 从 args 中获取初始值
             }
           },
           {
-            if: { properties: { type: { const: "protable" } } },
+            if: { properties: { type: { const: 'protable' } } },
             then: {
-              required: ["width", "height"]
+              required: ['width', 'height']
             }
           }
         ]
       };
 
       const schema = {
-        type: "object",
+        type: 'object',
+        required: ['orientation', 'pages'],
         properties: {
-          type: { const: "barchart" },
-          width: { type: "number" },
-          height: { type: "number" }
+          header: {
+            type: 'object',
+            properties: {
+              title: { $ref: '#/definitions/component' },
+              subtitle: { $ref: '#/definitions/component' },
+              logo: { $ref: '#/definitions/component' },
+              width: { type: ['string', 'number'] },
+              height: { type: ['string', 'number'] }
+            },
+            additionalProperties: false
+          },
+          footer: {
+            type: 'object',
+            properties: {
+              pageNo: {
+                type: 'object',
+                required: ['visible'],
+                properties: {
+                  visible: { type: 'boolean' },
+                  align: { enum: ['start', 'center', 'end'] }
+                },
+                additionalProperties: false
+              },
+              title: { $ref: '#/definitions/component' },
+              subtitle: { $ref: '#/definitions/component' },
+              logo: { $ref: '#/definitions/component' },
+              width: { type: ['string', 'number'] },
+              height: { type: ['string', 'number'] }
+            },
+            additionalProperties: false
+          },
+          orientation: { enum: ['horizontal', 'vertical'] },
+          pages: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['content'],
+              properties: {
+                width: { type: ['number', 'string'] },
+                height: { type: ['number', 'string'] },
+                content: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/component' }
+                }
+              },
+              additionalProperties: false
+            }
+          }
         },
-        required: ["type", "width", "height"],
-        additionalProperties: false
-      };
-
-      // 保存编辑后的 YAML
-      const handleSave = () => {
-        try {
-
-          // const parsed = yaml.load(editedYamlText);
-
-          context.args.yamlText = editedYamlText;
-          setYamlText(editedYamlText);
-          setModalVisible(false);
-        } catch (error) {
-          console.error('Invalid YAML:', error);
+        definitions: {
+          component: componentSchema
         }
       };
 
-
-      const handleEditorMount = async (editor: any, monacoInstance: any) => {
+      const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor, monacoInstance: typeof monaco) => {
         const model = editor.getModel();
         if (!model) return;
-        const uri = model.uri.toString(); // e.g. inmemory://model/1
 
-        // ✅ 正确使用 configureMonacoYaml（v5.3.1）
+        monacoInstance.editor.setModelLanguage(model, 'yaml');
+
         configureMonacoYaml(monacoInstance, {
-          enableSchemaRequest: false,
           validate: true,
-          hover: true,
           completion: true,
+          hover: true,
+          enableSchemaRequest: false,
           schemas: [
             {
-              uri: "inmemory://schema/barchart-schema",
-              fileMatch: [uri], // ⛳️ 关键：必须绑定 model 的 URI
-              schema
-            }
-          ]
+              uri: model.uri.toString(),
+              fileMatch: [model.uri.toString()],
+              schema,
+            },
+          ],
         });
       };
+
+      const handleSave = () => {
+        context.args.yamlText = editedYamlText;
+        setYamlText(editedYamlText);
+        setModalVisible(false);
+      };
+
       return (
         <>
           <style>
             {`
-                /* 隐藏 第二、第三 列（如果不需要隐藏，删掉下面这段即可） */
-                .sbdocs .docblock-argstable thead th:nth-child(2),
-                .sbdocs .docblock-argstable tbody td:nth-child(2) {
-                  display: none !important;
-                }
-                .sbdocs .docblock-argstable thead th:nth-child(3),
-                .sbdocs .docblock-argstable tbody td:nth-child(3) {
-                  display: none !important;
-                }
-                /* 将 Control 列（第 4 列）宽度设为 450px */
-                .sbdocs .docblock-argstable thead th:nth-child(4),
-                .sbdocs .docblock-argstable tbody td:nth-child(4) {
-                  width: 450px !important;
-                }
-              `}
+              .sbdocs .docblock-argstable thead th:nth-child(2),
+              .sbdocs .docblock-argstable tbody td:nth-child(2),
+              .sbdocs .docblock-argstable thead th:nth-child(3),
+              .sbdocs .docblock-argstable tbody td:nth-child(3) {
+                display: none !important;
+              }
+              .sbdocs .docblock-argstable thead th:nth-child(4),
+              .sbdocs .docblock-argstable tbody td:nth-child(4) {
+                width: 450px !important;
+              }
+            `}
           </style>
           <ReportBuilderProvider>
             <Story />
           </ReportBuilderProvider>
-          {/* <FloatButton
-            type="primary"
-            onClick={() => setModalVisible(true)}
-            shape="square"
-            description="Edit YAML"
-            style={{ right: 24 }}
-          /> */}
-          <Button
-            type="primary"
-            style={{
-              marginTop: '30px'
-            }}
-            onClick={() => setModalVisible(true)}>
+          <Button type="primary" style={{ marginTop: '30px' }} onClick={() => setModalVisible(true)}>
             Edit YAML code
           </Button>
+          <Editor
+            height="500px"
+            language="yaml"
+            defaultLanguage="yaml"
+            defaultValue={yamlText}
+            onChange={(v) => v && setEditedYamlText(v)}
+            options={{
+              minimap: { enabled: true },
+              glyphMargin: true, // 显示错误图标
+              renderValidationDecorations: 'on', // 显示行内错误
+              lineNumbers: 'on',
+              tabSize: 2
+            }}
+            onMount={handleEditorMount}
+          />
           <Modal
             onCancel={() => setModalVisible(false)}
             onOk={handleSave}
             width='60vw'
             open={modalVisible}>
-            <Editor
-              height="500px"
-              defaultLanguage="yaml"
-              defaultValue={editedYamlText}
-              onChange={(v) => v && setEditedYamlText(v)}
-              options={{
-                automaticLayout: true,
-                scrollBeyondLastColumn: 0,
-                folding: true,
-                lineNumbers: 'on'
-              }}
-              onMount={handleEditorMount}
-            />
           </Modal>
         </>
-      )
+      );
     }
   ]
 };
@@ -224,8 +239,6 @@ export default meta;
 type Story = StoryObj<typeof ReportBuilder>;
 
 export const Default: Story = {
-  // isStorybook is required to be true
-  // add some stories default args here
   args: {
     yamlText: configs.yamlText,
     isStorybook: true,
