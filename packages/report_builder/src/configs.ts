@@ -3,8 +3,6 @@ import { ReportBuilderPropsInterface } from "./type";
 
 export default {
   type: WidgetType.report_builder,
-  width: 300, // useless config
-  height: 300, // useless config
   yamlText: `header:
   title:
     type: text

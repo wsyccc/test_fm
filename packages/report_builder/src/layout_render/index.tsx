@@ -1,11 +1,11 @@
 // LayoutRender.tsx
-import {FC, Suspense} from "react";
 import { getLazyProvider, getLazyWidget } from "./cache";
-import {CardConfig, StackType} from "@packages/report_builder/src/type.ts";
-import { WidgetType } from "@hulk/common";
+import {CardConfig, StackType} from "../type.ts";
+import { React, WidgetType } from "@hulk/common";
 
-export const LayoutRender: FC<{ content: CardConfig[], level: number }> = ({ content, level }) => {
+export const LayoutRender: React.FC<{ content: CardConfig[], level: number }> = ({ content, level }) => {
 
+  const {Suspense} = React;
 
   return content.map((child, childInd) => {
     // 如果是horizontal的话，那高度顶满

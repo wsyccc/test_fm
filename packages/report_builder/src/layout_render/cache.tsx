@@ -1,19 +1,18 @@
-// widget‑loader.ts
-import { lazy, LazyExoticComponent, ComponentType, ReactNode } from 'react';
-import { WidgetType, toPascalCase } from '@hulk/common';
+/// <reference types="vite/client" />
+import {WidgetType, toPascalCase, React} from '@hulk/common';
 
-type ProvComp = ComponentType<{ children: ReactNode }>;
+type ProvComp = React.ComponentType<{ children: React.ReactNode }>;
 
-type WidgetComp = ComponentType<any>;
+type WidgetComp = React.ComponentType<any>;
 
 // 缓存每种类型的 LazyProvider，避免重复创建
-const providerCache: Partial<Record<WidgetType, LazyExoticComponent<ProvComp>>> = {};
+const providerCache: Partial<Record<WidgetType, React.LazyExoticComponent<ProvComp>>> = {};
 
-const widgetCache: Partial<Record<WidgetType, LazyExoticComponent<WidgetComp>>> = {};
+const widgetCache: Partial<Record<WidgetType, React.LazyExoticComponent<WidgetComp>>> = {};
 
-export function getLazyProvider(widgetType: WidgetType): LazyExoticComponent<ProvComp> {
+export function getLazyProvider(widgetType: WidgetType): React.LazyExoticComponent<ProvComp> {
   if (!providerCache[widgetType]) {
-    providerCache[widgetType] = lazy<ProvComp>(() =>
+    providerCache[widgetType] = React.lazy<ProvComp>(() =>
       import(
         `@packages/${widgetType}/src/context.ts`
         ).then(mod => {
@@ -22,17 +21,17 @@ export function getLazyProvider(widgetType: WidgetType): LazyExoticComponent<Pro
         if (!Provider) {
           throw new Error(`Module @packages/${widgetType}/src/context.ts does not export ${exportName}`);
         }
-        
-        return { default: Provider };
+
+        return {default: Provider};
       })
     );
   }
   return providerCache[widgetType]!;
 }
 
-export function getLazyWidget(widgetType: WidgetType): LazyExoticComponent<WidgetComp> {
+export function getLazyWidget(widgetType: WidgetType): React.LazyExoticComponent<WidgetComp> {
   if (!widgetCache[widgetType]) {
-    widgetCache[widgetType] = lazy<WidgetComp>(() =>
+    widgetCache[widgetType] = React.lazy<WidgetComp>(() =>
       import(
         `@packages/${widgetType}/src/index.tsx`
         ).then(mod => {
@@ -42,7 +41,7 @@ export function getLazyWidget(widgetType: WidgetType): LazyExoticComponent<Widge
             `Module @packages/${widgetType}/src/index.tsx has no default export`
           );
         }
-        return { default: Component };
+        return {default: Component};
       })
     );
   }

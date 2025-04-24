@@ -1,9 +1,11 @@
-import {BaseWidgetDataType, WidgetType} from "@hulk/common";
-import {StyleConfig} from "@packages/common/type.ts";
+import {BaseWidgetDataType, WidgetType, StyleConfig } from "@hulk/common";
 
-export interface ReportBuilderPropsInterface extends BaseWidgetDataType{
+export interface ReportBuilderPropsInterface extends Omit<BaseWidgetDataType, 'width' | 'height'> {
   // add more props here
   yamlText: string;
+  width?: number | string;
+  height?: number | string;
+
 }
 
 export enum StackType {

@@ -112,7 +112,7 @@ const buildWidget = (widgetName: string) => {
         const importMapScript = `<script type="importmap">
     {
         "imports": {
-            "@hulk/common": "/dist_common/common.es.js"
+            "@hulk/common": "/dist_common/common.index.es.js"
         }
     }
   </script>`;

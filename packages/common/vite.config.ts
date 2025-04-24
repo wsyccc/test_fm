@@ -5,17 +5,22 @@ import version from 'vite-plugin-package-version';
 import path from "path";
 
 export default defineConfig({
-  plugins: [react(), dts(), version()],
+  plugins: [react(), dts({
+    entryRoot: 'src',
+    outDir: 'dist_common',
+    include: ['index.ts'],
+  }), version()],
   build: {
     lib: {
       entry: {
         'index': path.resolve(__dirname, './index.ts')
       },
       name: 'HulkCommon',
-      formats: ['umd', 'es'],
-      fileName: (format) => `common.${format}.js`
+      formats: ['es'],
+      fileName: (format, entryName) => `common.${entryName}.${format}.js`
     },
     outDir: 'dist_common',
+    emptyOutDir: true,
     rollupOptions: {
       external: []
     }

@@ -17,31 +17,46 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import {React, WidgetType, Row, Button, Col} from '@hulk/common';
+import {React, WidgetType, Row, Button, Col, YamlParser, } from '@hulk/common';
 import { useReportBuilderCommon } from './context';
 import { ReportBuilderPropsInterface } from "./type.ts";
 import defaultConfigs from './configs.ts';
-import {YamlParser} from "@packages/common/src/yaml_parser/YamlParser.ts";
-import {getLazyProvider, getLazyWidget} from "@packages/report_builder/src/layout_render/cache.tsx";
-import {LayoutRender} from "@packages/report_builder/src/layout_render";
+import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
+import {LayoutRender} from "./layout_render";
+import { _ } from "@hulk/common";
 
 
 const MARGIN_CONSTANT = '20px';
 
 
-const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props) => {
+const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
 
   const { useState, useMemo, Suspense } = React;
 
+  console.log(props, 'props');
+  console.log(widgetData, 'widgetData');
+  console.log(defaultConfigs, 'defaultConfigs');
+
   const data: ReportBuilderPropsInterface = useMemo(() => {
-      return {
-        ...defaultConfigs,
-        ...props,
-        ...widgetData,
-      };
+    return _.mergeWith(
+      {},
+      defaultConfigs,
+      props,
+      widgetData,
+      // customizer: if key is "yamlText" and src is empty, keep objVal
+      (objVal, srcVal, key) => {
+        if (key === 'yamlText' && (srcVal === '' || srcVal == null)) {
+          return objVal;
+        }
+        return undefined;
+      }
+    );
   }, [props, widgetData]);
 
+  console.log(data, 'data')
+
+  const isStorybook = data.isStorybook ?? false;
   // determine isStorybook(Dev) or Production(Built)
   // const isStorybook = data.isStorybook ?? false;
 
