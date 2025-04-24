@@ -44,6 +44,9 @@ export interface BaseWidgetActionType {
 
 export interface ActionPayload {
   widgetId: string;
+  // paging for report builder
   pageNumber?: number;
   pageContentLimit?: number;
+  // initial data for widgets
+  version?: string;
 }

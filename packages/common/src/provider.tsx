@@ -9,14 +9,14 @@ import {
 } from "./data_manager";
 import {Message} from "./data_manager/Message";
 
-export interface CommonContextType<T extends BaseWidgetDataType> {
+export interface CommonContextType<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
   triggerAction: (trigger: BaseTriggerActions[], payload: ActionPayload, storybook?: boolean) => void;
 }
 
-export function getCommonContext<T extends BaseWidgetDataType>() {
+export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>>() {
   const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {

@@ -1,12 +1,51 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import {Config, createGenerator} from "ts-json-schema-generator";
 
 export default defineConfig(({}) => {
 
   return {
     base: 'dist_tree_map_chart',
-    plugins: [react()],
+    plugins: [react(), {
+      name: 'widget-props-schema',
+      apply: 'build',
+      enforce: 'pre',
+      buildStart() {
+        const tsconfigPath = path.resolve(__dirname, 'tsconfig.json');
+        const inputFile = path.resolve(__dirname, 'src/type.ts');
+        const typeName = 'TreeMapChartPropsInterface';
+
+        const config: Config = {
+          path: inputFile,
+          tsconfig: tsconfigPath,
+          type: typeName,
+          skipTypeCheck: true,
+          topRef: false,
+          minify: true,
+          encodeRefs: false,
+          jsDoc: "none"
+        };
+        const schema = createGenerator(config).createSchema(typeName);
+
+        if (schema.definitions) {
+          for (const k of Object.keys(schema.definitions)) {
+            if (k.startsWith('Property.') || k.startsWith('DataType.')) {
+              delete schema.definitions[k]
+            }
+          }
+        }
+
+        delete schema.definitions?.StyleConfig;
+        delete schema.additionalProperties;
+
+        this.emitFile({
+          type: 'asset',
+          fileName: 'configs.schema.json',
+          source: JSON.stringify(schema, null, 2)
+        })
+      }
+    }],
     resolve: {
       alias: {
         '@hulk/common': path.resolve(__dirname, '../../dist/dist_common/common.index.es.js'),

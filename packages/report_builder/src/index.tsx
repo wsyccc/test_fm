@@ -17,13 +17,14 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import {React, WidgetType, Row, Button, Col, YamlParser, } from '@hulk/common';
+import {React, WidgetType, Row, Button, Col, YamlParser, BaseTriggerActions, generateWidgetId,} from '@hulk/common';
 import { useReportBuilderCommon } from './context';
 import { ReportBuilderPropsInterface } from "./type.ts";
 import defaultConfigs from './configs.ts';
 import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
 import {LayoutRender} from "./layout_render";
 import { _ } from "@hulk/common";
+import pkg from '../package.json';
 
 
 const MARGIN_CONSTANT = '20px';
@@ -32,11 +33,7 @@ const MARGIN_CONSTANT = '20px';
 const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
 
-  const { useState, useMemo, Suspense } = React;
-
-  console.log(props, 'props');
-  console.log(widgetData, 'widgetData');
-  console.log(defaultConfigs, 'defaultConfigs');
+  const { useState, useMemo, Suspense, useEffect } = React;
 
   const data: ReportBuilderPropsInterface = useMemo(() => {
     return _.mergeWith(
@@ -54,7 +51,12 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
     );
   }, [props, widgetData]);
 
-  console.log(data, 'data')
+  useEffect(() => {
+    triggerAction([BaseTriggerActions.init], {
+      widgetId: generateWidgetId(),
+      version: pkg.version
+    })
+  }, [pkg.version]);
 
   const isStorybook = data.isStorybook ?? false;
   // determine isStorybook(Dev) or Production(Built)

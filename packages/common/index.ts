@@ -29,7 +29,7 @@ export { getCommonContext } from './src/provider';
 export type { CommonContextType } from './src/provider';
 export type { BaseWidgetDataType, BaseWidgetActionType, StyleConfig } from './type';
 export { BaseTriggerActions, WidgetType } from './constants';
-export { convertOriginDataToRawData, toPascalCase } from './utils';
+export { convertOriginDataToRawData, toPascalCase, generateWidgetId } from './utils';
 export {YamlParser} from './src/yaml_parser/YamlParser';
 /**
  * ==================END Custom=================
@@ -74,4 +74,3 @@ export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 /**
  * ============================================
  */
-

@@ -1,9 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const convertOriginDataToRawData = (
   originData,
   indicateXData?: string, // column名字
   indicateYData?: string[], // column名字组，多个column显示多个线（linechart)
 ) => {
   const xData: string[] = [];
+
   const xDataName: string[] = [];
   const yData: { name: string; data: number[]; type: string }[] = [];
 
@@ -109,4 +112,8 @@ export function toPascalCase(name: string): string {
     .filter(Boolean)
     .map(w => w[0].toUpperCase() + w.slice(1))
     .join('');
+}
+
+export function generateWidgetId(): string {
+  return uuidv4();
 }
