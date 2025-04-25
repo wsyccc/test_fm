@@ -28,17 +28,6 @@ export default defineConfig(({}) => {
         };
         const schema = createGenerator(config).createSchema(typeName);
 
-        if (schema.definitions) {
-          for (const k of Object.keys(schema.definitions)) {
-            if (k.startsWith('Property.') || k.startsWith('DataType.')) {
-              delete schema.definitions[k]
-            }
-          }
-        }
-
-        delete schema.definitions?.StyleConfig;
-        delete schema.additionalProperties;
-
         this.emitFile({
           type: 'asset',
           fileName: 'configs.schema.json',

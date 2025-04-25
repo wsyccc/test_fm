@@ -67,6 +67,7 @@
     "monaco-yaml": "5.3.1",
     "playwright": "1.52.0",
     "prettier": "3.5.3",
+    "quicktype": "^23.0.175",
     "serve": "14.2.4",
     "storybook": "8.6.12",
     "ts-json-schema-generator": "^2.4.0",

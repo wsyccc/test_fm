@@ -8,7 +8,6 @@ import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from 
  */
 export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = BaseMessagePurpose> {
 
-  private _source: MessageSource;
   private _purpose: BaseMessagePurpose & F;
   private _widgetId?: string;
   private _widgetType?: WidgetType;
@@ -22,7 +21,6 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
   private _isChunk?: boolean;
 
   constructor({
-                source,
                 purpose,
                 widgetId,
                 widgetType,
@@ -52,7 +50,6 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
     this._widgetType = widgetType;
     this._widgetWidth = widgetWidth;
     this._widgetHeight = widgetHeight;
-    this._source = source;
     this._purpose = purpose;
     this._payload = payload;
     this._triggerAction = triggerAction;
@@ -160,24 +157,6 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
     this._widgetType = value;
   }
 
-  /**
-   * MessageSource is where the message comes from
-   * from react to pm or from pm to react
-   * @return {MessageSource} - Message Source
-   */
-  get source(): MessageSource {
-    return this._source;
-  }
-
-  /**
-   * MessageSource is where the message comes from
-   * from react to pm or from pm to react
-   * @param value {MessageSource} - Message Source
-   */
-  set source(value: MessageSource) {
-    this._source = value;
-  }
-
 
   /**
    * purpose of the sending this message
@@ -262,7 +241,6 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
     return {
       widgetId: this._widgetId,
       widgetType: this._widgetType,
-      source: this._source,
       purpose: this._purpose,
       payload: this._payload,
       triggerAction: this._triggerAction,
