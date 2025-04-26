@@ -8,7 +8,7 @@ export interface StyleConfig extends CSSProperties {
 export interface BaseWidgetDataType {
   width: number | string;
   height: number | string;
-  style?: StyleConfig;
+  style?: Record<string, any>;
   bgColor?: string;
   isStorybook?: boolean;
 }

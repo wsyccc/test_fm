@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import {Config, createGenerator} from "ts-json-schema-generator";
+import {exportSchemaFilter} from "../../utils";
 
 export default defineConfig(({}) => {
 
@@ -20,18 +21,14 @@ export default defineConfig(({}) => {
           path: inputFile,
           tsconfig: tsconfigPath,
           type: typeName,
-          skipTypeCheck: true,
-          topRef: false,
-          minify: true,
-          encodeRefs: false,
-          jsDoc: "none"
+          skipTypeCheck: true
         };
         const schema = createGenerator(config).createSchema(typeName);
 
         this.emitFile({
           type: 'asset',
           fileName: 'configs.schema.json',
-          source: JSON.stringify(schema, null, 2)
+          source: JSON.stringify(exportSchemaFilter(schema), null, 2)
         })
       }
     }],
