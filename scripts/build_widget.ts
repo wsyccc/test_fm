@@ -204,8 +204,9 @@ const buildWidget = (widgetName: string) => {
       }
 
       // Determine output file path
-      const outputFile = path.join(widgetDistTo, `${widgetName}Schema_${lang}.${fileExt}`);
-      const topLevelName = `${widgetName}Schema`;
+      const widgetNameCamel = widgetName.charAt(0).toUpperCase() + widgetName.slice(1);
+      const outputFile = path.join(widgetDistTo, `${widgetNameCamel}Schema_${lang}.${fileExt}`);
+      const topLevelName = `${widgetNameCamel}Schema`;
 
       try {
         // Run quicktype to generate code from JSON Schema
@@ -216,12 +217,12 @@ const buildWidget = (widgetName: string) => {
           `--lang ${qtLang}`,
           '--src-lang schema',
           '--all-properties-optional',
-          '--type-style camel-case-upper-acronyms',
+          '--type-style camel-case',
           '--member-style underscore-case',
-          '--enumerator-style camel-case-upper-acronyms',
+          '--enumerator-style camel-case',
           `--top-level ${topLevelName}`,
           '--just-types',
-          `--namespace ${widgetName}`,
+          `--namespace ${widgetNameCamel}`,
           `-o ${outputFile}`,
           schemaFile
         ];
