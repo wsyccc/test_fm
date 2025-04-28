@@ -1,13 +1,15 @@
-import {BaseTriggerActions, WidgetType} from "../../constants";
-import {ActionPayload} from "../../type";
+import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../../constants";
+import {ActionRequest} from "../../type";
+import {Message} from "./Message";
+import {sendMessage} from "./index";
 
 export class ActionHandler {
-  get triggeredActions(): BaseTriggerActions[] {
-    return this._triggeredActions;
+  get actions(): BaseTriggerActions[] {
+    return this._actions;
   }
 
-  set triggeredActions(value: BaseTriggerActions[]) {
-    this._triggeredActions = value;
+  set actions(value: BaseTriggerActions[]) {
+    this._actions = value;
   }
 
   get widgetType(): WidgetType {
@@ -26,37 +28,53 @@ export class ActionHandler {
     this._widgetId = value;
   }
 
-  get payload(): ActionPayload {
-    return this._payload;
+  get actionRequest(): ActionRequest | undefined {
+    return this._actionRequest;
   }
 
-  set payload(value: ActionPayload) {
-    this._payload = value;
+  set actionRequest(value: ActionRequest) {
+    this._actionRequest = value;
   }
 
-  private _triggeredActions: BaseTriggerActions[];
+  private _actions: BaseTriggerActions[];
   private _widgetType: WidgetType;
   private _widgetId: string;
-  private _payload?: ActionPayload;
+  private _actionRequest?: ActionRequest;
 
-  constructor(widgetType: WidgetType, widgetId: string, triggerAction: BaseTriggerActions[], payload?: ActionPayload) {
+  constructor(widgetType: WidgetType, widgetId: string, request: ActionRequest) {
     this._widgetId = widgetId;
     this._widgetType = widgetType;
-    this._triggeredActions = triggerAction;
-    this._payload = payload;
+    this._actions = request.actions;
+    this._actionRequest = request;
   }
 
   public triggerAction(){
-    this.triggeredActions.forEach((action) => {
+    this.actions.forEach((action) => {
+      const message = new Message(
+        {
+          purpose: BaseMessagePurpose.triggerAction,
+          widgetId: this.widgetId,
+          widgetType: this.widgetType,
+          actionRequest: this.actionRequest
+        }
+      );
       switch (action) {
         case BaseTriggerActions.onClick:
           console.log(`onClick on ${this.widgetId}`);
           // Handle onClick action
           break;
-        case BaseTriggerActions.init:
-          console.log(`init on ${this.widgetId}`);
+        default:
+          message.payload = {
+            updateWidgets: [{
+              id: this.widgetId,
+              type: this.widgetType,
+              version: "0.0.0"
+            }],
+          }
           break;
       }
+      if (message.payload) sendMessage(message);
+      else console.error(`Message payload is empty for ${action}`);
     });
   }
 

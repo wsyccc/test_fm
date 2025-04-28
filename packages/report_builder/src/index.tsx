@@ -17,13 +17,12 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import {React, WidgetType, Row, Button, Col, YamlParser, BaseTriggerActions, generateWidgetId,} from '@hulk/common';
-import { useReportBuilderCommon } from './context';
-import { ReportBuilderPropsInterface } from "./type.ts";
+import {_, BaseTriggerActions, Button, Col, generateWidgetId, React, Row, WidgetType, YamlParser,} from '@hulk/common';
+import {useReportBuilderCommon} from './context';
+import {ReportBuilderPropsInterface} from "./type.ts";
 import defaultConfigs from './configs.ts';
-import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
+import {getLazyProvider, getLazyWidget} from "./layout_render/cache";
 import {LayoutRender} from "./layout_render";
-import { _ } from "@hulk/common";
 import pkg from '../package.json';
 
 
@@ -31,7 +30,7 @@ const MARGIN_CONSTANT = '20px';
 
 
 const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction, initializeWidgetData} = useReportBuilderCommon();
 
   const { useState, useMemo, Suspense, useEffect } = React;
 
@@ -51,16 +50,29 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
     );
   }, [props, widgetData]);
 
-  useEffect(() => {
-    triggerAction([BaseTriggerActions.init], {
-      widgetId: generateWidgetId(),
-      version: pkg.version
-    })
-  }, [pkg.version]);
-
   const isStorybook = data.isStorybook ?? false;
   // determine isStorybook(Dev) or Production(Built)
   // const isStorybook = data.isStorybook ?? false;
+
+  useEffect(() => {
+    if (!widgetData){
+
+    }
+  }, []);
+
+  useEffect(() => {
+    triggerAction({
+      actions: [BaseTriggerActions.init],
+      payload: {
+        updateWidgets: [{
+          id: generateWidgetId(),
+          type: WidgetType.report_builder,
+          version: pkg.version
+        }]
+      },
+      isStorybook,
+    });
+  }, [pkg.version]);
 
   const renderer = new YamlParser({reportText: data.yamlText});
   const config = renderer.getReport();

@@ -1,12 +1,7 @@
 import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
-import {ActionPayload, WidgetIdentityType, BaseWidgetDataType} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../constants";
-import {
-  getBaseWidgetData,
-  initializeCommunication,
-  sendMessage,
-  useWebviewListener
-} from "./data_manager";
+import {ActionRequest, BaseWidgetDataType, WidgetIdentityType} from '../type';
+import {BaseMessagePurpose, BaseTriggerActions, WidgetType} from "../constants";
+import {sendMessage, useWebviewListener} from "./data_manager";
 import {Message} from "./data_manager/Message";
 import {ActionHandler} from "./data_manager/actionHandler";
 
@@ -14,13 +9,14 @@ export interface CommonContextType<T extends BaseWidgetDataType | Omit<BaseWidge
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
-  triggerAction: (trigger: BaseTriggerActions[], payload: ActionPayload, isStorybook?: boolean) => void;
+  triggerAction: ({request, isStorybook}: { request: ActionRequest, isStorybook?: boolean }) => void;
+  initializeWidgetData: ({id, type, version, data}: WidgetIdentityType & { data: T }) => void;
 }
 
 export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>>() {
   const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
-  const Provider = ({ children }: { children: ReactNode }) => {
+  const Provider = ({children}: { children: ReactNode }) => {
     const [widgetData, setWidgetData] = useState<T | null>(null);
     const widgetIdentity = useRef<WidgetIdentityType>({});
     const originalWidgetData = useRef<T | null>(null);
@@ -32,63 +28,74 @@ export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetD
       const distName = segments.find((seg) => seg.startsWith('dist_'))?.split('_')[1];
       widgetIdentity.current = {
         type: distName ? WidgetType[distName] : undefined,
-        widgetId: undefined
+        id: undefined
       }
-      if (widgetIdentity.current.type) initializeCommunication(widgetIdentity.current.type);
     }, []);
 
     // received message from PM
     useWebviewListener((msg: Message) => {
-      if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
-        const newData = msg.payload;
-        console.log('Received updateWidgetData:', newData);
-        updateWidgetData({...widgetData, ...newData} as T);
-      } else if (msg.purpose === BaseMessagePurpose.setWidgetBaseConfig) {
-        const config = getBaseWidgetData(msg, widgetIdentity);
-        widgetIdentity.current = {
-          ...widgetIdentity.current,
-          ...config
-        }
-        setWidgetData({
-          ...widgetData,
-          width: config?.width,
-          height: config?.height,
-        } as T)
-        // sendWidgetDefaultConfigs();
+      // at runtime the server side already has the data
+      if (msg.purpose === BaseMessagePurpose.initialize) {
+        const data = msg.payload?.updateWidgets[0].data;
+        widgetIdentity.current.id = msg.widgetId;
+        widgetIdentity.current.type = msg.widgetType;
+        setWidgetData(data);
       } else {
-        console.warn('Received unknown message:', msg);
+        const data = msg.payload?.updateWidgets.find(item => item.id === widgetIdentity.current.id );
+        if (!data) return;
+        if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
+          const newData = data.data;
+          console.log('Received updateWidgetData:', newData);
+          updateWidgetData({...widgetData, ...newData} as T);
+        } else {
+          console.warn('Received unknown message:', msg);
+        }
       }
     });
 
-    const updateWidgetData = (update: Partial<T>, isStorybook?: boolean, ) => {
-      const newWidgetData = { ...widgetData, ...update } as T;
-      console.log(newWidgetData);
+    const updateWidgetData = (update: Partial<T>, isStorybook?: boolean) => {
+      const newWidgetData = {...widgetData, ...update} as T;
       setWidgetData(newWidgetData);
       if (!isStorybook) {
         sendMessage(new Message({
-          source: MessageSource.Hulk,
           purpose: BaseMessagePurpose.updateWidgetData,
-          widgetId: widgetIdentity.current.widgetId,
+          widgetId: widgetIdentity.current.id,
           widgetType: widgetIdentity.current.type,
-          payload: newWidgetData,
+          payload: {
+            updateWidgets: [
+              {
+                id: widgetIdentity.current.id,
+                type: widgetIdentity.current.type,
+                data: newWidgetData,
+                version: widgetIdentity.current.version ?? "0.0.0",
+              }
+            ]
+          }
         }));
       }
       // pass the new widget data to pm
     };
 
+    const initializeWidgetData = ({id, type, version, data}: WidgetIdentityType & { data: T }) => {
+      widgetIdentity.current.id = id;
+      widgetIdentity.current.type = type;
+      widgetIdentity.current.version = version;
+      setWidgetData({...widgetData, ...data} as T);
+    }
+
     const resetWidgetData = () => {
       setWidgetData(originalWidgetData.current);
     };
 
-    const triggerAction = (actions: BaseTriggerActions[], payload: ActionPayload, isStorybook?: boolean) => {
-      if (widgetIdentity && widgetIdentity.current.type && widgetIdentity.current.widgetId && !isStorybook){
-        const actionTrigger = new ActionHandler(widgetIdentity.current.type, widgetIdentity.current.widgetId, actions, payload);
+    const triggerAction = ({request, isStorybook}: { request: ActionRequest, isStorybook?: boolean }) => {
+      if (widgetIdentity && widgetIdentity.current.type && widgetIdentity.current.id && !isStorybook) {
+        const actionTrigger = new ActionHandler(widgetIdentity.current.type, widgetIdentity.current.id, actions, payload);
         actionTrigger.triggerAction();
       }
     };
 
     return (
-      <Context.Provider value={{ widgetData, updateWidgetData, resetWidgetData, triggerAction }}>
+      <Context.Provider value={{widgetData, updateWidgetData, resetWidgetData, triggerAction, initializeWidgetData}}>
         {children}
       </Context.Provider>
     );
@@ -102,5 +109,5 @@ export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetD
     return context;
   };
 
-  return { Provider, useCommon };
+  return {Provider, useCommon};
 }

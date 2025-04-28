@@ -14,39 +14,28 @@ export interface BaseWidgetDataType {
 }
 
 export interface WidgetIdentityType {
-  widgetId?: string;
+  id?: string;
   type?: WidgetType;
+  version?: string;
 }
 
-/**
- * @example
- * {
- *   "widgetId": "123",
- *   "source": "title_change",
- *   "type": "onChange",
- *   "description": "button clicked",
- *   "payload": {
- *     "key": "value"
- *   }
- * }
- */
-export interface BaseWidgetActionType {
-  // the id of the widget that triggered the action
-  widgetId?: string;
-  // the source name of the action e.g. button, input, etc.
-  source: string;
-  // the action type
-  type: BaseTriggerActions;
-  description: string;
-  // the action payload e.g. the data to be passed to the action
-  payload: any;
+
+export interface MessagePayload {
+  updateWidgets: {
+    // updated widget id, normally is the widget itself,
+    // but when you want to trigger an action by this widget, but update other widget data,
+    // place the widgets' id that you want to update here
+    id?: string;
+    type?: WidgetType;
+    version: string;
+    data?: any;
+  }[];
+  webviewVersion?: string;
 }
 
-export interface ActionPayload {
-  widgetId: string;
+export interface ActionRequest {
+  actions: BaseTriggerActions[],
   // paging for report builder
   pageNumber?: number;
   pageContentLimit?: number;
-  // initial data for widgets
-  version?: string;
 }

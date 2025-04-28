@@ -27,7 +27,7 @@ export { createRoot } from 'react-dom/client';
  */
 export { getCommonContext } from './src/provider';
 export type { CommonContextType } from './src/provider';
-export type { BaseWidgetDataType, BaseWidgetActionType, StyleConfig } from './type';
+export type { BaseWidgetDataType, StyleConfig } from './type';
 export { BaseTriggerActions, WidgetType } from './constants';
 export { convertOriginDataToRawData, toPascalCase, generateWidgetId } from './utils';
 export {YamlParser} from './src/yaml_parser/YamlParser';

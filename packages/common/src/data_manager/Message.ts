@@ -1,4 +1,6 @@
-import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from "../../constants";
+import {BaseMessagePurpose, WidgetType} from "../../constants";
+import {ActionRequest, MessagePayload} from "../../type";
+import * as console from "node:console";
 
 /**
  * Message class
@@ -6,19 +8,27 @@ import {BaseMessagePurpose, BaseTriggerActions, MessageSource, WidgetType} from 
  * S is the trigger action type
  * F is the message purpose type
  */
-export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = BaseMessagePurpose> {
+export class Message {
+  get acknowledge(): boolean | undefined {
+    return this._acknowledge;
+  }
 
-  private _purpose: BaseMessagePurpose & F;
+  set acknowledge(value: boolean) {
+    this._acknowledge = value;
+  }
+
+  private _purpose: BaseMessagePurpose;
   private _widgetId?: string;
   private _widgetType?: WidgetType;
   private _widgetWidth?: number;
   private _widgetHeight?: number;
-  private _payload?: T;
-  private _triggerAction?: BaseTriggerActions[] & S;
+  private _payload?: MessagePayload;
+  private _actionRequest?: ActionRequest;
   private _sequenceId?: string;
   private _chunkIndex?: number;
   private _totalChunks?: number;
   private _isChunk?: boolean;
+  private _acknowledge?: boolean;
 
   constructor({
                 purpose,
@@ -27,24 +37,25 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
                 widgetWidth,
                 widgetHeight,
                 payload,
-                triggerAction,
+                actionRequest,
                 sequenceId,
                 chunkIndex,
                 totalChunks,
-                isChunk
+                isChunk,
+                acknowledge,
               }: {
-    source: MessageSource;
-    purpose: BaseMessagePurpose & F;
+    purpose: BaseMessagePurpose;
     widgetId?: string;
     widgetType?: WidgetType;
     widgetWidth?: number;
     widgetHeight?: number;
-    payload?: T;
-    triggerAction?: BaseTriggerActions[] & S;
+    payload?: MessagePayload;
+    actionRequest?: ActionRequest;
     sequenceId?: string;
     chunkIndex?: number;
     totalChunks?: number;
     isChunk?: boolean;
+    acknowledge?: boolean;
   }) {
     this._widgetId = widgetId;
     this._widgetType = widgetType;
@@ -52,11 +63,12 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
     this._widgetHeight = widgetHeight;
     this._purpose = purpose;
     this._payload = payload;
-    this._triggerAction = triggerAction;
+    this._actionRequest = actionRequest;
     this._sequenceId = sequenceId;
     this._chunkIndex = chunkIndex;
     this._totalChunks = totalChunks;
     this._isChunk = isChunk;
+    this._acknowledge = acknowledge;
   }
 
   /**
@@ -164,9 +176,9 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
    * e.g. 1. purpose: 'changeBarColor' means the message is going to change the color of the bar for bar chart widget
    *     2. purpose: 'updateWidgetData' means the message is going to update the widget data
    *
-   * @return {BaseMessagePurpose & F} - Message Purpose
+   * @return {BaseMessagePurpose} - Message Purpose
    */
-  get purpose(): BaseMessagePurpose & F {
+  get purpose(): BaseMessagePurpose {
     return this._purpose;
   }
 
@@ -177,45 +189,54 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
    * e.g. 1. purpose: 'changeBarColor' means the message is going to change the color of the bar for bar chart widget
    *    2. purpose: 'updateWidgetData' means the message is going to update the widget data
    *
-   * @param value {BaseMessagePurpose & F} - Message Purpose
+   * @param value {BaseMessagePurpose} - Message Purpose
    */
-  set purpose(value: BaseMessagePurpose & F) {
+  set purpose(value: BaseMessagePurpose) {
     this._purpose = value;
   }
 
   /**
    * payload is the data for the message
    * e.g. payload: { color: 'red' } means the color is red
-   * @return {T} - Message Payload
+   * @return {MessagePayload} - Message Payload
    */
-  get payload(): T | undefined {
+  get payload(): MessagePayload | undefined {
     return this._payload;
   }
 
   /**
    * payload is the data for the message
    * e.g. payload: { color: 'red' } means the color is red
-   * @param value {T} - Message Payload
+   * @param value {MessagePayload} - Message Payload
    */
-  set payload(value: T) {
+  set payload(value: MessagePayload) {
+    this._payload = {
+      updateWidgets: value.updateWidgets.map(item => (
+        {
+          ...item,
+          id: item.id ?? this.widgetId,
+          type: item.type ?? this.widgetType,
+        }
+      ))
+    }
     this._payload = value;
   }
 
   /**
    * triggerAction is the action that triggered by user or system
    * e.g. triggerAction: 'onClick' means the user clicked the button
-   * @return {BaseTriggerActions & S} - Message Trigger Action
+   * @return {BaseTriggerActions} - Message Trigger Action
    */
-  get triggerAction(): (BaseTriggerActions[] & S) | undefined {
-    return this._triggerAction;
+  get actionRequest(): ActionRequest | undefined {
+    return this._actionRequest;
   }
 
   /**
    * triggerAction is the action that triggered by user or system
-   * @param value {BaseTriggerActions & S} - Message Trigger Action
+   * @param value {BaseTriggerActions} - Message Trigger Action
    */
-  set triggerAction(value: BaseTriggerActions[] & S) {
-    this._triggerAction = value;
+  set actionRequest(value: ActionRequest) {
+    this._actionRequest = value;
   }
 
   get widgetWidth(): number | undefined {
@@ -239,15 +260,17 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
    */
   toJSON(): any {
     return {
-      widgetId: this._widgetId,
-      widgetType: this._widgetType,
-      purpose: this._purpose,
-      payload: this._payload,
-      triggerAction: this._triggerAction,
-      sequenceId: this._sequenceId,
-      chunkIndex: this._chunkIndex,
-      totalChunks: this._totalChunks,
-      isChunk: this._isChunk
+      widgetId: this.widgetId,
+      widgetType: this.widgetType,
+      purpose: this.purpose,
+      widgetWidth: this.widgetWidth,
+      widgetHeight: this.widgetHeight,
+      payload: this.payload,
+      actionRequest: this.actionRequest,
+      sequenceId: this.sequenceId,
+      chunkIndex: this.chunkIndex,
+      totalChunks: this.totalChunks,
+      isChunk: this.isChunk
     };
   }
 
@@ -262,10 +285,11 @@ export class Message<T = Record<string, any>, S = BaseTriggerActions[], F = Base
         {
           widgetId: parsedMessage.widgetId ?? undefined,
           widgetType: parsedMessage.widgetType ?? undefined,
-          source: parsedMessage.source ?? undefined,
           purpose: parsedMessage.purpose ?? undefined,
+          widgetWidth: parsedMessage.widgetWidth ?? undefined,
+          widgetHeight: parsedMessage.widgetHeight ?? undefined,
           payload: parsedMessage.payload ?? undefined,
-          triggerAction: parsedMessage.triggerAction ?? undefined,
+          actionRequest: parsedMessage.actionRequest ?? undefined,
           sequenceId: parsedMessage.sequenceId ?? undefined,
           chunkIndex: parsedMessage.chunkIndex ?? undefined,
           totalChunks: parsedMessage.totalChunks ?? undefined,
