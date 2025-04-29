@@ -64,13 +64,11 @@ pages:
       - type: barchart
         width: 33%
         height: 200
-        configs:
-          color: red
+        color: red
       - type: gaugechart
         width: 33%
         height: 400
-        configs:
-          bgColor: "#18ffd8"
+        bgColor: "#18ffd8"
       - type: linechart
         width: 33%
         height: 200
@@ -104,13 +102,11 @@ pages:
       - type: barchart
         width: 33%
         height: 200
-        configs:
-          color: red
+        color: red
       - type: gaugechart
         width: 33%
         height: 400
-        configs:
-          bgColor: "#18ffd8"
+        bgColor: "#18ffd8"
       - type: linechart
         width: 33%
         height: 200

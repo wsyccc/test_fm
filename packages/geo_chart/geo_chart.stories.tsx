@@ -1,14 +1,14 @@
-import { Meta, StoryObj } from '@storybook/react';
-import GeoChart from './src/index';
+import { Meta, StoryObj } from "@storybook/react";
+import GeoChart from "./src/index";
 import { GeoChartProvider } from "./src/context";
 import { GeoChartPropsInterface } from "./src/type";
-import React from 'react';
-import { GeoChartCategory } from './src/utils';
+import React from "react";
+import { GeoChartCategory } from "./src/utils";
 
 const meta: Meta<typeof GeoChart> = {
-  title: 'Components/GeoChart',
+  title: "Components/GeoChart",
   component: GeoChart,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     category: {
       table: {

@@ -5,3 +5,16 @@ export interface ImagePropsInterface extends BaseWidgetDataType {
   src?: string;
   alt?: string;
 }
+
+const ImagePropsSchema = {
+  src: {
+    type: "string",
+    required: false
+  },
+  alt: {
+    type: "string",
+    required: false
+  }
+};
+
+export default ImagePropsSchema;

@@ -6,8 +6,8 @@ export function generateGaugeChartOption(configs: GaugechartPropsInterface) {
   const option = {
     series: [
       {
-        type: 'gauge',
-        center: ['50%', '60%'],
+        type: "gauge",
+        center: ["50%", "60%"],
         startAngle,
         endAngle,
         min,
@@ -41,7 +41,7 @@ export function generateGaugeChartOption(configs: GaugechartPropsInterface) {
           valueAnimation: true,
           fontSize: 15,
           formatter: `${prefix} {value} ${suffix}`,
-          color: color ?? 'inherit'
+          color: color ?? "inherit"
         },
         data: [
           {

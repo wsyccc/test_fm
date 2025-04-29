@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useScatterChartCommon } from './context';
+import { React } from "@hulk/common";
+import { useScatterChartCommon } from "./context";
 import { ScatterChartPropsInterface } from "./type.ts";
-import { generateBasicScatterChartOption, generateCalendarScatterChartOption, generateDistributionScatterChartOption, generateLogarithmicScatterChartOption, generateSingleAxisScatterChartOption, ScatterChartCategory } from './utils.ts';
-import { ReactEcharts, Echarts, EchartsStat } from '@hulk/common';
-import defaultConfigs from './configs.ts';
+import { generateBasicScatterChartOption, generateCalendarScatterChartOption, generateDistributionScatterChartOption, generateLogarithmicScatterChartOption, generateSingleAxisScatterChartOption, ScatterChartCategory } from "./utils.ts";
+import { ReactEcharts, Echarts, EchartsStat } from "@hulk/common";
+import defaultConfigs from "./configs.ts";
 
 Echarts.registerTransform((EchartsStat as any).transform.clustering);
 Echarts.registerTransform((EchartsStat as any).transform.regression);
@@ -12,7 +12,7 @@ const ScatterChart: React.FC = (props: ScatterChartPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useScatterChartCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;
-  console.log(props, 'wid')
+  console.log(props, "wid")
   const data: ScatterChartPropsInterface = useMemo(() => {
     return {
       //TODO add default props here above ...props
@@ -26,7 +26,7 @@ const ScatterChart: React.FC = (props: ScatterChartPropsInterface | {}) => {
 
   const echartsRef = useRef<ReactEcharts>(null);
 
-  const [distributionType, setDistributionType] = useState<string>('scatter');
+  const [distributionType, setDistributionType] = useState<string>("scatter");
 
   const option = useMemo(() => {
     return data.category === ScatterChartCategory.Calendar ? generateCalendarScatterChartOption({
@@ -55,7 +55,7 @@ const ScatterChart: React.FC = (props: ScatterChartPropsInterface | {}) => {
 
     const interval = setInterval(() => {
       if (!echartsInstance) return;
-      setDistributionType(p => p === 'scatter' ? 'bar' : 'scatter');
+      setDistributionType(p => p === "scatter" ? "bar" : "scatter");
     }, data.interval * 1000);
 
     return () => {

@@ -1,15 +1,5 @@
 import { BaseWidgetDataType } from "@hulk/common";
 
-export enum GaugeChartCategory {
-  Basic = 'Basic',
-  Vertical = 'Vertical',
-  RadialPolar = 'Radial Polar',
-  TangentialPolar = 'Tangential Polar',
-  MixedLine = 'Mixed Line',
-  Stacked = 'Stacked',
-  StackedHorizontal = 'Stacked Horizontal',
-}
-
 export type GaugeChartRawDataType = {
   xData: string[];
   yData: {
@@ -19,7 +9,6 @@ export type GaugeChartRawDataType = {
 };
 
 export interface GaugechartPropsInterface extends BaseWidgetDataType {
-  category?: GaugeChartCategory;
   color?: string,
   axisColor?: string,
   progress?: boolean,
@@ -46,3 +35,81 @@ export interface GaugechartPropsInterface extends BaseWidgetDataType {
   // 当前值后缀名
   suffix?: string;
 }
+
+const GaugechartPropsSchema = {
+  // Gauge 特有属性
+  color: {
+    type: "string",
+    required: false
+  },
+  axisColor: {
+    type: "string",
+    required: false
+  },
+  progress: {
+    type: "boolean",
+    required: false
+  },
+  startAngle: {
+    type: "number",
+    minimum: 0,
+    maximum: 360,
+    required: false
+  },
+  endAngle: {
+    type: "number",
+    minimum: 0,
+    maximum: 360,
+    required: false
+  },
+  splitNumber: {
+    type: "number",
+    minimum: 1,
+    required: false
+  },
+  min: {
+    type: "number",
+    required: false
+  },
+  max: {
+    type: "number",
+    required: false
+  },
+  labelDistance: {
+    type: "number",
+    minimum: 0,
+    required: false
+  },
+  intervals: {
+    type: "array",
+    required: false,
+    items: {
+      type: "array",
+      minItems: 2,
+      maxItems: 2,
+      items: [
+        { type: "number" },
+        { type: "string" }
+      ]
+    }
+  },
+  value: {
+    type: "number",
+    required: false
+  },
+  fontSize: {
+    type: "number",
+    minimum: 1,
+    required: false
+  },
+  prefix: {
+    type: "string",
+    required: false
+  },
+  suffix: {
+    type: "string",
+    required: false
+  }
+};
+
+export default GaugechartPropsSchema;

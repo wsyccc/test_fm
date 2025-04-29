@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useOtherChartsCommon } from './context';
+import { React } from "@hulk/common";
+import { useOtherChartsCommon } from "./context";
 import { OtherChartsPropsInterface } from "./type.ts";
-import { ReactEcharts } from '@hulk/common';
-import { generateOtherChartsOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts } from "@hulk/common";
+import { generateOtherChartsOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 
 const OtherCharts: React.FC = (props: OtherChartsPropsInterface | {}) => {
@@ -27,7 +27,7 @@ const OtherCharts: React.FC = (props: OtherChartsPropsInterface | {}) => {
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 

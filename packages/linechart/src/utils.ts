@@ -1,11 +1,11 @@
 export enum LineChartCategory {
-  Basic = 'Basic',
-  Smoothed = 'Smoothed',
-  Area = 'Area',
-  StackedLine = 'Stacked Line',
-  StackedArea = 'Stacked Area',
-  Race = 'Race',
-  Step = 'Step',
+  Basic = "Basic",
+  Smoothed = "Smoothed",
+  Area = "Area",
+  StackedLine = "Stacked Line",
+  StackedArea = "Stacked Area",
+  Race = "Race",
+  Step = "Step",
 }
 
 export type LineChartRawDataType = {
@@ -13,7 +13,7 @@ export type LineChartRawDataType = {
   yData: {
     name: string;
     data: number[];
-    step?: 'start' | 'middle' | 'end'
+    step?: "start" | "middle" | "end"
   }[];
 };
 
@@ -39,46 +39,46 @@ export function generateLineChartOption(configs: any, rawData: LineChartRawDataT
 
   // 2. 构造 series 列表（每个系列绑定自己的列名）
   const series = rawData.yData.map((seriesItem) => ({
-    type: 'line',
+    type: "line",
     name: seriesItem.name,
     encode: {
-      x: 'day',
+      x: "day",
       y: seriesItem.name,
       label: [seriesItem.name],
-      itemName: 'day',
+      itemName: "day",
       tooltip: [seriesItem.name],
     },
     labelLayout: {
-      moveOverlap: 'shiftY',
+      moveOverlap: "shiftY",
     },
     emphasis: {
-      focus: 'series',
+      focus: "series",
     },
   }));
 
   const option = {
     animationDuration: duration,
     xAxis: {
-      type: 'category',
-      position: 'bottom',
+      type: "category",
+      position: "bottom",
       data: rawData.xData,
     },
     yAxis: {
-      type: 'value',
+      type: "value",
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
     },
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
       containLabel: true,
     },
     ...(configs.category === LineChartCategory.Race ? {
       dataset: [
         {
-          id: 'dataset_raw',
+          id: "dataset_raw",
           source: datasetSource,
         },
       ],
@@ -88,11 +88,11 @@ export function generateLineChartOption(configs: any, rawData: LineChartRawDataT
       ...rawData.yData.map((yD) => {
         return {
           ...([LineChartCategory.Area, LineChartCategory.StackedArea].includes(configs.category) ? { areaStyle: {} } : {}),
-          ...([LineChartCategory.StackedLine, LineChartCategory.StackedArea].includes(configs.category) ? { stack: 'Total' } : {}),
+          ...([LineChartCategory.StackedLine, LineChartCategory.StackedArea].includes(configs.category) ? { stack: "Total" } : {}),
           ...([LineChartCategory.Step].includes(configs.category) ? { step: yD.step } : {}),
           smooth: configs.category === LineChartCategory.Smoothed,
-          type: 'line',
-          name: yD.name || '',
+          type: "line",
+          name: yD.name || "",
           data: yD.data,
           label: {
             show: configs.labelEnabled,
@@ -102,7 +102,7 @@ export function generateLineChartOption(configs: any, rawData: LineChartRawDataT
             itemStyle: {
               shadowBlur: 10,
               shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowColor: "rgba(0, 0, 0, 0.5)",
             },
           },
         };

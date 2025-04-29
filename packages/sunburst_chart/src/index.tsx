@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useSunburstChartCommon } from './context';
+import { React } from "@hulk/common";
+import { useSunburstChartCommon } from "./context";
 import { SunburstChartPropsInterface } from "./type.ts";
-import { ReactEcharts } from '@hulk/common';
-import { generateBasicSunburstChartOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts } from "@hulk/common";
+import { generateBasicSunburstChartOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 
 const SunburstChart: React.FC = (props: SunburstChartPropsInterface | {}) => {
@@ -27,7 +27,7 @@ const SunburstChart: React.FC = (props: SunburstChartPropsInterface | {}) => {
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 
@@ -37,7 +37,7 @@ const SunburstChart: React.FC = (props: SunburstChartPropsInterface | {}) => {
 
     const onMouseOver = (event: any) => {
       echartsInstance.dispatchAction({
-        type: 'highlight',
+        type: "highlight",
         geoIndex: 0,
         name: event.name
       });
@@ -45,18 +45,18 @@ const SunburstChart: React.FC = (props: SunburstChartPropsInterface | {}) => {
 
     const onMouseOut = (event: any) => {
       echartsInstance.dispatchAction({
-        type: 'downplay',
+        type: "downplay",
         geoIndex: 0,
         name: event.name
       });
     };
 
-    echartsInstance.on('mouseover', { seriesIndex: 0 }, onMouseOver);
-    echartsInstance.on('mouseout', { seriesIndex: 0 }, onMouseOut);
+    echartsInstance.on("mouseover", { seriesIndex: 0 }, onMouseOver);
+    echartsInstance.on("mouseout", { seriesIndex: 0 }, onMouseOut);
 
     return () => {
-      echartsInstance.off('mouseover', onMouseOver);
-      echartsInstance.off('mouseout', onMouseOut);
+      echartsInstance.off("mouseover", onMouseOver);
+      echartsInstance.off("mouseout", onMouseOut);
     };
   }, []);
 

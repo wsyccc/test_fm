@@ -5,7 +5,7 @@ export default {
   type: WidgetType.three_d,
   width: 600,
   height: 480,
-  externalSourceLink: '/public/3D/objExample2.obj',
+  externalSourceLink: "/public/3D/objExample2.obj",
   shallowTheme: true,
   wireframe: false,
   transparent: true,

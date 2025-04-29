@@ -5,9 +5,9 @@ export default {
   type: WidgetType.splitter,
   width: 300,
   height: 100,
-  direction: '',
+  direction: "",
   layout: [
-    { title: 'left' },
-    { title: 'right' },
+    { title: "left" },
+    { title: "right" },
   ],
 } as SplitterPropsInterface

@@ -10,20 +10,20 @@
  *
  * 2. add the lib export in @hulk/common/index.ts, remember to use the specific import for 3-rd package you need.
  * ```ts
- * export { Button } from 'antd';
+ * export { Button } from "antd";
  * ```
  * 3. add the lib import in the component
  * ```ts
- * import { Button } from '@hulk/common';
+ * import { Button } from "@hulk/common";
  * ```
  */
-import { convertOriginDataToRawData, React } from '@hulk/common';
-import { useLinechartCommon } from './context';
+import { convertOriginDataToRawData, React } from "@hulk/common";
+import { useLinechartCommon } from "./context";
 import { LinechartPropsInterface } from "./type.ts";
-import { generateLineChartOption } from './utils.ts';
-import { ReactEcharts } from '@hulk/common';
-import defaultConfigs from './configs.ts';
-import { ORIGINDATA } from './constants.ts';
+import { generateLineChartOption } from "./utils.ts";
+import { ReactEcharts } from "@hulk/common";
+import defaultConfigs from "./configs.ts";
+import { ORIGINDATA } from "./constants.ts";
 
 
 const Linechart: React.FC = (props: LinechartPropsInterface | {}) => {
@@ -51,19 +51,19 @@ const Linechart: React.FC = (props: LinechartPropsInterface | {}) => {
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 
     const echartsInstance = echartsRef.current?.getEchartsInstance();
 
     if (echartsInstance) {
-      echartsInstance.on('mousedown', handleChartClick);
+      echartsInstance.on("mousedown", handleChartClick);
     }
 
     return () => {
       if (echartsInstance) {
-        echartsInstance.off('mousedown', handleChartClick);
+        echartsInstance.off("mousedown", handleChartClick);
       }
     };
   }, []);

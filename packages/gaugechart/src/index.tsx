@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useGaugechartCommon } from './context';
+import { React } from "@hulk/common";
+import { useGaugechartCommon } from "./context";
 import { GaugechartPropsInterface } from "./type.ts";
-import { ReactEcharts } from '@hulk/common';
-import { generateGaugeChartOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts } from "@hulk/common";
+import { generateGaugeChartOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 
 const Gaugechart: React.FC = (props: GaugechartPropsInterface | {}) => {
@@ -30,19 +30,19 @@ const Gaugechart: React.FC = (props: GaugechartPropsInterface | {}) => {
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 
     const echartsInstance = echartsRef.current?.getEchartsInstance();
 
     if (echartsInstance) {
-      echartsInstance.on('mousedown', handleChartClick);
+      echartsInstance.on("mousedown", handleChartClick);
     }
 
     return () => {
       if (echartsInstance) {
-        echartsInstance.off('mousedown', handleChartClick);
+        echartsInstance.off("mousedown", handleChartClick);
       }
     };
   }, []);

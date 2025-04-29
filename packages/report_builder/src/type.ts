@@ -1,18 +1,16 @@
 import {BaseWidgetDataType, WidgetType, StyleConfig } from "@hulk/common";
 
-export interface ReportBuilderPropsInterface extends Omit<BaseWidgetDataType, 'width' | 'height'> {
+export interface ReportBuilderPropsInterface extends Omit<BaseWidgetDataType, "width" | "height"> {
   // add more props here
   yamlText: string;
   width?: number | string;
   height?: number | string;
-
 }
 
 export enum StackType {
-  vertical = 'vertical',
-  horizontal = 'horizontal'
+  vertical = "vertical",
+  horizontal = "horizontal"
 }
-
 
 export type CardConfig = WidgetCard | StackCard;
 
@@ -63,7 +61,7 @@ export interface Report {
   footer?: {
     pageNo: {
       visible: boolean;
-      align?: 'start' | 'end' | 'center'
+      align?: "start" | "end" | "center"
     },
     title?: WidgetCard;
     subtitle?: WidgetCard;

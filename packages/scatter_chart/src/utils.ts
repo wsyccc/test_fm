@@ -1,14 +1,14 @@
 import { ScatterChartPropsInterface } from "./type";
-import { ReactEcharts, Echarts, EchartsStat } from '@hulk/common';
+import { ReactEcharts, Echarts, EchartsStat } from "@hulk/common";
 
 export enum ScatterChartCategory {
-  Basic = 'Basic',
-  Cluster = 'Cluster',
-  ExponentialRegression = 'ExponentialRegression',
-  LogarithmicRegression = 'LogarithmicRegression',
-  DistibutionAndAggregate = 'DistibutionAndAggregate',
-  SingleAxis = 'SingleAxis',
-  Calendar = 'Calendar',
+  Basic = "Basic",
+  Cluster = "Cluster",
+  ExponentialRegression = "ExponentialRegression",
+  LogarithmicRegression = "LogarithmicRegression",
+  DistibutionAndAggregate = "DistibutionAndAggregate",
+  SingleAxis = "SingleAxis",
+  Calendar = "Calendar",
 }
 
 export function generateBasicScatterChartOption({
@@ -18,19 +18,19 @@ export function generateBasicScatterChartOption({
   const CLUSTER_COUNT = clusterCount ?? 6;
   const DIENSIION_CLUSTER_INDEX = 2;
   const COLOR_ALL = [
-    '#37A2DA',
-    '#e06343',
-    '#37a354',
-    '#b55dba',
-    '#b5bd48',
-    '#8378EA',
-    '#96BFFF'
+    "#37A2DA",
+    "#e06343",
+    "#37a354",
+    "#b55dba",
+    "#b5bd48",
+    "#8378EA",
+    "#96BFFF"
   ];
   const pieces: { value: number; label: string; color: string; }[] = [];
   for (let i = 0; i < CLUSTER_COUNT; i++) {
     pieces.push({
       value: i,
-      label: 'cluster ' + i,
+      label: "cluster " + i,
       color: COLOR_ALL[i]
     });
   }
@@ -43,22 +43,22 @@ export function generateBasicScatterChartOption({
       },
       {
         transform: {
-          type: 'ecStat:clustering',
+          type: "ecStat:clustering",
           // print: true,
           config: {
             clusterCount: CLUSTER_COUNT,
-            outputType: 'single',
+            outputType: "single",
             outputClusterIndexDimension: DIENSIION_CLUSTER_INDEX
           }
         }
       }
     ],
     tooltip: {
-      position: 'top'
+      position: "top"
     },
     visualMap: {
-      type: 'piecewise',
-      top: 'middle',
+      type: "piecewise",
+      top: "middle",
       min: 0,
       max: CLUSTER_COUNT,
       left: 10,
@@ -72,11 +72,11 @@ export function generateBasicScatterChartOption({
     xAxis: {},
     yAxis: {},
     series: {
-      type: 'scatter',
+      type: "scatter",
       encode: { tooltip: [0, 1] },
       symbolSize,
       itemStyle: {
-        borderColor: '#555'
+        borderColor: "#555"
       },
       datasetIndex: 1
     }
@@ -88,7 +88,7 @@ export function generateBasicScatterChartOption({
       {
         symbolSize,
         data: yData,
-        type: 'scatter'
+        type: "scatter"
       }
     ]
   };
@@ -102,34 +102,34 @@ export function generateSingleAxisScatterChartOption({
   const singleAxis: echarts.SingleAxisComponentOption[] = [];
   const series: echarts.ScatterSeriesOption[] = [];
   const hours = additionalXData ?? [
-    '12a', '1a', '2a', '3a', '4a', '5a', '6a',
-    '7a', '8a', '9a', '10a', '11a',
-    '12p', '1p', '2p', '3p', '4p', '5p',
-    '6p', '7p', '8p', '9p', '10p', '11p'
+    "12a", "1a", "2a", "3a", "4a", "5a", "6a",
+    "7a", "8a", "9a", "10a", "11a",
+    "12p", "1p", "2p", "3p", "4p", "5p",
+    "6p", "7p", "8p", "9p", "10p", "11p"
   ];
 
   if (xData && yData) {
     xData.forEach(function (day, idx) {
       title.push({
-        textBaseline: 'middle',
-        top: ((idx + 0.5) * 100) / 7 + '%',
+        textBaseline: "middle",
+        top: ((idx + 0.5) * 100) / 7 + "%",
         text: day
       });
       singleAxis.push({
         left: 150,
-        type: 'category',
+        type: "category",
         boundaryGap: false,
         data: hours,
-        top: (idx * 100) / 7 + 5 + '%',
-        height: 100 / 7 - 10 + '%',
+        top: (idx * 100) / 7 + 5 + "%",
+        height: 100 / 7 - 10 + "%",
         axisLabel: {
           interval: 2
         }
       });
       series.push({
         singleAxisIndex: idx,
-        coordinateSystem: 'singleAxis',
-        type: 'scatter',
+        coordinateSystem: "singleAxis",
+        type: "scatter",
         data: [],
         symbolSize: function (dataItem) {
           return dataItem[1] * (symbolSize ?? 4);
@@ -145,7 +145,7 @@ export function generateSingleAxisScatterChartOption({
 
   return {
     tooltip: {
-      position: 'top'
+      position: "top"
     },
     title: title,
     singleAxis: singleAxis,
@@ -167,52 +167,52 @@ export function generateLogarithmicScatterChartOption({
       },
       {
         transform: {
-          type: 'filter',
+          type: "filter",
           config: { dimension: 4, eq: 1990 }
         }
       },
       {
         transform: {
-          type: 'filter',
+          type: "filter",
           config: { dimension: 4, eq: 2015 }
         }
       },
       {
         transform: {
-          type: 'ecStat:regression',
+          type: "ecStat:regression",
           config: {
-            method: 'logarithmic'
+            method: "logarithmic"
           }
         }
       }
     ],
     title: {
-      text: '1990 and 2015 per capita life expectancy and GDP',
-      left: 'center'
+      text: "1990 and 2015 per capita life expectancy and GDP",
+      left: "center"
     },
     legend: {
-      data: ['1990', '2015'],
+      data: ["1990", "2015"],
       bottom: 10
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'cross'
+        type: "cross"
       }
     },
     xAxis: {
-      type: 'value',
+      type: "value",
       splitLine: {
         lineStyle: {
-          type: 'dashed'
+          type: "dashed"
         }
       }
     },
     yAxis: {
-      type: 'value',
+      type: "value",
       splitLine: {
         lineStyle: {
-          type: 'dashed'
+          type: "dashed"
         }
       }
     },
@@ -228,22 +228,22 @@ export function generateLogarithmicScatterChartOption({
     },
     series: [
       {
-        name: '1990',
-        type: 'scatter',
+        name: "1990",
+        type: "scatter",
         datasetIndex: 1
       },
       {
-        name: '2015',
-        type: 'scatter',
+        name: "2015",
+        type: "scatter",
         datasetIndex: 2
       },
       {
-        name: 'line',
-        type: 'line',
+        name: "line",
+        type: "line",
         smooth: true,
         datasetIndex: 3,
         symbolSize: 0.1,
-        symbol: 'circle',
+        symbol: "circle",
         label: { show: true, fontSize: 16 },
         labelLayout: { dx: -20 },
         encode: { label: 2, tooltip: 1 }
@@ -266,45 +266,45 @@ export function generateDistributionScatterChartOption({
     return (total /= data.length);
   }
 
-  return distributionType === 'scatter' ? {
+  return distributionType === "scatter" ? {
     title: {
-      text: 'Male and female height and weight distribution',
+      text: "Male and female height and weight distribution",
     },
     grid: {
-      left: '3%',
-      right: '7%',
-      bottom: '7%',
+      left: "3%",
+      right: "7%",
+      bottom: "7%",
       containLabel: true
     },
     tooltip: {
-      // trigger: 'axis',
+      // trigger: "axis",
       showDelay: 0,
       formatter: function (params: any) {
         if (params.value.length > 1) {
           return (
             params.seriesName +
-            ' :<br/>' +
+            " :<br/>" +
             params.value[0] +
-            'cm ' +
+            "cm " +
             params.value[1] +
-            'kg '
+            "kg "
           );
         } else {
           return (
             params.seriesName +
-            ' :<br/>' +
+            " :<br/>" +
             params.name +
-            ' : ' +
+            " : " +
             params.value +
-            'kg '
+            "kg "
           );
         }
       },
       axisPointer: {
         show: true,
-        type: 'cross',
+        type: "cross",
         lineStyle: {
-          type: 'dashed',
+          type: "dashed",
           width: 1
         }
       }
@@ -313,22 +313,22 @@ export function generateDistributionScatterChartOption({
       feature: {
         dataZoom: {},
         brush: {
-          type: ['rect', 'polygon', 'clear']
+          type: ["rect", "polygon", "clear"]
         }
       }
     },
     brush: {},
     legend: {
-      data: ['Female', 'Male'],
-      left: 'center',
+      data: ["Female", "Male"],
+      left: "center",
       bottom: 10
     },
     xAxis: [
       {
-        type: 'value',
+        type: "value",
         scale: true,
         axisLabel: {
-          formatter: '{value} cm'
+          formatter: "{value} cm"
         },
         splitLine: {
           show: false
@@ -337,10 +337,10 @@ export function generateDistributionScatterChartOption({
     ],
     yAxis: [
       {
-        type: 'value',
+        type: "value",
         scale: true,
         axisLabel: {
-          formatter: '{value} kg'
+          formatter: "{value} kg"
         },
         splitLine: {
           show: false
@@ -351,132 +351,132 @@ export function generateDistributionScatterChartOption({
     series: [
       {
         symbolSize,
-        name: 'Female',
-        id: 'female',
-        dataGroupId: 'female',
+        name: "Female",
+        id: "female",
+        dataGroupId: "female",
         universalTransition: {
           enabled: true,
           delay: function (idx, count) {
             return Math.random() * 400;
           }
         },
-        type: 'scatter',
+        type: "scatter",
         emphasis: {
-          focus: 'series'
+          focus: "series"
         },
         // @ts-ignore
         data: yData[0],
         markArea: {
           silent: true,
           itemStyle: {
-            color: 'transparent',
+            color: "transparent",
             borderWidth: 1,
-            borderType: 'dashed'
+            borderType: "dashed"
           },
           data: [
             [
               {
-                name: 'Female Data Range',
-                xAxis: 'min',
-                yAxis: 'min'
+                name: "Female Data Range",
+                xAxis: "min",
+                yAxis: "min"
               },
               {
-                xAxis: 'max',
-                yAxis: 'max'
+                xAxis: "max",
+                yAxis: "max"
               }
             ]
           ]
         },
         markPoint: {
           data: [
-            { type: 'max', name: 'Max' },
-            { type: 'min', name: 'Min' }
+            { type: "max", name: "Max" },
+            { type: "min", name: "Min" }
           ]
         },
         markLine: {
           lineStyle: {
-            type: 'solid'
+            type: "solid"
           },
-          data: [{ type: 'average', name: 'AVG' }, { xAxis: 160 }]
+          data: [{ type: "average", name: "AVG" }, { xAxis: 160 }]
         }
       },
       {
         symbolSize,
-        name: 'Male',
-        id: 'male',
-        dataGroupId: 'male',
+        name: "Male",
+        id: "male",
+        dataGroupId: "male",
         universalTransition: {
           enabled: true,
           delay: function (idx, count) {
             return Math.random() * 400;
           }
         },
-        type: 'scatter',
+        type: "scatter",
         emphasis: {
-          focus: 'series'
+          focus: "series"
         },
         // @ts-ignore
         data: yData[1],
         markArea: {
           silent: true,
           itemStyle: {
-            color: 'transparent',
+            color: "transparent",
             borderWidth: 1,
-            borderType: 'dashed'
+            borderType: "dashed"
           },
           data: [
             [
               {
-                name: 'Male Data Range',
-                xAxis: 'min',
-                yAxis: 'min'
+                name: "Male Data Range",
+                xAxis: "min",
+                yAxis: "min"
               },
               {
-                xAxis: 'max',
-                yAxis: 'max'
+                xAxis: "max",
+                yAxis: "max"
               }
             ]
           ]
         },
         markPoint: {
           data: [
-            { type: 'max', name: 'Max' },
-            { type: 'min', name: 'Min' }
+            { type: "max", name: "Max" },
+            { type: "min", name: "Min" }
           ]
         },
         markLine: {
           lineStyle: {
-            type: 'solid'
+            type: "solid"
           },
-          data: [{ type: 'average', name: 'Average' }, { xAxis: 170 }]
+          data: [{ type: "average", name: "Average" }, { xAxis: 170 }]
         }
       }
     ]
   } : {
     xAxis: {
-      type: 'category',
-      data: ['Female', 'Male']
+      type: "category",
+      data: ["Female", "Male"]
     },
     yAxis: {},
     series: [
       {
-        type: 'bar',
-        id: 'total',
+        type: "bar",
+        id: "total",
         data: [
           {
             // @ts-ignore
             value: calculateAverage(yData[1], 0),
-            groupId: 'male'
+            groupId: "male"
           },
           {
             // @ts-ignore
             value: calculateAverage(yData[0], 0),
-            groupId: 'female'
+            groupId: "female"
           }
         ],
         universalTransition: {
           enabled: true,
-          seriesKey: ['female', 'male'],
+          seriesKey: ["female", "male"],
           delay: function (idx, count) {
             return Math.random() * 400;
           }
@@ -502,7 +502,7 @@ export function generateCalendarScatterChartOption({
     }
     if (xData && xData.length) {
       for (let i = 0; i < xData?.length; i += 1) {
-        const [yearStr, monthStr] = xData[i].split('-');
+        const [yearStr, monthStr] = xData[i].split("-");
         const year = parseInt(yearStr);
         const month = parseInt(monthStr);
         const monthStart = +Echarts.time.parse(`${year}-${monthStr}-01`);
@@ -510,13 +510,13 @@ export function generateCalendarScatterChartOption({
         // 构造下一个月（注意年份进位）
         const nextMonth = month === 12 ? 1 : month + 1;
         const nextYear = month === 12 ? year + 1 : year;
-        const nextMonthStr = String(nextMonth).padStart(2, '0');
+        const nextMonthStr = String(nextMonth).padStart(2, "0");
 
         const monthEnd = +Echarts.time.parse(`${nextYear}-${nextMonthStr}-01`);
         console.log(monthStart, monthEnd)
         for (let time = monthStart; time < monthEnd; time += dayTime) {
           data.push([
-            Echarts.time.format(time, '{yyyy}-{MM}-{dd}', false),
+            Echarts.time.format(time, "{yyyy}-{MM}-{dd}", false),
             Math.floor(Math.random() * 1000)
           ]);
         }
@@ -527,37 +527,37 @@ export function generateCalendarScatterChartOption({
 
   const allSeries = [
     {
-      type: 'graph',
-      edgeSymbol: ['none', 'arrow'],
-      coordinateSystem: 'calendar',
+      type: "graph",
+      edgeSymbol: ["none", "arrow"],
+      coordinateSystem: "calendar",
       symbolSize,
       calendarIndex: 0,
       data: getVirtualData()
     },
     {
-      type: 'heatmap',
-      coordinateSystem: 'calendar',
+      type: "heatmap",
+      coordinateSystem: "calendar",
       data: getVirtualData()
     },
     {
-      type: 'effectScatter',
-      coordinateSystem: 'calendar',
+      type: "effectScatter",
+      coordinateSystem: "calendar",
       symbolSize: function (val: any) {
         return val[1] / 40;
       },
       data: getVirtualData()
     },
     {
-      type: 'scatter',
-      coordinateSystem: 'calendar',
+      type: "scatter",
+      coordinateSystem: "calendar",
       symbolSize: function (val: any) {
         return val[1] / 60;
       },
       data: getVirtualData()
     },
     {
-      type: 'heatmap',
-      coordinateSystem: 'calendar',
+      type: "heatmap",
+      coordinateSystem: "calendar",
       data: getVirtualData()
     }
   ];
@@ -584,7 +584,7 @@ export function generateCalendarScatterChartOption({
 
   return {
     tooltip: {
-      position: 'top'
+      position: "top"
     },
 
     visualMap: [
@@ -593,15 +593,15 @@ export function generateCalendarScatterChartOption({
         max: 1000,
         calculable: true,
         seriesIndex: xData && xData.length > 0 ? Array.from({ length: xData.length - 1 }, (_, i) => i + 2) : [2, 3, 4],
-        orient: 'horizontal',
-        left: '55%',
+        orient: "horizontal",
+        left: "55%",
         bottom: 20
       },
       {
         min: 0,
         max: 1000,
         inRange: {
-          color: ['grey'],
+          color: ["grey"],
           opacity: [0, 0.9]
         },
         controller: {
@@ -609,29 +609,29 @@ export function generateCalendarScatterChartOption({
             opacity: [0.3, 0.6]
           },
           outOfRange: {
-            color: '#ccc'
+            color: "#ccc"
           }
         },
         seriesIndex: [1],
-        orient: 'horizontal',
-        left: '10%',
+        orient: "horizontal",
+        left: "10%",
         bottom: 20
       }
     ],
 
     calendar: xData && xData.length > 0 ? xData?.map((x, ind) => {
       return {
-        orient: 'vertical',
+        orient: "vertical",
         yearLabel: {
           margin: 40
         },
         monthLabel: {
-          nameMap: 'cn',
+          nameMap: "cn",
           margin: 20
         },
         dayLabel: {
           firstDay: 1,
-          nameMap: 'cn'
+          nameMap: "cn"
         },
         cellSize: 40,
         left: 40 + (ind % 2) * 400,
@@ -641,23 +641,23 @@ export function generateCalendarScatterChartOption({
 
     }) : [
       {
-        orient: 'vertical',
+        orient: "vertical",
         yearLabel: {
           margin: 40
         },
         monthLabel: {
-          nameMap: 'cn',
+          nameMap: "cn",
           margin: 20
         },
         dayLabel: {
           firstDay: 1,
-          nameMap: 'cn'
+          nameMap: "cn"
         },
         cellSize: 40,
-        range: '2017-02'
+        range: "2017-02"
       },
       {
-        orient: 'vertical',
+        orient: "vertical",
         yearLabel: {
           margin: 40
         },
@@ -666,10 +666,10 @@ export function generateCalendarScatterChartOption({
         },
         cellSize: 40,
         left: 460,
-        range: '2017-01'
+        range: "2017-01"
       },
       {
-        orient: 'vertical',
+        orient: "vertical",
         yearLabel: {
           margin: 40
         },
@@ -678,25 +678,25 @@ export function generateCalendarScatterChartOption({
         },
         cellSize: 40,
         top: 350,
-        range: '2017-03'
+        range: "2017-03"
       },
       {
-        orient: 'vertical',
+        orient: "vertical",
         yearLabel: {
           margin: 40
         },
         dayLabel: {
           firstDay: 1,
-          nameMap: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+          nameMap: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         },
         monthLabel: {
-          nameMap: 'cn',
+          nameMap: "cn",
           margin: 20
         },
         cellSize: 40,
         top: 350,
         left: 460,
-        range: '2017-04'
+        range: "2017-04"
       }
     ],
     // @ts-ignore

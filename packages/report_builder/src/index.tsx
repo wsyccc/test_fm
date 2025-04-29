@@ -1,32 +1,13 @@
-/**
- * Have to use 3rd-party lib from @hulk/common
- *
- * @description
- * 1. use the script
- * ```sh
- * yarn install:lib <lib_name>
- * ```
- * The script will install the lib to @hulk/common
- *
- * 2. add the lib export in @hulk/common/index.ts, remember to use the specific import for 3-rd package you need.
- * ```ts
- * export { Button } from 'antd';
- * ```
- * 3. add the lib import in the component
- * ```ts
- * import { Button } from '@hulk/common';
- * ```
- */
-import {React, WidgetType, Row, Button, Col, YamlParser, } from '@hulk/common';
-import { useReportBuilderCommon } from './context';
+import {React, WidgetType, Row, Button, Col, YamlParser, } from "@hulk/common";
+import { useReportBuilderCommon } from "./context";
 import { ReportBuilderPropsInterface } from "./type.ts";
-import defaultConfigs from './configs.ts';
+import defaultConfigs from "./configs.ts";
 import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
 import {LayoutRender} from "./layout_render";
 import { _ } from "@hulk/common";
 
 
-const MARGIN_CONSTANT = '20px';
+const MARGIN_CONSTANT = "20px";
 
 
 const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
@@ -34,9 +15,9 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
 
   const { useState, useMemo, Suspense } = React;
 
-  console.log(props, 'props');
-  console.log(widgetData, 'widgetData');
-  console.log(defaultConfigs, 'defaultConfigs');
+  // console.log(props, "props 888");
+  // console.log(widgetData, "widgetData");
+  // console.log(defaultConfigs, "defaultConfigs");
 
   const data: ReportBuilderPropsInterface = useMemo(() => {
     return _.mergeWith(
@@ -46,7 +27,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
       widgetData,
       // customizer: if key is "yamlText" and src is empty, keep objVal
       (objVal, srcVal, key) => {
-        if (key === 'yamlText' && (srcVal === '' || srcVal == null)) {
+        if (key === "yamlText" && (srcVal === "" || srcVal == null)) {
           return objVal;
         }
         return undefined;
@@ -54,7 +35,6 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
     );
   }, [props, widgetData]);
 
-  console.log(data, 'data')
 
   const isStorybook = data.isStorybook ?? false;
   // determine isStorybook(Dev) or Production(Built)
@@ -65,7 +45,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   const error = renderer.getError();
 
   if (error) {
-    return <pre style={{ color: 'red' }}>{error}</pre>;
+    return <pre style={{ color: "red" }}>{error}</pre>;
   }
 
   if (!config) {
@@ -81,9 +61,9 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   //   const element = document.getElementById(pageId);
   //   if (element) {
   //     element.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: orientation === 'vertical' ? 'start' : 'nearest',
-  //       inline: orientation === 'horizontal' ? 'start' : 'nearest'
+  //       behavior: "smooth",
+  //       block: orientation === "vertical" ? "start" : "nearest",
+  //       inline: orientation === "horizontal" ? "start" : "nearest"
   //     });
   //   }
   // };
@@ -91,10 +71,10 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   // 处理导航按钮点击
   const handleNavClick = (currentPageId: number, orientation: string) => {
     const currentIndex = pages.findIndex(p => `page_${currentPageId}` === `page_${pages.indexOf(p) + 1}`);
-    if (orientation === 'prev' && currentIndex > 0) {
+    if (orientation === "prev" && currentIndex > 0) {
       // scrollToPage(`page_${currentIndex}`); // 上一页
       setCurrentPage(p => p - 1);
-    } else if (orientation === 'next' && currentIndex < pages.length - 1) {
+    } else if (orientation === "next" && currentIndex < pages.length - 1) {
       // scrollToPage(`page_${currentIndex + 2}`); // 下一页
       setCurrentPage(p => p + 1);
     }
@@ -128,24 +108,24 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
         style={{
           width: page.width ?? "100%",
           height: page.height ?? "100%",
-          border: 'solid black 1px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'auto'
+          border: "solid black 1px",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "auto"
         }}>
         {/* 上一页下一页锚点 */}
-        <Row justify={'space-between'}>
+        <Row justify={"space-between"}>
           <Button
             style={{
-              visibility: pageInd !== 0 && pageControl ? 'visible' : 'hidden',
+              visibility: pageInd !== 0 && pageControl ? "visible" : "hidden",
               marginLeft: MARGIN_CONSTANT
             }}
-            onClick={() => handleNavClick(pageInd + 1, 'prev')}>上一页</Button>
-          <Button onClick={() => setPageControl(p => !p)}>{pageControl ? '隐藏控制' : '显示控制'}</Button>
+            onClick={() => handleNavClick(pageInd + 1, "prev")}>上一页</Button>
+          <Button onClick={() => setPageControl(p => !p)}>{pageControl ? "隐藏控制" : "显示控制"}</Button>
           <Button
-            style={{ visibility: pageInd !== (pages.length - 1) && pageControl ? 'visible' : 'hidden' }}
+            style={{ visibility: pageInd !== (pages.length - 1) && pageControl ? "visible" : "hidden" }}
 
-            onClick={() => handleNavClick(pageInd + 1, 'next')}>下一页</Button>
+            onClick={() => handleNavClick(pageInd + 1, "next")}>下一页</Button>
         </Row>
 
 
@@ -154,7 +134,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
           width: header.width ?? "100%",
           height: header.height ?? "100%",
         }}>
-          <Row justify={'space-between'}>
+          <Row justify={"space-between"}>
             <Col style={{ marginLeft: MARGIN_CONSTANT }}>
               {header.title && <Suspense
                 fallback={<div>Loading {header.title?.type}…</div>}>
@@ -192,15 +172,15 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
           style={{
             width: footer.width ?? "100%",
             height: footer.height ?? "100%",
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
           }}>
           <div style={{
             flex: 1,
-            overflow: 'auto',
-            position: 'relative'
+            overflow: "auto",
+            position: "relative"
           }}>
-            {(footer.title || footer.subtitle || footer.logo) && <Row justify={'space-between'}>
+            {(footer.title || footer.subtitle || footer.logo) && <Row justify={"space-between"}>
               <Col style={{ marginLeft: MARGIN_CONSTANT }}>
                 {footer.title && <Suspense
                   fallback={<div>Loading {footer.title?.type}…</div>}>
@@ -232,8 +212,8 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
           {footer.pageNo.visible &&
             <Row justify={footer.pageNo.align}>
               <Col style={{
-                marginBottom: '10px',
-                ...(footer.pageNo.align === 'start' ? { marginLeft: '20px' } : footer.pageNo.align === 'end' ? { marginRight: '20px', } : {}),
+                marginBottom: "10px",
+                ...(footer.pageNo.align === "start" ? { marginLeft: "20px" } : footer.pageNo.align === "end" ? { marginRight: "20px", } : {}),
 
               }}>
                 {pageInd + 1}
@@ -246,12 +226,12 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   }, [pageControl, currentPage, config])
 
   return <div style={{
-    display: orientation === 'horizontal' ? 'flex' : 'block',
-    overflowX: orientation === 'horizontal' ? 'auto' : 'visible',
-    overflowY: orientation === 'vertical' ? 'auto' : 'visible',
-    height: '100%',
-    width: '100%',
-    scrollSnapType: orientation === 'horizontal' ? 'x mandatory' : 'y mandatory'
+    display: orientation === "horizontal" ? "flex" : "block",
+    overflowX: orientation === "horizontal" ? "auto" : "visible",
+    overflowY: orientation === "vertical" ? "auto" : "visible",
+    height: "100%",
+    width: "100%",
+    scrollSnapType: orientation === "horizontal" ? "x mandatory" : "y mandatory"
   }}>
     {pageLoader}
   </div>;

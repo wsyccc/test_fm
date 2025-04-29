@@ -1,42 +1,42 @@
 
 export const RAWDATA = [
   {
-    name: 'Grandpa',
+    name: "Grandpa",
     children: [
       {
-        name: 'Uncle Leo',
+        name: "Uncle Leo",
         value: 15,
         children: [
           {
-            name: 'Cousin Jack',
+            name: "Cousin Jack",
             value: 2
           },
           {
-            name: 'Cousin Mary',
+            name: "Cousin Mary",
             value: 5,
             children: [
               {
-                name: 'Jackson',
+                name: "Jackson",
                 value: 2
               }
             ]
           },
           {
-            name: 'Cousin Ben',
+            name: "Cousin Ben",
             value: 4
           }
         ]
       },
       {
-        name: 'Father',
+        name: "Father",
         value: 10,
         children: [
           {
-            name: 'Me',
+            name: "Me",
             value: 5
           },
           {
-            name: 'Brother Peter',
+            name: "Brother Peter",
             value: 1
           }
         ]
@@ -44,17 +44,17 @@ export const RAWDATA = [
     ]
   },
   {
-    name: 'Nancy',
+    name: "Nancy",
     children: [
       {
-        name: 'Uncle Nike',
+        name: "Uncle Nike",
         children: [
           {
-            name: 'Cousin Betty',
+            name: "Cousin Betty",
             value: 1
           },
           {
-            name: 'Cousin Jenny',
+            name: "Cousin Jenny",
             value: 2
           }
         ]
@@ -64,13 +64,13 @@ export const RAWDATA = [
 ]
 
 const item1 = {
-  color: '#F54F4A'
+  color: "#F54F4A"
 };
 const item2 = {
-  color: '#FF8C75'
+  color: "#FF8C75"
 };
 const item3 = {
-  color: '#FFB499'
+  color: "#FFB499"
 };
 
 export const MONOCHROME_DATA = [
@@ -281,83 +281,83 @@ export const MONOCHROME_DATA = [
   }
 ]
 
-const colors = ['#FFAE57', '#FF7853', '#EA5151', '#CC3F57', '#9A2555'];
+const colors = ["#FFAE57", "#FF7853", "#EA5151", "#CC3F57", "#9A2555"];
 
 export const ADVANCE_DATA = [
   {
-    name: '虚构',
+    name: "虚构",
     itemStyle: {
       color: colors[1]
     },
     children: [
       {
-        name: '小说',
+        name: "小说",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '疼'
+                name: "疼"
               },
               {
-                name: '慈悲'
+                name: "慈悲"
               },
               {
-                name: '楼下的房客'
+                name: "楼下的房客"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '虚无的十字架'
+                name: "虚无的十字架"
               },
               {
-                name: '无声告白'
+                name: "无声告白"
               },
               {
-                name: '童年的终结'
+                name: "童年的终结"
               }
             ]
           },
           {
-            name: '3☆',
+            name: "3☆",
             children: [
               {
-                name: '疯癫老人日记'
+                name: "疯癫老人日记"
               }
             ]
           }
         ]
       },
       {
-        name: '其他',
+        name: "其他",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '纳博科夫短篇小说全集'
+                name: "纳博科夫短篇小说全集"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '安魂曲'
+                name: "安魂曲"
               },
               {
-                name: '人生拼图版'
+                name: "人生拼图版"
               }
             ]
           },
           {
-            name: '3☆',
+            name: "3☆",
             children: [
               {
-                name: '比起爱你，我更需要你'
+                name: "比起爱你，我更需要你"
               }
             ]
           }
@@ -366,193 +366,193 @@ export const ADVANCE_DATA = [
     ]
   },
   {
-    name: '非虚构',
+    name: "非虚构",
     itemStyle: {
       color: colors[2]
     },
     children: [
       {
-        name: '设计',
+        name: "设计",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '无界面交互'
+                name: "无界面交互"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '数字绘图的光照与渲染技术'
+                name: "数字绘图的光照与渲染技术"
               },
               {
-                name: '日本建筑解剖书'
+                name: "日本建筑解剖书"
               }
             ]
           },
           {
-            name: '3☆',
+            name: "3☆",
             children: [
               {
-                name: '奇幻世界艺术\n&RPG地图绘制讲座'
+                name: "奇幻世界艺术\n&RPG地图绘制讲座"
               }
             ]
           }
         ]
       },
       {
-        name: '社科',
+        name: "社科",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '痛点'
+                name: "痛点"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '卓有成效的管理者'
+                name: "卓有成效的管理者"
               },
               {
-                name: '进化'
+                name: "进化"
               },
               {
-                name: '后物欲时代的来临'
+                name: "后物欲时代的来临"
               }
             ]
           },
           {
-            name: '3☆',
+            name: "3☆",
             children: [
               {
-                name: '疯癫与文明'
+                name: "疯癫与文明"
               }
             ]
           }
         ]
       },
       {
-        name: '心理',
+        name: "心理",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '我们时代的神经症人格'
+                name: "我们时代的神经症人格"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '皮格马利翁效应'
+                name: "皮格马利翁效应"
               },
               {
-                name: '受伤的人'
+                name: "受伤的人"
               }
             ]
           },
           {
-            name: '3☆'
+            name: "3☆"
           },
           {
-            name: '2☆',
+            name: "2☆",
             children: [
               {
-                name: '迷恋'
+                name: "迷恋"
               }
             ]
           }
         ]
       },
       {
-        name: '居家',
+        name: "居家",
         children: [
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '把房子住成家'
+                name: "把房子住成家"
               },
               {
-                name: '只过必要生活'
+                name: "只过必要生活"
               },
               {
-                name: '北欧简约风格'
+                name: "北欧简约风格"
               }
             ]
           }
         ]
       },
       {
-        name: '绘本',
+        name: "绘本",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '设计诗'
+                name: "设计诗"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '假如生活糊弄了你'
+                name: "假如生活糊弄了你"
               },
               {
-                name: '博物学家的神秘动物图鉴'
+                name: "博物学家的神秘动物图鉴"
               }
             ]
           },
           {
-            name: '3☆',
+            name: "3☆",
             children: [
               {
-                name: '方向'
+                name: "方向"
               }
             ]
           }
         ]
       },
       {
-        name: '哲学',
+        name: "哲学",
         children: [
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: '人生的智慧'
+                name: "人生的智慧"
               }
             ]
           }
         ]
       },
       {
-        name: '技术',
+        name: "技术",
         children: [
           {
-            name: '5☆',
+            name: "5☆",
             children: [
               {
-                name: '代码整洁之道'
+                name: "代码整洁之道"
               }
             ]
           },
           {
-            name: '4☆',
+            name: "4☆",
             children: [
               {
-                name: 'Three.js 开发指南'
+                name: "Three.js 开发指南"
               }
             ]
           }
@@ -564,43 +564,43 @@ export const ADVANCE_DATA = [
 
 export const DETAIL_DATA = [
   {
-    name: 'Flora',
+    name: "Flora",
     itemStyle: {
-      color: '#da0d68'
+      color: "#da0d68"
     },
     children: [
       {
-        name: 'Black Tea',
+        name: "Black Tea",
         value: 1,
         itemStyle: {
-          color: '#975e6d'
+          color: "#975e6d"
         }
       },
       {
-        name: 'Floral',
+        name: "Floral",
         itemStyle: {
-          color: '#e0719c'
+          color: "#e0719c"
         },
         children: [
           {
-            name: 'Chamomile',
+            name: "Chamomile",
             value: 1,
             itemStyle: {
-              color: '#f99e1c'
+              color: "#f99e1c"
             }
           },
           {
-            name: 'Rose',
+            name: "Rose",
             value: 1,
             itemStyle: {
-              color: '#ef5a78'
+              color: "#ef5a78"
             }
           },
           {
-            name: 'Jasmine',
+            name: "Jasmine",
             value: 1,
             itemStyle: {
-              color: '#f7f1bd'
+              color: "#f7f1bd"
             }
           }
         ]
@@ -608,165 +608,165 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Fruity',
+    name: "Fruity",
     itemStyle: {
-      color: '#da1d23'
+      color: "#da1d23"
     },
     children: [
       {
-        name: 'Berry',
+        name: "Berry",
         itemStyle: {
-          color: '#dd4c51'
+          color: "#dd4c51"
         },
         children: [
           {
-            name: 'Blackberry',
+            name: "Blackberry",
             value: 1,
             itemStyle: {
-              color: '#3e0317'
+              color: "#3e0317"
             }
           },
           {
-            name: 'Raspberry',
+            name: "Raspberry",
             value: 1,
             itemStyle: {
-              color: '#e62969'
+              color: "#e62969"
             }
           },
           {
-            name: 'Blueberry',
+            name: "Blueberry",
             value: 1,
             itemStyle: {
-              color: '#6569b0'
+              color: "#6569b0"
             }
           },
           {
-            name: 'Strawberry',
+            name: "Strawberry",
             value: 1,
             itemStyle: {
-              color: '#ef2d36'
+              color: "#ef2d36"
             }
           }
         ]
       },
       {
-        name: 'Dried Fruit',
+        name: "Dried Fruit",
         itemStyle: {
-          color: '#c94a44'
+          color: "#c94a44"
         },
         children: [
           {
-            name: 'Raisin',
+            name: "Raisin",
             value: 1,
             itemStyle: {
-              color: '#b53b54'
+              color: "#b53b54"
             }
           },
           {
-            name: 'Prune',
+            name: "Prune",
             value: 1,
             itemStyle: {
-              color: '#a5446f'
+              color: "#a5446f"
             }
           }
         ]
       },
       {
-        name: 'Other Fruit',
+        name: "Other Fruit",
         itemStyle: {
-          color: '#dd4c51'
+          color: "#dd4c51"
         },
         children: [
           {
-            name: 'Coconut',
+            name: "Coconut",
             value: 1,
             itemStyle: {
-              color: '#f2684b'
+              color: "#f2684b"
             }
           },
           {
-            name: 'Cherry',
+            name: "Cherry",
             value: 1,
             itemStyle: {
-              color: '#e73451'
+              color: "#e73451"
             }
           },
           {
-            name: 'Pomegranate',
+            name: "Pomegranate",
             value: 1,
             itemStyle: {
-              color: '#e65656'
+              color: "#e65656"
             }
           },
           {
-            name: 'Pineapple',
+            name: "Pineapple",
             value: 1,
             itemStyle: {
-              color: '#f89a1c'
+              color: "#f89a1c"
             }
           },
           {
-            name: 'Grape',
+            name: "Grape",
             value: 1,
             itemStyle: {
-              color: '#aeb92c'
+              color: "#aeb92c"
             }
           },
           {
-            name: 'Apple',
+            name: "Apple",
             value: 1,
             itemStyle: {
-              color: '#4eb849'
+              color: "#4eb849"
             }
           },
           {
-            name: 'Peach',
+            name: "Peach",
             value: 1,
             itemStyle: {
-              color: '#f68a5c'
+              color: "#f68a5c"
             }
           },
           {
-            name: 'Pear',
+            name: "Pear",
             value: 1,
             itemStyle: {
-              color: '#baa635'
+              color: "#baa635"
             }
           }
         ]
       },
       {
-        name: 'Citrus Fruit',
+        name: "Citrus Fruit",
         itemStyle: {
-          color: '#f7a128'
+          color: "#f7a128"
         },
         children: [
           {
-            name: 'Grapefruit',
+            name: "Grapefruit",
             value: 1,
             itemStyle: {
-              color: '#f26355'
+              color: "#f26355"
             }
           },
           {
-            name: 'Orange',
+            name: "Orange",
             value: 1,
             itemStyle: {
-              color: '#e2631e'
+              color: "#e2631e"
             }
           },
           {
-            name: 'Lemon',
+            name: "Lemon",
             value: 1,
             itemStyle: {
-              color: '#fde404'
+              color: "#fde404"
             }
           },
           {
-            name: 'Lime',
+            name: "Lime",
             value: 1,
             itemStyle: {
-              color: '#7eb138'
+              color: "#7eb138"
             }
           }
         ]
@@ -774,93 +774,93 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Sour/\nFermented',
+    name: "Sour/\nFermented",
     itemStyle: {
-      color: '#ebb40f'
+      color: "#ebb40f"
     },
     children: [
       {
-        name: 'Sour',
+        name: "Sour",
         itemStyle: {
-          color: '#e1c315'
+          color: "#e1c315"
         },
         children: [
           {
-            name: 'Sour Aromatics',
+            name: "Sour Aromatics",
             value: 1,
             itemStyle: {
-              color: '#9ea718'
+              color: "#9ea718"
             }
           },
           {
-            name: 'Acetic Acid',
+            name: "Acetic Acid",
             value: 1,
             itemStyle: {
-              color: '#94a76f'
+              color: "#94a76f"
             }
           },
           {
-            name: 'Butyric Acid',
+            name: "Butyric Acid",
             value: 1,
             itemStyle: {
-              color: '#d0b24f'
+              color: "#d0b24f"
             }
           },
           {
-            name: 'Isovaleric Acid',
+            name: "Isovaleric Acid",
             value: 1,
             itemStyle: {
-              color: '#8eb646'
+              color: "#8eb646"
             }
           },
           {
-            name: 'Citric Acid',
+            name: "Citric Acid",
             value: 1,
             itemStyle: {
-              color: '#faef07'
+              color: "#faef07"
             }
           },
           {
-            name: 'Malic Acid',
+            name: "Malic Acid",
             value: 1,
             itemStyle: {
-              color: '#c1ba07'
+              color: "#c1ba07"
             }
           }
         ]
       },
       {
-        name: 'Alcohol/\nFremented',
+        name: "Alcohol/\nFremented",
         itemStyle: {
-          color: '#b09733'
+          color: "#b09733"
         },
         children: [
           {
-            name: 'Winey',
+            name: "Winey",
             value: 1,
             itemStyle: {
-              color: '#8f1c53'
+              color: "#8f1c53"
             }
           },
           {
-            name: 'Whiskey',
+            name: "Whiskey",
             value: 1,
             itemStyle: {
-              color: '#b34039'
+              color: "#b34039"
             }
           },
           {
-            name: 'Fremented',
+            name: "Fremented",
             value: 1,
             itemStyle: {
-              color: '#ba9232'
+              color: "#ba9232"
             }
           },
           {
-            name: 'Overripe',
+            name: "Overripe",
             value: 1,
             itemStyle: {
-              color: '#8b6439'
+              color: "#8b6439"
             }
           }
         ]
@@ -868,301 +868,221 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Green/\nVegetative',
+    name: "Green/\nVegetative",
     itemStyle: {
-      color: '#187a2f'
+      color: "#187a2f"
     },
     children: [
       {
-        name: 'Olive Oil',
+        name: "Olive Oil",
         value: 1,
         itemStyle: {
-          color: '#a2b029'
+          color: "#a2b029"
         }
       },
       {
-        name: 'Raw',
+        name: "Raw",
         value: 1,
         itemStyle: {
-          color: '#718933'
+          color: "#718933"
         }
       },
       {
-        name: 'Green/\nVegetative',
+        name: "Green/\nVegetative",
         itemStyle: {
-          color: '#3aa255'
+          color: "#3aa255"
         },
         children: [
           {
-            name: 'Under-ripe',
+            name: "Under-ripe",
             value: 1,
             itemStyle: {
-              color: '#a2bb2b'
+              color: "#a2bb2b"
             }
           },
           {
-            name: 'Peapod',
+            name: "Peapod",
             value: 1,
             itemStyle: {
-              color: '#62aa3c'
+              color: "#62aa3c"
             }
           },
           {
-            name: 'Fresh',
+            name: "Fresh",
             value: 1,
             itemStyle: {
-              color: '#03a653'
+              color: "#03a653"
             }
           },
           {
-            name: 'Dark Green',
+            name: "Dark Green",
             value: 1,
             itemStyle: {
-              color: '#038549'
+              color: "#038549"
             }
           },
           {
-            name: 'Vegetative',
+            name: "Vegetative",
             value: 1,
             itemStyle: {
-              color: '#28b44b'
+              color: "#28b44b"
             }
           },
           {
-            name: 'Hay-like',
+            name: "Hay-like",
             value: 1,
             itemStyle: {
-              color: '#a3a830'
+              color: "#a3a830"
             }
           },
           {
-            name: 'Herb-like',
+            name: "Herb-like",
             value: 1,
             itemStyle: {
-              color: '#7ac141'
+              color: "#7ac141"
             }
           }
         ]
       },
       {
-        name: 'Beany',
+        name: "Beany",
         value: 1,
         itemStyle: {
-          color: '#5e9a80'
+          color: "#5e9a80"
         }
       }
     ]
   },
   {
-    name: 'Other',
+    name: "Other",
     itemStyle: {
-      color: '#0aa3b5'
+      color: "#0aa3b5"
     },
     children: [
       {
-        name: 'Papery/Musty',
+        name: "Papery/Musty",
         itemStyle: {
-          color: '#9db2b7'
+          color: "#9db2b7"
         },
         children: [
           {
-            name: 'Stale',
+            name: "Stale",
             value: 1,
             itemStyle: {
-              color: '#8b8c90'
+              color: "#8b8c90"
             }
           },
           {
-            name: 'Cardboard',
+            name: "Cardboard",
             value: 1,
             itemStyle: {
-              color: '#beb276'
+              color: "#beb276"
             }
           },
           {
-            name: 'Papery',
+            name: "Papery",
             value: 1,
             itemStyle: {
-              color: '#fefef4'
+              color: "#fefef4"
             }
           },
           {
-            name: 'Woody',
+            name: "Woody",
             value: 1,
             itemStyle: {
-              color: '#744e03'
+              color: "#744e03"
             }
           },
           {
-            name: 'Moldy/Damp',
+            name: "Moldy/Damp",
             value: 1,
             itemStyle: {
-              color: '#a3a36f'
+              color: "#a3a36f"
             }
           },
           {
-            name: 'Musty/Dusty',
+            name: "Musty/Dusty",
             value: 1,
             itemStyle: {
-              color: '#c9b583'
+              color: "#c9b583"
             }
           },
           {
-            name: 'Musty/Earthy',
+            name: "Musty/Earthy",
             value: 1,
             itemStyle: {
-              color: '#978847'
+              color: "#978847"
             }
           },
           {
-            name: 'Animalic',
+            name: "Animalic",
             value: 1,
             itemStyle: {
-              color: '#9d977f'
+              color: "#9d977f"
             }
           },
           {
-            name: 'Meaty Brothy',
+            name: "Meaty Brothy",
             value: 1,
             itemStyle: {
-              color: '#cc7b6a'
+              color: "#cc7b6a"
             }
           },
           {
-            name: 'Phenolic',
+            name: "Phenolic",
             value: 1,
             itemStyle: {
-              color: '#db646a'
+              color: "#db646a"
             }
           }
         ]
       },
       {
-        name: 'Chemical',
+        name: "Chemical",
         itemStyle: {
-          color: '#76c0cb'
+          color: "#76c0cb"
         },
         children: [
           {
-            name: 'Bitter',
+            name: "Bitter",
             value: 1,
             itemStyle: {
-              color: '#80a89d'
+              color: "#80a89d"
             }
           },
           {
-            name: 'Salty',
+            name: "Salty",
             value: 1,
             itemStyle: {
-              color: '#def2fd'
+              color: "#def2fd"
             }
           },
           {
-            name: 'Medicinal',
+            name: "Medicinal",
             value: 1,
             itemStyle: {
-              color: '#7a9bae'
+              color: "#7a9bae"
             }
           },
           {
-            name: 'Petroleum',
+            name: "Petroleum",
             value: 1,
             itemStyle: {
-              color: '#039fb8'
+              color: "#039fb8"
             }
           },
           {
-            name: 'Skunky',
+            name: "Skunky",
             value: 1,
             itemStyle: {
-              color: '#5e777b'
+              color: "#5e777b"
             }
           },
           {
-            name: 'Rubber',
+            name: "Rubber",
             value: 1,
             itemStyle: {
-              color: '#120c0c'
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name: 'Roasted',
-    itemStyle: {
-      color: '#c94930'
-    },
-    children: [
-      {
-        name: 'Pipe Tobacco',
-        value: 1,
-        itemStyle: {
-          color: '#caa465'
-        }
-      },
-      {
-        name: 'Tobacco',
-        value: 1,
-        itemStyle: {
-          color: '#dfbd7e'
-        }
-      },
-      {
-        name: 'Burnt',
-        itemStyle: {
-          color: '#be8663'
-        },
-        children: [
-          {
-            name: 'Acrid',
-            value: 1,
-            itemStyle: {
-              color: '#b9a449'
-            }
-          },
-          {
-            name: 'Ashy',
-            value: 1,
-            itemStyle: {
-              color: '#899893'
-            }
-          },
-          {
-            name: 'Smoky',
-            value: 1,
-            itemStyle: {
-              color: '#a1743b'
-            }
-          },
-          {
-            name: 'Brown, Roast',
-            value: 1,
-            itemStyle: {
-              color: '#894810'
-            }
-          }
-        ]
-      },
-      {
-        name: 'Cereal',
-        itemStyle: {
-          color: '#ddaf61'
-        },
-        children: [
-          {
-            name: 'Grain',
-            value: 1,
-            itemStyle: {
-              color: '#b7906f'
-            }
-          },
-          {
-            name: 'Malt',
-            value: 1,
-            itemStyle: {
-              color: '#eb9d5f'
+              color: "#120c0c"
             }
           }
         ]
@@ -1170,57 +1090,79 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Spices',
+    name: "Roasted",
     itemStyle: {
-      color: '#ad213e'
+      color: "#c94930"
     },
     children: [
       {
-        name: 'Pungent',
+        name: "Pipe Tobacco",
         value: 1,
         itemStyle: {
-          color: '#794752'
+          color: "#caa465"
         }
       },
       {
-        name: 'Pepper',
+        name: "Tobacco",
         value: 1,
         itemStyle: {
-          color: '#cc3d41'
+          color: "#dfbd7e"
         }
       },
       {
-        name: 'Brown Spice',
+        name: "Burnt",
         itemStyle: {
-          color: '#b14d57'
+          color: "#be8663"
         },
         children: [
           {
-            name: 'Anise',
+            name: "Acrid",
             value: 1,
             itemStyle: {
-              color: '#c78936'
+              color: "#b9a449"
             }
           },
           {
-            name: 'Nutmeg',
+            name: "Ashy",
             value: 1,
             itemStyle: {
-              color: '#8c292c'
+              color: "#899893"
             }
           },
           {
-            name: 'Cinnamon',
+            name: "Smoky",
             value: 1,
             itemStyle: {
-              color: '#e5762e'
+              color: "#a1743b"
             }
           },
           {
-            name: 'Clove',
+            name: "Brown, Roast",
             value: 1,
             itemStyle: {
-              color: '#a16c5a'
+              color: "#894810"
+            }
+          }
+        ]
+      },
+      {
+        name: "Cereal",
+        itemStyle: {
+          color: "#ddaf61"
+        },
+        children: [
+          {
+            name: "Grain",
+            value: 1,
+            itemStyle: {
+              color: "#b7906f"
+            }
+          },
+          {
+            name: "Malt",
+            value: 1,
+            itemStyle: {
+              color: "#eb9d5f"
             }
           }
         ]
@@ -1228,58 +1170,57 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Nutty/\nCocoa',
+    name: "Spices",
     itemStyle: {
-      color: '#a87b64'
+      color: "#ad213e"
     },
     children: [
       {
-        name: 'Nutty',
+        name: "Pungent",
+        value: 1,
         itemStyle: {
-          color: '#c78869'
-        },
-        children: [
-          {
-            name: 'Peanuts',
-            value: 1,
-            itemStyle: {
-              color: '#d4ad12'
-            }
-          },
-          {
-            name: 'Hazelnut',
-            value: 1,
-            itemStyle: {
-              color: '#9d5433'
-            }
-          },
-          {
-            name: 'Almond',
-            value: 1,
-            itemStyle: {
-              color: '#c89f83'
-            }
-          }
-        ]
+          color: "#794752"
+        }
       },
       {
-        name: 'Cocoa',
+        name: "Pepper",
+        value: 1,
         itemStyle: {
-          color: '#bb764c'
+          color: "#cc3d41"
+        }
+      },
+      {
+        name: "Brown Spice",
+        itemStyle: {
+          color: "#b14d57"
         },
         children: [
           {
-            name: 'Chocolate',
+            name: "Anise",
             value: 1,
             itemStyle: {
-              color: '#692a19'
+              color: "#c78936"
             }
           },
           {
-            name: 'Dark Chocolate',
+            name: "Nutmeg",
             value: 1,
             itemStyle: {
-              color: '#470604'
+              color: "#8c292c"
+            }
+          },
+          {
+            name: "Cinnamon",
+            value: 1,
+            itemStyle: {
+              color: "#e5762e"
+            }
+          },
+          {
+            name: "Clove",
+            value: 1,
+            itemStyle: {
+              color: "#a16c5a"
             }
           }
         ]
@@ -1287,73 +1228,132 @@ export const DETAIL_DATA = [
     ]
   },
   {
-    name: 'Sweet',
+    name: "Nutty/\nCocoa",
     itemStyle: {
-      color: '#e65832'
+      color: "#a87b64"
     },
     children: [
       {
-        name: 'Brown Sugar',
+        name: "Nutty",
         itemStyle: {
-          color: '#d45a59'
+          color: "#c78869"
         },
         children: [
           {
-            name: 'Molasses',
+            name: "Peanuts",
             value: 1,
             itemStyle: {
-              color: '#310d0f'
+              color: "#d4ad12"
             }
           },
           {
-            name: 'Maple Syrup',
+            name: "Hazelnut",
             value: 1,
             itemStyle: {
-              color: '#ae341f'
+              color: "#9d5433"
             }
           },
           {
-            name: 'Caramelized',
+            name: "Almond",
             value: 1,
             itemStyle: {
-              color: '#d78823'
-            }
-          },
-          {
-            name: 'Honey',
-            value: 1,
-            itemStyle: {
-              color: '#da5c1f'
+              color: "#c89f83"
             }
           }
         ]
       },
       {
-        name: 'Vanilla',
+        name: "Cocoa",
+        itemStyle: {
+          color: "#bb764c"
+        },
+        children: [
+          {
+            name: "Chocolate",
+            value: 1,
+            itemStyle: {
+              color: "#692a19"
+            }
+          },
+          {
+            name: "Dark Chocolate",
+            value: 1,
+            itemStyle: {
+              color: "#470604"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Sweet",
+    itemStyle: {
+      color: "#e65832"
+    },
+    children: [
+      {
+        name: "Brown Sugar",
+        itemStyle: {
+          color: "#d45a59"
+        },
+        children: [
+          {
+            name: "Molasses",
+            value: 1,
+            itemStyle: {
+              color: "#310d0f"
+            }
+          },
+          {
+            name: "Maple Syrup",
+            value: 1,
+            itemStyle: {
+              color: "#ae341f"
+            }
+          },
+          {
+            name: "Caramelized",
+            value: 1,
+            itemStyle: {
+              color: "#d78823"
+            }
+          },
+          {
+            name: "Honey",
+            value: 1,
+            itemStyle: {
+              color: "#da5c1f"
+            }
+          }
+        ]
+      },
+      {
+        name: "Vanilla",
         value: 1,
         itemStyle: {
-          color: '#f89a80'
+          color: "#f89a80"
         }
       },
       {
-        name: 'Vanillin',
+        name: "Vanillin",
         value: 1,
         itemStyle: {
-          color: '#f37674'
+          color: "#f37674"
         }
       },
       {
-        name: 'Overall Sweet',
+        name: "Overall Sweet",
         value: 1,
         itemStyle: {
-          color: '#e75b68'
+          color: "#e75b68"
         }
       },
       {
-        name: 'Sweet Aromatics',
+        name: "Sweet Aromatics",
         value: 1,
         itemStyle: {
-          color: '#d0545f'
+          color: "#d0545f"
         }
       }
     ]

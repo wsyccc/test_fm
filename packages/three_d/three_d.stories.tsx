@@ -1,17 +1,17 @@
-import { Meta, StoryObj } from '@storybook/react';
-import ThreeD from './src/index';
+import { Meta, StoryObj } from "@storybook/react";
+import ThreeD from "./src/index";
 import { ThreeDProvider } from "./src/context";
-import React from 'react';
+import React from "react";
 
 const meta: Meta<typeof ThreeD> = {
-  title: 'Components/ThreeD',
+  title: "Components/ThreeD",
   component: ThreeD,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    // backgroundColor: { control: 'color' },
+    // backgroundColor: { control: "color" },
   },
   decorators: [
     (Story) => (
@@ -44,7 +44,7 @@ export const DefaultObj: Story = {
     yScale: 1,
     zScale: 1,
     alarms: [
-      { name: 'obj5', color: 'red' }
+      { name: "obj5", color: "red" }
     ]
   },
 };
