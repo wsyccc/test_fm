@@ -1,22 +1,19 @@
 // data_manager/index.tsx
 
-import {RefObject, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Message} from './Message';
-import {BaseMessagePurpose, MessageSource, WidgetType} from '../../constants';
-import {WidgetIdentityType} from "../../type";
 
-
-// 如果 CHUNK_SIZE 设置较大数据时超过此大小则进行分块传输（单位：字节）
-// const CHUNK_SIZE = 512 * 1024; // 512KB
-const VERSION = import.meta.env.PACKAGE_VERSION;
 
 /**
  * 基本的消息发送函数
  */
-export function sendMessage<T, S, F>(message: Message<T, S, F>): void {
+export function sendMessage(message: Message): void {
   if (typeof window.postMessage === 'function') {
     console.log('Sending message:', message);
-    window.postMessage(message.toJSON());
+    window.postMessage({
+      ...message.toJSON(),
+      version: import.meta.env.VITE_VERSION,
+    });
   } else {
     console.warn('WebView2 API is not available.');
   }
@@ -64,12 +61,12 @@ export function sendMessage<T, S, F>(message: Message<T, S, F>): void {
  * React Hook：注册 WebView2 消息监听器
  * 传入的 handler 用于处理所有收到的消息
  */
-export function useWebviewListener<T, S, F>(handler: (msg: Message<T, S, F>) => void): void {
+export function useWebviewListener(handler: (msg: Message) => void): void {
   useEffect(() => {
     const listener = (event: MessageEvent) => {
       if (event.data) {
         try {
-          handler(Message.toMessage(JSON.stringify(event.data)) as Message<T, S, F>);
+          handler(Message.toMessage(JSON.stringify(event.data)) as Message);
         } catch (err) {
           console.error('Error handling message:', err);
         }
@@ -89,52 +86,3 @@ export function useWebviewListener<T, S, F>(handler: (msg: Message<T, S, F>) => 
     };
   }, [handler]);
 }
-
-// ====== 3-way handshake ======
-/**
- * 初始化与 WebView2 之间的握手通信
- * 前端启动时调用，通知宿主当前客户端信息和版本号（你可以扩展 payload 内容）
- */
-export function initializeCommunication(widgetType: WidgetType): void {
-  const initMessage: Message = new Message(
-    {
-      source: MessageSource.Hulk,
-      purpose: BaseMessagePurpose.initialize,
-      payload: {
-        type: widgetType,
-        version: VERSION,
-      },
-    }
-  );
-  sendMessage(initMessage);
-}
-
-export function getBaseWidgetData(message: Message, widgetConfig: RefObject<WidgetIdentityType>): {
-  type: WidgetType,
-  id: string,
-  width: number,
-  height: number
-} | undefined {
-  if (message.widgetId &&
-      message.purpose === BaseMessagePurpose.setWidgetBaseConfig &&
-      message.widgetWidth && message.widgetHeight && message.widgetType) {
-
-    if (message.widgetType !== widgetConfig.current.type) {
-      console.error('Widget type mismatch:', message.widgetType, widgetConfig.current.type);
-      return;
-    }
-    return {
-      type: message.widgetType,
-      id: message.widgetId,
-      width: message.widgetWidth,
-      height: message.widgetHeight,
-    };
-  }
-  console.error('Invalid message for set base widget config:', message);
-  return;
-}
-
-// export function sendWidgetDefaultConfigs<T extends BaseWidgetDataType>(widgetData: T): void {
-//
-//
-// }

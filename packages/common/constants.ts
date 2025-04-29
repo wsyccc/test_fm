@@ -20,26 +20,20 @@ export enum WidgetType {
   report_builder = 'report_builder',
 }
 
-export enum MessageSource {
-  // The Message is sent from WebView to the React
-  WebView,
-  // The Message is sent from React to the WebView
-  Hulk
-}
-
 export enum BaseMessagePurpose {
-  // === 3-way handshake ===
-  initialize,
-  setWidgetBaseConfig,
-  setWidgetDefaultData,
+  INIT,
 
-  updateWidgetData,
-  triggerAction,
+  // sender message from hulk to pm
+  SEND_CREATE_WIDGET,
+  SEND_NOTIFY_ACTIONS,
+  SEND_UPDATE_WIDGET,
+
+  // receive a message from pm to hulk
+  RECEIVE_WIDGET_DATA,
 }
 
 
 export enum BaseTriggerActions {
-  init = 'init',
   onClick = 'onClick',
   onMouseEnter = 'onMouseEnter',
   onMouseLeave = 'onMouseLeave',

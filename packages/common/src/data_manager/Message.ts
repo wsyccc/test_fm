@@ -1,74 +1,92 @@
-import {BaseMessagePurpose, WidgetType} from "../../constants";
-import {ActionRequest, MessagePayload} from "../../type";
-import * as console from "node:console";
+import {BaseMessagePurpose, BaseTriggerActions, WidgetType} from "../../constants";
+import {message} from "antd";
 
-/**
- * Message class
- * T is the payload type
- * S is the trigger action type
- * F is the message purpose type
- */
+export interface ReceiverMessagePayload {
+  updateWidgets: {
+    // updated widget id, normally is the widget itself,
+    // but when you want to trigger an action by this widget, but update other widget data,
+    // place the widgets' id that you want to update here
+    widgetId: string;
+    widgetType: WidgetType;
+    data?: any;
+  }[];
+  webviewVersion?: string;
+}
+
+export interface SenderMessagePayload {
+  triggerWidgets: {
+    widgetId?: string;
+    widgetType?: WidgetType;
+    action: BaseTriggerActions;
+    data?: any;
+  }[];
+}
+
+export interface MessageInterface {
+  id: string;
+  purpose: BaseMessagePurpose;
+  widgetId: string;
+  widgetType: WidgetType;
+  widgetWidth?: number;
+  widgetHeight?: number;
+  receiverMessagePayload?: ReceiverMessagePayload;
+  senderMessagePayload?: SenderMessagePayload;
+
+  sequenceId?: string;
+  chunkIndex?: number;
+  totalChunks?: number;
+  isChunk?: boolean;
+}
+
 export class Message {
-  get acknowledge(): boolean | undefined {
-    return this._acknowledge;
+  get id(): string {
+    return this._id;
   }
 
-  set acknowledge(value: boolean) {
-    this._acknowledge = value;
+  set id(value: string) {
+    this._id = value;
   }
 
+  private _id: string;
   private _purpose: BaseMessagePurpose;
-  private _widgetId?: string;
-  private _widgetType?: WidgetType;
+  // this widget id
+  private _widgetId: string;
+  private _widgetType: WidgetType;
   private _widgetWidth?: number;
   private _widgetHeight?: number;
-  private _payload?: MessagePayload;
-  private _actionRequest?: ActionRequest;
+  private _receiverMessagePayload?: ReceiverMessagePayload;
+  private _senderMessagePayload?: SenderMessagePayload;
   private _sequenceId?: string;
   private _chunkIndex?: number;
   private _totalChunks?: number;
   private _isChunk?: boolean;
-  private _acknowledge?: boolean;
 
   constructor({
+                id,
                 purpose,
                 widgetId,
                 widgetType,
                 widgetWidth,
                 widgetHeight,
-                payload,
-                actionRequest,
+                receiverMessagePayload,
+                senderMessagePayload,
                 sequenceId,
                 chunkIndex,
                 totalChunks,
                 isChunk,
-                acknowledge,
-              }: {
-    purpose: BaseMessagePurpose;
-    widgetId?: string;
-    widgetType?: WidgetType;
-    widgetWidth?: number;
-    widgetHeight?: number;
-    payload?: MessagePayload;
-    actionRequest?: ActionRequest;
-    sequenceId?: string;
-    chunkIndex?: number;
-    totalChunks?: number;
-    isChunk?: boolean;
-    acknowledge?: boolean;
-  }) {
+              }: MessageInterface) {
+    this._id = id;
     this._widgetId = widgetId;
     this._widgetType = widgetType;
     this._widgetWidth = widgetWidth;
     this._widgetHeight = widgetHeight;
     this._purpose = purpose;
-    this._payload = payload;
-    this._actionRequest = actionRequest;
+    this.receiverMessagePayload = receiverMessagePayload;
+    this.senderMessagePayload = senderMessagePayload;
     this._sequenceId = sequenceId;
     this._chunkIndex = chunkIndex;
     this._totalChunks = totalChunks;
     this._isChunk = isChunk;
-    this._acknowledge = acknowledge;
   }
 
   /**
@@ -141,7 +159,7 @@ export class Message {
    *
    * @return {string} - Widget ID
    */
-  get widgetId(): string | undefined {
+  get widgetId(): string {
     return this._widgetId;
   }
 
@@ -157,7 +175,7 @@ export class Message {
    * Get Widget Type
    * @return {string} - Widget Type
    */
-  get widgetType(): WidgetType | undefined {
+  get widgetType(): WidgetType {
     return this._widgetType;
   }
 
@@ -195,48 +213,41 @@ export class Message {
     this._purpose = value;
   }
 
-  /**
-   * payload is the data for the message
-   * e.g. payload: { color: 'red' } means the color is red
-   * @return {MessagePayload} - Message Payload
-   */
-  get payload(): MessagePayload | undefined {
-    return this._payload;
+
+  get receiverMessagePayload(): ReceiverMessagePayload | undefined {
+    return this._receiverMessagePayload;
   }
 
-  /**
-   * payload is the data for the message
-   * e.g. payload: { color: 'red' } means the color is red
-   * @param value {MessagePayload} - Message Payload
-   */
-  set payload(value: MessagePayload) {
-    this._payload = {
-      updateWidgets: value.updateWidgets.map(item => (
-        {
-          ...item,
-          id: item.id ?? this.widgetId,
-          type: item.type ?? this.widgetType,
-        }
-      ))
+  set receiverMessagePayload(value: ReceiverMessagePayload | undefined) {
+    if (value) {
+      const parsedUpdateWidgets = value.updateWidgets.map(t => {
+        if (t.widgetId == null) t.widgetId = this.widgetId;
+        if (t.widgetType == null) t.widgetType = this.widgetType;
+        return t;
+      })
+      this._receiverMessagePayload = {
+        ...value,
+        updateWidgets: parsedUpdateWidgets,
+      };
     }
-    this._payload = value;
   }
 
-  /**
-   * triggerAction is the action that triggered by user or system
-   * e.g. triggerAction: 'onClick' means the user clicked the button
-   * @return {BaseTriggerActions} - Message Trigger Action
-   */
-  get actionRequest(): ActionRequest | undefined {
-    return this._actionRequest;
+  get senderMessagePayload(): SenderMessagePayload | undefined {
+    return this._senderMessagePayload;
   }
 
-  /**
-   * triggerAction is the action that triggered by user or system
-   * @param value {BaseTriggerActions} - Message Trigger Action
-   */
-  set actionRequest(value: ActionRequest) {
-    this._actionRequest = value;
+  set senderMessagePayload(value: SenderMessagePayload | undefined) {
+    if (value) {
+      const parsedTriggerWidgets = value.triggerWidgets.map(t => {
+        if (t.widgetId == null) t.widgetId = this.widgetId;
+        if (t.widgetType == null) t.widgetType = this.widgetType;
+        return t;
+      })
+      this._senderMessagePayload = {
+        ...value,
+        triggerWidgets: parsedTriggerWidgets,
+      };
+    }
   }
 
   get widgetWidth(): number | undefined {
@@ -265,8 +276,8 @@ export class Message {
       purpose: this.purpose,
       widgetWidth: this.widgetWidth,
       widgetHeight: this.widgetHeight,
-      payload: this.payload,
-      actionRequest: this.actionRequest,
+      receiverMessagePayload: this.receiverMessagePayload,
+      senderMessagePayload: this.senderMessagePayload,
       sequenceId: this.sequenceId,
       chunkIndex: this.chunkIndex,
       totalChunks: this.totalChunks,
@@ -283,13 +294,14 @@ export class Message {
       const parsedMessage = JSON.parse(message);
       return new Message(
         {
+          id: parsedMessage.id ?? undefined,
           widgetId: parsedMessage.widgetId ?? undefined,
           widgetType: parsedMessage.widgetType ?? undefined,
           purpose: parsedMessage.purpose ?? undefined,
           widgetWidth: parsedMessage.widgetWidth ?? undefined,
           widgetHeight: parsedMessage.widgetHeight ?? undefined,
-          payload: parsedMessage.payload ?? undefined,
-          actionRequest: parsedMessage.actionRequest ?? undefined,
+          senderMessagePayload: parsedMessage.senderMessagePayload ?? undefined,
+          receiverMessagePayload: parsedMessage.receiverMessagePayload ?? undefined,
           sequenceId: parsedMessage.sequenceId ?? undefined,
           chunkIndex: parsedMessage.chunkIndex ?? undefined,
           totalChunks: parsedMessage.totalChunks ?? undefined,
