@@ -92,16 +92,16 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
     if (objectType === "obj") {
       const materialLoader = new MTLLoader();
-      try {
-        if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
-          materials.preload();
-          setCurrentMaterial(materials);
+      // try {
+      //   if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
+      //     materials.preload();
+      //     setCurrentMaterial(materials);
 
-          (loader as OBJLoader).setMaterials(materials);
-        });
-      } catch (e) {
-        console.error(e);
-      }
+      //     (loader as OBJLoader).setMaterials(materials);
+      //   });
+      // } catch (e) {
+      //   console.error(e);
+      // }
       if (link) loader.load(
         link,
         (example) => {
