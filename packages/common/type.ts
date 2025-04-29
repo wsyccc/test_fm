@@ -8,7 +8,7 @@ export interface StyleConfig extends CSSProperties {
 export interface BaseWidgetDataType {
   width: number | string;
   height: number | string;
-  style?: StyleConfig;
+  style?: Record<string, any>;
   bgColor?: string;
   isStorybook?: boolean;
 }
@@ -44,6 +44,9 @@ export interface BaseWidgetActionType {
 
 export interface ActionPayload {
   widgetId: string;
+  // paging for report builder
   pageNumber?: number;
   pageContentLimit?: number;
+  // initial data for widgets
+  version?: string;
 }

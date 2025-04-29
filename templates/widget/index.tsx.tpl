@@ -17,11 +17,12 @@
  * import { Button } from '@hulk/common';
  * ```
  */
-import { React } from '@hulk/common';
+import { React, generateWidgetId, BaseTriggerActions } from '@hulk/common';
 import { use{{namePascal}}Common } from './context';
 import { {{namePascal}}PropsInterface } from "./type.ts";
 import { WidgetActions } from '@hulk/common';
 import defaultConfigs from './configs.ts';
+import pkg from '../package.json';
 
 
 const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
@@ -36,6 +37,13 @@ const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
         ...widgetData,
       };
   }, [props, widgetData]);
+
+  useEffect(() => {
+      triggerAction([BaseTriggerActions.init], {
+        widgetId: generateWidgetId(),
+        version: pkg.version
+      })
+    }, [pkg.version]);
 
   // determine isStorybook(Dev) or Production(Built)
   const isStorybook = data.isStorybook ?? false;

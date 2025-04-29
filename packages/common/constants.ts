@@ -39,6 +39,7 @@ export enum BaseMessagePurpose {
 
 
 export enum BaseTriggerActions {
+  init = 'init',
   onClick = 'onClick',
   onMouseEnter = 'onMouseEnter',
   onMouseLeave = 'onMouseLeave',

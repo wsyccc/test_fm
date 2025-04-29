@@ -115,7 +115,7 @@ export function getBaseWidgetData(message: Message, widgetConfig: RefObject<Widg
   width: number,
   height: number
 } | undefined {
-  if (message.widgetId && message.source === MessageSource.WebView &&
+  if (message.widgetId &&
       message.purpose === BaseMessagePurpose.setWidgetBaseConfig &&
       message.widgetWidth && message.widgetHeight && message.widgetType) {
 

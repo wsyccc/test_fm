@@ -1,12 +1,41 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import {Config, createGenerator} from "ts-json-schema-generator";
+import {exportSchemaFilter} from "../../utils";
 
 export default defineConfig(({}) => {
 
   return {
     base: 'dist_dynamic_barchart',
-    plugins: [react()],
+    plugins: [react(), {
+      name: 'widget-props-schema',
+      apply: 'build',
+      enforce: 'pre',
+      buildStart() {
+        const tsconfigPath = path.resolve(__dirname, 'tsconfig.json');
+        const inputFile = path.resolve(__dirname, 'src/type.ts');
+        const typeName = 'DynamicBarchartPropsInterface';
+
+        const config: Config = {
+          path: inputFile,
+          tsconfig: tsconfigPath,
+          type: typeName,
+          skipTypeCheck: true,
+          topRef: false,
+          minify: true,
+          encodeRefs: false,
+          jsDoc: "none"
+        };
+        const schema = createGenerator(config).createSchema(typeName);
+
+        this.emitFile({
+          type: 'asset',
+          fileName: 'configs.schema.json',
+          source: JSON.stringify(exportSchemaFilter(schema), null, 2)
+        })
+      }
+    }],
     resolve: {
       alias: {
         '@hulk/common': path.resolve(__dirname, '../../dist/dist_common/common.index.es.js'),

@@ -8,15 +8,16 @@ import {
   useWebviewListener
 } from "./data_manager";
 import {Message} from "./data_manager/Message";
+import {ActionHandler} from "./data_manager/actionHandler";
 
-export interface CommonContextType<T extends BaseWidgetDataType> {
+export interface CommonContextType<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>> {
   widgetData: T | null;
   updateWidgetData: (update: Partial<T>, storybook?: boolean) => void;
   resetWidgetData: () => void;
-  triggerAction: (trigger: BaseTriggerActions[], payload: ActionPayload, storybook?: boolean) => void;
+  triggerAction: (trigger: BaseTriggerActions[], payload: ActionPayload, isStorybook?: boolean) => void;
 }
 
-export function getCommonContext<T extends BaseWidgetDataType>() {
+export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>>() {
   const Context = createContext<CommonContextType<T> | undefined>(undefined);
 
   const Provider = ({ children }: { children: ReactNode }) => {
@@ -38,26 +39,24 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
 
     // received message from PM
     useWebviewListener((msg: Message) => {
-      if (msg.source === MessageSource.WebView){
-        if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
-          const newData = msg.payload;
-          console.log('Received updateWidgetData:', newData);
-          updateWidgetData({...widgetData, ...newData} as T);
-        } else if (msg.purpose === BaseMessagePurpose.setWidgetBaseConfig) {
-          const config = getBaseWidgetData(msg, widgetIdentity);
-          widgetIdentity.current = {
-            ...widgetIdentity.current,
-            ...config
-          }
-          setWidgetData({
-            ...widgetData,
-            width: config?.width,
-            height: config?.height,
-          } as T)
-          // sendWidgetDefaultConfigs();
-        } else {
-          console.warn('Received unknown message:', msg);
+      if (msg.purpose === BaseMessagePurpose.updateWidgetData) {
+        const newData = msg.payload;
+        console.log('Received updateWidgetData:', newData);
+        updateWidgetData({...widgetData, ...newData} as T);
+      } else if (msg.purpose === BaseMessagePurpose.setWidgetBaseConfig) {
+        const config = getBaseWidgetData(msg, widgetIdentity);
+        widgetIdentity.current = {
+          ...widgetIdentity.current,
+          ...config
         }
+        setWidgetData({
+          ...widgetData,
+          width: config?.width,
+          height: config?.height,
+        } as T)
+        // sendWidgetDefaultConfigs();
+      } else {
+        console.warn('Received unknown message:', msg);
       }
     });
 
@@ -81,15 +80,11 @@ export function getCommonContext<T extends BaseWidgetDataType>() {
       setWidgetData(originalWidgetData.current);
     };
 
-    const triggerAction = (actions: BaseTriggerActions[]) => {
-      actions.forEach((action) => {
-        switch (action) {
-          case BaseTriggerActions.onClick:
-            console.log(`onClick on ${widgetIdentity.current.widgetId}`);
-            // Handle onClick action
-            break;
-        }
-      });
+    const triggerAction = (actions: BaseTriggerActions[], payload: ActionPayload, isStorybook?: boolean) => {
+      if (widgetIdentity && widgetIdentity.current.type && widgetIdentity.current.widgetId && !isStorybook){
+        const actionTrigger = new ActionHandler(widgetIdentity.current.type, widgetIdentity.current.widgetId, actions, payload);
+        actionTrigger.triggerAction();
+      }
     };
 
     return (

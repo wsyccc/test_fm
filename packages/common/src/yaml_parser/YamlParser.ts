@@ -1,5 +1,5 @@
 import { parseDocument } from 'yaml';
-import { Report } from '../../../report_builder/src/type';
+import { Report } from '@packages/report_builder/src/type';
 
 export class YamlParser {
   private report: Report | null = null;
