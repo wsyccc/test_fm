@@ -87,5 +87,3 @@ const ScatterChartPropsSchema = {
     }
   }
 };
-
-export default ScatterChartPropsSchema;

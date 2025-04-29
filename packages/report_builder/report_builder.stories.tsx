@@ -45,40 +45,82 @@ const baseComponentProperties = {
   }
 };
 
+function resolveField(
+  field: any,
+  definitions: Record<string, any>,
+  fieldName?: string,
+  refStack: Set<string> = new Set()
+): any {
+  if (fieldName === "style") {
+    return {
+      type: "object",
+      additionalProperties: true
+    };
+  }
+
+  if (field?.$ref) {
+    const refKey = field.$ref.replace("#/definitions/", "");
+
+    if (refStack.has(refKey)) {
+      return { type: "object", additionalProperties: true };
+    }
+
+    const def = definitions[refKey];
+    if (!def) {
+      return field; 
+    }
+
+    refStack.add(refKey);
+
+    const resolved = resolveField(def, definitions, fieldName, refStack);
+
+    refStack.delete(refKey);
+
+    return resolved;
+  }
+
+  if (field?.type === 'object' && field.properties) {
+    const resolvedProperties: Record<string, any> = {};
+    for (const [k, v] of Object.entries(field.properties)) {
+      resolvedProperties[k] = resolveField(v, definitions, k, refStack);
+    }
+    return { ...field, properties: resolvedProperties };
+  }
+
+  if (field?.type === 'array' && field.items) {
+    return { ...field, items: resolveField(field.items, definitions, undefined, refStack) };
+  }
+
+  if (Array.isArray(field?.anyOf)) {
+    return { ...field, anyOf: field.anyOf.map((sub) => resolveField(sub, definitions, undefined, refStack)) };
+  }
+
+  if (Array.isArray(field?.allOf)) {
+    return { ...field, allOf: field.allOf.map((sub) => resolveField(sub, definitions, undefined, refStack)) };
+  }
+
+  return { ...field };
+}
+
 function convertAtoB(standardSchema: any, definitions: Record<string, any> = {}): Record<string, any> {
   const result: Record<string, any> = {};
   const requiredKeys = new Set(standardSchema.required || []);
 
   for (const [key, value] of Object.entries(standardSchema.properties || {})) {
-    if (typeof value !== 'object' || value === null) continue;
+    const field = value as Record<string, any>;
 
-    const { type, enum: enumValues, items, properties, additionalProperties, $ref, ...rest } = value as any;
-    const newField: Record<string, any> = {};
+    const resolvedField = resolveField(field, definitions, key); // 传递refStack防止死循环
 
-    if ($ref) {
-      const refKey = $ref.replace("#/definitions/", "");
-      const def = definitions[refKey];
-      if (def) {
-        // 展开 definition 里的定义
-        Object.assign(newField, { type: def.type });
-        if (def.enum) newField.enum = def.enum;
-      } else {
-        // 找不到 definition，保留原始$ref（或者这里可以报错，看你要不要）
-        console.warn(`⚠️ Warning: cannot resolve ref: ${$ref}`);
-        newField.$ref = $ref;
-      }
-    } else {
-      if (type) newField.type = type;
-      if (enumValues) newField.enum = enumValues;
-      if (items) newField.items = items;
-      if (properties) newField.properties = properties;
-      if (additionalProperties !== undefined) newField.additionalProperties = additionalProperties;
-      Object.assign(newField, rest);
+    const finalField: Record<string, any> = {
+      ...resolvedField,
+      required: requiredKeys.has(key)
+    };
+
+    if ('required' in finalField && Array.isArray(finalField.required)) {
+      delete (finalField as any).required;
     }
 
-    newField.required = requiredKeys.has(key);
-
-    result[key] = newField;
+    result[key] = finalField;
   }
 
   return result;
@@ -115,8 +157,8 @@ function makeWidgetSchema(widgetType: WidgetType | StackType, widgetProps: Recor
     }
   }
 
-  if (widgetType === WidgetType.linechart) {
-    widgetProps = convertAtoB(widgetProps);
+  if (widgetType === WidgetType.linechart || widgetType === WidgetType.scatter_chart) {
+    widgetProps = convertAtoB(widgetProps, widgetProps.definitions || {});
   }
 
   // ===统一处理（无论是原始B格式，还是转过来的B格式）===
@@ -251,7 +293,7 @@ const meta: Meta<typeof ReportBuilder> = {
               logo: { $ref: "#/definitions/component" },
               width: { type: ["string", "number"] },
               height: { type: ["string", "number"] },
-              bgColor: { type: "string"}
+              bgColor: { type: "string" }
             },
             additionalProperties: false
           },
@@ -272,7 +314,7 @@ const meta: Meta<typeof ReportBuilder> = {
               logo: { $ref: "#/definitions/component" },
               width: { type: ["string", "number"] },
               height: { type: ["string", "number"] },
-              bgColor: { type: "string"},
+              bgColor: { type: "string" },
             },
             additionalProperties: false
           },
@@ -330,8 +372,6 @@ const meta: Meta<typeof ReportBuilder> = {
           } else {
             setHasError(false);
           }
-
-          console.log(console.log("componentSchema", JSON.stringify(schema, null, 2)))
         });
       };
 

@@ -6,9 +6,9 @@ import CandleStickChartPropsSchema from '@packages/candle_stick_chart/src/type';
 import DynamicBarchartPropsSchema from '@packages/dynamic_barchart/src/type';
 import GaugechartPropsSchema from '@packages/gaugechart/src/type';
 import GeoChartPropsSchema from '@packages/geo_chart/src/type';
-import LineChartPropsSchemaJSON from '@packages/linechart/src/type';
+import LineChartPropsSchemaJSON from '@packages/linechart/src/configs.schema.json';
 import OtherChartsPropsSchema from '@packages/other_charts/src/type';
-import ScatterChartPropsSchema from '@packages/scatter_chart/src/type';
+import ScatterChartPropsSchemaJSON from '@packages/scatter_chart/src/configs.schema.json';
 import SpeedThreeDPropsSchema from '@packages/speed_three_d/src/type';
 import SplitterPropsSchema from '@packages/splitter/src/type';
 import SunburstChartPropsSchema from '@packages/sunburst_chart/src/type';
@@ -18,7 +18,6 @@ import TreeMapChartPropsSchema from '@packages/tree_map_chart/src/type';
 import ProtablePropsSchema from '@packages/protable/src/type';
 import TextPropsSchema from '@packages/text/src/type';
 import ImagePropsSchema from '@packages/image/src/type';
-import { StackType } from '../type';
 
 type ProvComp = React.ComponentType<{ children: React.ReactNode }>;
 
@@ -76,7 +75,7 @@ const schemaMap: Partial<Record<WidgetType, any>> = {
   geo_chart: GeoChartPropsSchema,
   linechart: LineChartPropsSchemaJSON,
   other_charts: OtherChartsPropsSchema,
-  scatter_chart: ScatterChartPropsSchema,
+  scatter_chart: ScatterChartPropsSchemaJSON,
   speed_three_d: SpeedThreeDPropsSchema,
   splitter: SplitterPropsSchema,
   sunburst_chart: SunburstChartPropsSchema,

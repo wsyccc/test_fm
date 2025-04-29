@@ -1,9 +1,9 @@
-import {React, WidgetType, Row, Button, Col, YamlParser, generateWidgetId, BaseTriggerActions, } from "@hulk/common";
+import { React, WidgetType, Row, Button, Col, YamlParser, generateWidgetId, BaseTriggerActions, } from "@hulk/common";
 import { useReportBuilderCommon } from "./context";
 import { ReportBuilderPropsInterface } from "./type.ts";
 import defaultConfigs from "./configs.ts";
 import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
-import {LayoutRender} from "./layout_render";
+import { LayoutRender } from "./layout_render";
 import { _ } from "@hulk/common";
 import pkg from '../package.json';
 
@@ -12,7 +12,7 @@ const MARGIN_CONSTANT = "20px";
 
 
 const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction} = useReportBuilderCommon();
+  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useReportBuilderCommon();
 
   const { useState, useMemo, Suspense, useEffect } = React;
 
@@ -43,7 +43,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   // determine isStorybook(Dev) or Production(Built)
   // const isStorybook = data.isStorybook ?? false;
 
-  const renderer = new YamlParser({reportText: data.yamlText});
+  const renderer = new YamlParser({ reportText: data.yamlText });
   const config = renderer.getReport();
   const error = renderer.getError();
 
@@ -52,7 +52,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
   }
 
   if (!config) {
-    return <div>⚠️ 没有可渲染的内容</div>;
+    return <div>没有可渲染的内容</div>;
   }
 
   const { header, footer, pages, orientation } = config;
@@ -124,7 +124,13 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
               marginLeft: MARGIN_CONSTANT
             }}
             onClick={() => handleNavClick(pageInd + 1, "prev")}>上一页</Button>
-          <Button onClick={() => setPageControl(p => !p)}>{pageControl ? "隐藏控制" : "显示控制"}</Button>
+          <Button onClick={() => {
+            // 如果要显示控制变成单页浏览，那把用户按键显示控制的那一页变成当前显示页
+            if (!pageControl) {
+              setCurrentPage(pageInd + 1)
+            }
+            setPageControl(p => !p)
+          }}>{pageControl ? "隐藏控制" : "显示控制"}</Button>
           <Button
             style={{ visibility: pageInd !== (pages.length - 1) && pageControl ? "visible" : "hidden" }}
 

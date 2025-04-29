@@ -12,7 +12,7 @@ const ScatterChart: React.FC = (props: ScatterChartPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useScatterChartCommon();
 
   const { useState, useRef, useEffect, useMemo } = React;
-  console.log(props, "wid")
+
   const data: ScatterChartPropsInterface = useMemo(() => {
     return {
       //TODO add default props here above ...props

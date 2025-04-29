@@ -65,7 +65,7 @@ pages:
         width: 33%
         height: 200
         color: red
-      - type: gaugechart
+      - type: scatter_chart
         width: 33%
         height: 400
         bgColor: "#18ffd8"
