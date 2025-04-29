@@ -9,9 +9,9 @@ export const exportSchemaFilter = (schema: Schema): Schema => {
     }
   }
 
-  delete schema.definitions?.StyleConfig;
-  delete schema.definitions?.Globals;
-  delete schema.additionalProperties;
+  // delete schema.definitions?.StyleConfig;
+  // delete schema.definitions?.Globals;
+  // delete schema.additionalProperties;
 
   return schema;
 }
