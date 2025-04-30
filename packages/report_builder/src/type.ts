@@ -1,10 +1,9 @@
 import {BaseWidgetDataType, WidgetType, StyleConfig } from "@hulk/common";
 
-export interface ReportBuilderPropsInterface extends Omit<BaseWidgetDataType, "width" | "height"> {
+export interface ReportBuilderPropsInterface extends BaseWidgetDataType {
   // add more props here
-  yamlText: string;
-  width?: number | string;
-  height?: number | string;
+  yamlText?: string;
+  jsonData?: string;
 }
 
 export enum StackType {
@@ -50,7 +49,7 @@ export interface Page {
 //   type: WidgetType.image;
 // }
 
-export interface Report {
+export interface Report extends Record<string, any> {
   header?: {
     title?: WidgetCard;
     subtitle?: WidgetCard;

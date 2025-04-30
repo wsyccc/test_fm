@@ -21,6 +21,7 @@ import { React } from '@hulk/common';
 import { useButtonCommon } from './context';
 import { ButtonPropsInterface } from "./type.ts";
 import defaultConfigs from './configs.ts';
+import pkg from '../package.json';
 
 
 const Button: React.FC<ButtonPropsInterface> = (props) => {
@@ -29,12 +30,17 @@ const Button: React.FC<ButtonPropsInterface> = (props) => {
   const { useState, useRef, useEffect, useMemo } = React;
 
   const data: ButtonPropsInterface = useMemo(() => {
-      return {
-        //TODO add default props here above ...props
+      const mergedData = {
         ...defaultConfigs,
         ...props,
         ...widgetData,
       };
+      // on design time
+      if (!widgetData) {
+        updateWidgetData(data, pkg.version, data.isStorybook ?? false);
+      }
+      return mergedData;
+
   }, [props, widgetData]);
 
   // determine isStorybook(Dev) or Production(Built)

@@ -1,23 +1,22 @@
-import { React, WidgetType, Row, Button, Col, YamlParser, generateWidgetId, BaseTriggerActions, } from "@hulk/common";
+import { React, WidgetType, Row, Button, Col, YamlParser} from "@hulk/common";
 import { useReportBuilderCommon } from "./context";
 import { ReportBuilderPropsInterface } from "./type.ts";
 import defaultConfigs from "./configs.ts";
 import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
 import { LayoutRender } from "./layout_render";
 import { _ } from "@hulk/common";
-import pkg from '../package.json';
 
 
 const MARGIN_CONSTANT = "20px";
 
 
 const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuilderPropsInterface | {}) => {
-  const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useReportBuilderCommon();
+  const { widgetData, updateWidgetData, triggerAction } = useReportBuilderCommon();
 
-  const { useState, useMemo, Suspense, useEffect } = React;
+  const { useState, useMemo, Suspense } = React;
 
   const data: ReportBuilderPropsInterface = useMemo(() => {
-    return _.mergeWith(
+    const mergedData = _.mergeWith(
       {},
       defaultConfigs,
       props,
@@ -30,47 +29,30 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
         return undefined;
       }
     );
+    if (mergedData.jsonData) return mergedData.jsonData;
+    else return mergedData;
   }, [props, widgetData]);
 
   const isStorybook = data.isStorybook ?? false;
-  // determine isStorybook(Dev) or Production(Built)
-  // const isStorybook = data.isStorybook ?? false;
 
-  useEffect(() => {
-    if (!widgetData){
+  let config: null;
 
+  if (data.yamlText){
+    const renderer = new YamlParser({ reportText: data.yamlText });
+    config = renderer.getReport() as Record<string, any> | null;
+    const error = renderer.getError();
+
+    if (error) {
+      return <pre style={{ color: "red" }}>{error}</pre>;
     }
-  }, []);
 
-  useEffect(() => {
-    triggerAction({
-      actions: [BaseTriggerActions.init],
-      payload: {
-        updateWidgets: [{
-          id: generateWidgetId(),
-          type: WidgetType.report_builder,
-          version: pkg.version
-        }]
-      },
-      isStorybook,
-    });
-  }, [pkg.version]);
-
-  const isStorybook = data.isStorybook ?? false;
-  // determine isStorybook(Dev) or Production(Built)
-  // const isStorybook = data.isStorybook ?? false;
-
-  const renderer = new YamlParser({ reportText: data.yamlText });
-  const config = renderer.getReport();
-  const error = renderer.getError();
-
-  if (error) {
-    return <pre style={{ color: "red" }}>{error}</pre>;
+    if (!config) {
+      return <div>没有可渲染的内容</div>;
+    }
+  } else {
+    config = data;
   }
 
-  if (!config) {
-    return <div>没有可渲染的内容</div>;
-  }
 
   const { header, footer, pages, orientation } = config;
 

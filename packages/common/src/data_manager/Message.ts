@@ -1,5 +1,4 @@
 import {BaseMessagePurpose, BaseTriggerActions, WidgetType} from "../../constants";
-import {message} from "antd";
 
 export interface ReceiverMessagePayload {
   updateWidgets: {
@@ -17,8 +16,9 @@ export interface SenderMessagePayload {
   triggerWidgets: {
     widgetId?: string;
     widgetType?: WidgetType;
-    action: BaseTriggerActions;
+    action?: BaseTriggerActions;
     data?: any;
+    version?: string;
   }[];
 }
 
@@ -31,14 +31,22 @@ export interface MessageInterface {
   widgetHeight?: number;
   receiverMessagePayload?: ReceiverMessagePayload;
   senderMessagePayload?: SenderMessagePayload;
+  configDataString?: string;
 
-  sequenceId?: string;
   chunkIndex?: number;
   totalChunks?: number;
   isChunk?: boolean;
 }
 
 export class Message {
+  get configDataString(): string | undefined {
+    return this._configDataString;
+  }
+
+  set configDataString(value: string) {
+    this._configDataString = value;
+  }
+
   get id(): string {
     return this._id;
   }
@@ -56,7 +64,9 @@ export class Message {
   private _widgetHeight?: number;
   private _receiverMessagePayload?: ReceiverMessagePayload;
   private _senderMessagePayload?: SenderMessagePayload;
-  private _sequenceId?: string;
+  // the widget config string to initialize the widget
+  private _configDataString?: string;
+
   private _chunkIndex?: number;
   private _totalChunks?: number;
   private _isChunk?: boolean;
@@ -70,10 +80,10 @@ export class Message {
                 widgetHeight,
                 receiverMessagePayload,
                 senderMessagePayload,
-                sequenceId,
                 chunkIndex,
                 totalChunks,
                 isChunk,
+                configDataString
               }: MessageInterface) {
     this._id = id;
     this._widgetId = widgetId;
@@ -83,26 +93,10 @@ export class Message {
     this._purpose = purpose;
     this.receiverMessagePayload = receiverMessagePayload;
     this.senderMessagePayload = senderMessagePayload;
-    this._sequenceId = sequenceId;
+    this._configDataString = configDataString;
     this._chunkIndex = chunkIndex;
     this._totalChunks = totalChunks;
     this._isChunk = isChunk;
-  }
-
-  /**
-   * Get sequenceId
-   * @return {string} - Sequence ID
-   */
-  get sequenceId(): string | undefined {
-    return this._sequenceId;
-  }
-
-  /**
-   * Set sequenceId
-   * @param value {string} - Sequence ID
-   */
-  set sequenceId(value: string) {
-    this._sequenceId = value;
   }
 
   /**
@@ -278,7 +272,6 @@ export class Message {
       widgetHeight: this.widgetHeight,
       receiverMessagePayload: this.receiverMessagePayload,
       senderMessagePayload: this.senderMessagePayload,
-      sequenceId: this.sequenceId,
       chunkIndex: this.chunkIndex,
       totalChunks: this.totalChunks,
       isChunk: this.isChunk
@@ -302,7 +295,6 @@ export class Message {
           widgetHeight: parsedMessage.widgetHeight ?? undefined,
           senderMessagePayload: parsedMessage.senderMessagePayload ?? undefined,
           receiverMessagePayload: parsedMessage.receiverMessagePayload ?? undefined,
-          sequenceId: parsedMessage.sequenceId ?? undefined,
           chunkIndex: parsedMessage.chunkIndex ?? undefined,
           totalChunks: parsedMessage.totalChunks ?? undefined,
           isChunk: parsedMessage.isChunk ?? false
