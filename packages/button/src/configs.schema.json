@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "value": {
+      "type": "string"
+    },
+    "fontSize": {
+      "type": "number"
+    },
+    "fontFamily": {
+      "$ref": "#/definitions/Fonts"
+    },
+    "color": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "Fonts": {
+      "type": "string",
+      "enum": [
+        "Arial",
+        "Arial Black",
+        "Verdana",
+        "Helvetica",
+        "Tahoma",
+        "Trebuchet MS",
+        "Impact",
+        "Times New Roman",
+        "Didot",
+        "Georgia",
+        "Garamond",
+        "American Typewriter",
+        "Andale Mono",
+        "Courier",
+        "Courier New",
+        "Lucida Console",
+        "Monaco",
+        "Bradley Hand",
+        "Brush Script MT",
+        "Luminari",
+        "Comic Sans MS",
+        "LiGothic",
+        "FangSong",
+        "STHeiti Light",
+        "STHeiti",
+        "STKaiti",
+        "STSong",
+        "STFangsong",
+        "LiHei Pro Medium",
+        "LiSong Pro Light",
+        "BiauKai",
+        "PMingLiU",
+        "MingLiU",
+        "DFKai-SB",
+        "SimHei",
+        "SimSun",
+        "NSimSun",
+        "KaiTi",
+        "Microsoft JhengHei",
+        "Microsoft YaHei",
+        "FangSong_GB2312",
+        "KaiTi_GB2312"
+      ]
+    }
+  }
+}

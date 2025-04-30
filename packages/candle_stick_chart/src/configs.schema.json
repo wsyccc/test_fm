@@ -24,7 +24,7 @@
       "type": "boolean"
     },
     "category": {
-      "$ref": "#/definitions/ScatterChartCategory"
+      "$ref": "#/definitions/CandleStickChartCategory"
     },
     "xData": {
       "type": "array",
@@ -46,24 +46,12 @@
             }
           },
           {
-            "$ref": "#/definitions/alias-src_type.ts-98-157-src_type.ts-0-1740"
+            "$ref": "#/definitions/alias-src_type.ts-100-159-src_type.ts-0-1443"
           }
         ]
       }
     },
-    "additionalXData": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "symbolSize": {
-      "type": "number"
-    },
-    "clusterCount": {
-      "type": "number"
-    },
-    "interval": {
+    "amount": {
       "type": "number"
     }
   },
@@ -76,19 +64,16 @@
     "StyleConfig": {
       "type": "object"
     },
-    "ScatterChartCategory": {
+    "CandleStickChartCategory": {
       "type": "string",
       "enum": [
         "Basic",
-        "Cluster",
-        "ExponentialRegression",
-        "LogarithmicRegression",
-        "DistibutionAndAggregate",
-        "SingleAxis",
-        "Calendar"
+        "Detail",
+        "LargeScale",
+        "AxisPointer"
       ]
     },
-    "alias-src_type.ts-98-157-src_type.ts-0-1740": {
+    "alias-src_type.ts-100-159-src_type.ts-0-1443": {
       "type": "array",
       "items": {
         "anyOf": [
@@ -102,7 +87,7 @@
             }
           },
           {
-            "$ref": "#/definitions/alias-src_type.ts-98-157-src_type.ts-0-1740"
+            "$ref": "#/definitions/alias-src_type.ts-100-159-src_type.ts-0-1443"
           }
         ]
       }

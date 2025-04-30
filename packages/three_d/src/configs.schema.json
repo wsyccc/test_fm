@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "externalSourceLink": {
+      "type": "string"
+    },
+    "shallowTheme": {
+      "type": "boolean"
+    },
+    "wireframe": {
+      "type": "boolean"
+    },
+    "transparent": {
+      "type": "boolean"
+    },
+    "grid": {
+      "type": "boolean"
+    },
+    "ambientLight": {
+      "type": "number"
+    },
+    "xScale": {
+      "type": "number"
+    },
+    "yScale": {
+      "type": "number"
+    },
+    "zScale": {
+      "type": "number"
+    },
+    "alarms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/alarmType"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "alarmType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "color"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

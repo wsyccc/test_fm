@@ -24,7 +24,7 @@
       "type": "boolean"
     },
     "category": {
-      "$ref": "#/definitions/LineChartCategory"
+      "$ref": "#/definitions/BarChartCategory"
     },
     "legendEnabled": {
       "type": "boolean"
@@ -117,14 +117,6 @@
             "items": {
               "type": "number"
             }
-          },
-          "step": {
-            "type": "string",
-            "enum": [
-              "start",
-              "middle",
-              "end"
-            ]
           }
         },
         "required": [
@@ -144,16 +136,16 @@
     "StyleConfig": {
       "type": "object"
     },
-    "LineChartCategory": {
+    "BarChartCategory": {
       "type": "string",
       "enum": [
         "Basic",
-        "Smoothed",
-        "Area",
-        "Stacked Line",
-        "Stacked Area",
-        "Race",
-        "Step"
+        "Vertical",
+        "Radial Polar",
+        "Tangential Polar",
+        "Mixed Line",
+        "Stacked",
+        "Stacked Horizontal"
       ]
     }
   }
