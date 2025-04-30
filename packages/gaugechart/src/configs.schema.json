@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "color": {
+      "type": "string"
+    },
+    "axisColor": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "boolean"
+    },
+    "startAngle": {
+      "type": "number"
+    },
+    "endAngle": {
+      "type": "number"
+    },
+    "splitNumber": {
+      "type": "number"
+    },
+    "min": {
+      "type": "number"
+    },
+    "max": {
+      "type": "number"
+    },
+    "labelDistance": {
+      "type": "number"
+    },
+    "intervals": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "items": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "maxItems": 2
+      }
+    },
+    "value": {
+      "type": "number"
+    },
+    "fontSize": {
+      "type": "number"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    }
+  }
+}

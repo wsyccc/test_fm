@@ -24,7 +24,7 @@
       "type": "boolean"
     },
     "category": {
-      "$ref": "#/definitions/ScatterChartCategory"
+      "$ref": "#/definitions/ThreeDChartCategory"
     },
     "xData": {
       "type": "array",
@@ -46,7 +46,7 @@
             }
           },
           {
-            "$ref": "#/definitions/alias-src_type.ts-98-157-src_type.ts-0-1740"
+            "$ref": "#/definitions/alias-src_type.ts-95-154-src_type.ts-0-1386"
           }
         ]
       }
@@ -56,15 +56,6 @@
       "items": {
         "type": "string"
       }
-    },
-    "symbolSize": {
-      "type": "number"
-    },
-    "clusterCount": {
-      "type": "number"
-    },
-    "interval": {
-      "type": "number"
     }
   },
   "additionalProperties": false,
@@ -76,19 +67,16 @@
     "StyleConfig": {
       "type": "object"
     },
-    "ScatterChartCategory": {
+    "ThreeDChartCategory": {
       "type": "string",
       "enum": [
-        "Basic",
-        "Cluster",
-        "ExponentialRegression",
-        "LogarithmicRegression",
-        "DistibutionAndAggregate",
-        "SingleAxis",
-        "Calendar"
+        "Dataset",
+        "Bar",
+        "Transparent",
+        "Scatter"
       ]
     },
-    "alias-src_type.ts-98-157-src_type.ts-0-1740": {
+    "alias-src_type.ts-95-154-src_type.ts-0-1386": {
       "type": "array",
       "items": {
         "anyOf": [
@@ -102,7 +90,7 @@
             }
           },
           {
-            "$ref": "#/definitions/alias-src_type.ts-98-157-src_type.ts-0-1740"
+            "$ref": "#/definitions/alias-src_type.ts-95-154-src_type.ts-0-1386"
           }
         ]
       }

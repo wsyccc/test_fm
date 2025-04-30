@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "category": {
+      "$ref": "#/definitions/OtherChartsCategory"
+    },
+    "xData": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "yData": {}
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "OtherChartsCategory": {
+      "type": "string",
+      "enum": [
+        "SimpleGraph",
+        "GraphOnCartesian",
+        "GraphOverlap",
+        "Tree",
+        "MultiTrees",
+        "RadialTree",
+        "SimpleParallel",
+        "SimpleFunnel",
+        "RichText"
+      ]
+    }
+  }
+}

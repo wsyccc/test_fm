@@ -1,23 +1,23 @@
 /// <reference types="vite/client" />
 import { WidgetType, toPascalCase, React } from '@hulk/common';
-import BarchartPropsSchema from '@packages/barchart/src/type';
-import ButtonPropsSchema from '@packages/button/src/type';
-import CandleStickChartPropsSchema from '@packages/candle_stick_chart/src/type';
-import DynamicBarchartPropsSchema from '@packages/dynamic_barchart/src/type';
-import GaugechartPropsSchema from '@packages/gaugechart/src/type';
-import GeoChartPropsSchema from '@packages/geo_chart/src/type';
-import LineChartPropsSchemaJSON from '@packages/linechart/src/configs.schema.json';
-import OtherChartsPropsSchema from '@packages/other_charts/src/type';
-import ScatterChartPropsSchemaJSON from '@packages/scatter_chart/src/configs.schema.json';
-import SpeedThreeDPropsSchema from '@packages/speed_three_d/src/type';
-import SplitterPropsSchema from '@packages/splitter/src/type';
-import SunburstChartPropsSchema from '@packages/sunburst_chart/src/type';
-import ThreeDPropsSchema from '@packages/three_d/src/type';
-import ThreeDChartPropsSchema from '@packages/three_dchart/src/type';
-import TreeMapChartPropsSchema from '@packages/tree_map_chart/src/type';
-import ProtablePropsSchema from '@packages/protable/src/type';
-import TextPropsSchema from '@packages/text/src/type';
-import ImagePropsSchema from '@packages/image/src/type';
+import BarchartPropsSchema from '@packages/barchart/src/configs.schema.json';
+import ButtonPropsSchema from '@packages/button/src/configs.schema.json';
+import CandleStickChartPropsSchema from '@packages/candle_stick_chart/src/configs.schema.json';
+import DynamicBarchartPropsSchema from '@packages/dynamic_barchart/src/configs.schema.json';
+import GaugechartPropsSchema from '@packages/gaugechart/src/configs.schema.json';
+import GeoChartPropsSchema from '@packages/geo_chart/src/configs.schema.json';
+import LineChartPropsSchema from '@packages/linechart/src/configs.schema.json';
+import OtherChartsPropsSchema from '@packages/other_charts/src/configs.schema.json';
+import ScatterChartPropsSchema from '@packages/scatter_chart/src/configs.schema.json';
+import SpeedThreeDPropsSchema from '@packages/speed_three_d/src/configs.schema.json';
+import SplitterPropsSchema from '@packages/splitter/src/configs.schema.json';
+import SunburstChartPropsSchema from '@packages/sunburst_chart/src/configs.schema.json';
+import ThreeDPropsSchema from '@packages/three_d/src/configs.schema.json';
+import ThreeDChartPropsSchema from '@packages/three_dchart/src/configs.schema.json';
+import TreeMapChartPropsSchema from '@packages/tree_map_chart/src/configs.schema.json';
+import ProtablePropsSchema from '@packages/protable/src/configs.schema.json';
+import TextPropsSchema from '@packages/text/src/configs.schema.json';
+import ImagePropsSchema from '@packages/image/src/configs.schema.json';
 
 type ProvComp = React.ComponentType<{ children: React.ReactNode }>;
 
@@ -73,9 +73,9 @@ const schemaMap: Partial<Record<WidgetType, any>> = {
   dynamic_barchart: DynamicBarchartPropsSchema,
   gaugechart: GaugechartPropsSchema,
   geo_chart: GeoChartPropsSchema,
-  linechart: LineChartPropsSchemaJSON,
+  linechart: LineChartPropsSchema,
   other_charts: OtherChartsPropsSchema,
-  scatter_chart: ScatterChartPropsSchemaJSON,
+  scatter_chart: ScatterChartPropsSchema,
   speed_three_d: SpeedThreeDPropsSchema,
   splitter: SplitterPropsSchema,
   sunburst_chart: SunburstChartPropsSchema,

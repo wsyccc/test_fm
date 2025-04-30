@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "category": {
+      "$ref": "#/definitions/SunburstChartCategory"
+    },
+    "yData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/interface-src_type.ts-110-279-src_type.ts-0-1489"
+            }
+          },
+          "itemStyle": {
+            "$ref": "#/definitions/StyleConfig"
+          },
+          "label": {
+            "type": "object",
+            "properties": {
+              "downplay": {
+                "$ref": "#/definitions/StyleConfig"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "SunburstChartCategory": {
+      "type": "string",
+      "enum": [
+        "Basic",
+        "Rounded",
+        "LabelRotate",
+        "Monochrome",
+        "Detail",
+        "Advance"
+      ]
+    },
+    "interface-src_type.ts-110-279-src_type.ts-0-1489": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/interface-src_type.ts-110-279-src_type.ts-0-1489"
+          }
+        },
+        "itemStyle": {
+          "$ref": "#/definitions/StyleConfig"
+        },
+        "label": {
+          "type": "object",
+          "properties": {
+            "downplay": {
+              "$ref": "#/definitions/StyleConfig"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -51,15 +51,16 @@ function resolveField(
   fieldName?: string,
   refStack: Set<string> = new Set()
 ): any {
-  if (fieldName === "style") {
-    return {
-      type: "object",
-      additionalProperties: true
-    };
-  }
 
   if (field?.$ref) {
     const refKey = field.$ref.replace("#/definitions/", "");
+
+    if (refKey === "StyleConfig") {
+      return {
+        type: "object",
+        additionalProperties: true
+      };
+    }
 
     if (refStack.has(refKey)) {
       return { type: "object", additionalProperties: true };
@@ -67,7 +68,7 @@ function resolveField(
 
     const def = definitions[refKey];
     if (!def) {
-      return field; 
+      return field;
     }
 
     refStack.add(refKey);
@@ -157,9 +158,9 @@ function makeWidgetSchema(widgetType: WidgetType | StackType, widgetProps: Recor
     }
   }
 
-  if (widgetType === WidgetType.linechart || widgetType === WidgetType.scatter_chart) {
-    widgetProps = convertAtoB(widgetProps, widgetProps.definitions || {});
-  }
+
+  widgetProps = convertAtoB(widgetProps, widgetProps.definitions || {});
+
 
   // ===统一处理（无论是原始B格式，还是转过来的B格式）===
   for (const [key, prop] of Object.entries(widgetProps)) {
