@@ -6,3 +6,34 @@ export interface OtherChartsPropsInterface extends BaseWidgetDataType{
   xData?: string[];
   yData?: any;
 }
+
+const OtherChartsPropsSchema = {
+  category: {
+    type: "string",
+    enum: [
+      "SimpleGraph",
+      "GraphOnCartesian",
+      "GraphOverlap",
+      "Tree",
+      "MultiTrees",
+      "RadialTree",
+      "SimpleParallel",
+      "SimpleFunnel",
+      "RichText"
+    ],
+    required: false
+  },
+  xData: {
+    type: "array",
+    items: {
+      type: "string"
+    },
+    required: false
+  },
+  yData: {
+    type: "any",  // 任意类型
+    required: false
+  }
+};
+
+export default OtherChartsPropsSchema;

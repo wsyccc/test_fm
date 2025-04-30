@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "originData": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "columns"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "rows"
+      ],
+      "additionalProperties": false
+    },
+    "tableName": {
+      "type": "string"
+    },
+    "pageBreak": {
+      "type": "boolean"
+    },
+    "pageSize": {
+      "type": "number"
+    },
+    "columnSize": {
+      "type": "number"
+    },
+    "currentPage": {
+      "type": "number"
+    },
+    "currentColumnPage": {
+      "type": "number"
+    },
+    "fixedRowHeaders": {
+      "type": "number"
+    },
+    "fixedColumnHeaders": {
+      "type": "boolean"
+    },
+    "keepColumnsTogether": {
+      "type": "boolean"
+    },
+    "keepRowsTogether": {
+      "type": "boolean"
+    },
+    "repeatRowHeaders": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    }
+  }
+}

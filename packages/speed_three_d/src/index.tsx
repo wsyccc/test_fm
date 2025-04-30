@@ -1,15 +1,15 @@
-import { React } from '@hulk/common';
-import * as THREE from 'three';
-import { OrbitControls } from '@hulk/common';
+import { React } from "@hulk/common";
+import * as THREE from "three";
+import { OrbitControls } from "@hulk/common";
 // 各种加载器
-import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from '@hulk/common';
-import type { GLTF } from '@hulk/common';
-import { Col, Row, Spin } from '@hulk/common';
-import { alarmType, SpeedThreeDPropsInterface } from './type';
-import { useSpeedThreeDCommon } from './context';
-import defaultConfigs from './configs.ts';
+import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from "@hulk/common";
+import type { GLTF } from "@hulk/common";
+import { Col, Row, Spin } from "@hulk/common";
+import { alarmType, SpeedThreeDPropsInterface } from "./type";
+import { useSpeedThreeDCommon } from "./context";
+import defaultConfigs from "./configs.ts";
 
-const domId = 'speed-3d-dom'
+const domId = "speed-3d-dom"
 
 const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
   const { widgetData } = useSpeedThreeDCommon();
@@ -36,7 +36,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
     | null
   >(null);
   // 记录模型类型
-  const [externalObjectType, setExternalObjectType] = useState<string>('');
+  const [externalObjectType, setExternalObjectType] = useState<string>("");
   // 材质文件
   const [currentMaterial, setCurrentMaterial] = useState<MTLLoader.MaterialCreator | null>(null);
 
@@ -44,15 +44,15 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
   // 创建渐变纹理
   function createGradientTexture() {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = data.width; // 设置较小的尺寸
-    canvas.height = data.height;
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = typeof data.width==="number"?data.width:300; // 设置较小的尺寸
+    canvas.height = typeof data.height === "number" ? data.height : 300
 
     // 创建线性渐变，上浅蓝，下白色
     const gradient = context!.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, '#87CEFA'); // 浅蓝色
-    gradient.addColorStop(1, '#FFFFFF'); // 白色
+    gradient.addColorStop(0, "#87CEFA"); // 浅蓝色
+    gradient.addColorStop(1, "#FFFFFF"); // 白色
 
     context!.fillStyle = gradient;
     context!.fillRect(0, 0, canvas.width, canvas.height);
@@ -70,38 +70,38 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
     const link = data.externalSourceLink
     const objectType =
-      link?.toLowerCase().endsWith('.glb') || link?.toLowerCase().endsWith('.gltf')
-        ? 'gltf'
-        : link?.toLowerCase().endsWith('.obj')
-          ? 'obj'
-          : link?.toLowerCase().endsWith('.fbx')
-            ? 'fbx'
-            : link?.toLowerCase().endsWith('.stl')
-              ? 'stl'
-              : 'other';
+      link?.toLowerCase().endsWith(".glb") || link?.toLowerCase().endsWith(".gltf")
+        ? "gltf"
+        : link?.toLowerCase().endsWith(".obj")
+          ? "obj"
+          : link?.toLowerCase().endsWith(".fbx")
+            ? "fbx"
+            : link?.toLowerCase().endsWith(".stl")
+              ? "stl"
+              : "other";
     setExternalObjectType(objectType);
 
     const loader =
-      objectType === 'gltf'
+      objectType === "gltf"
         ? new GLTFLoader()
-        : objectType === 'obj'
+        : objectType === "obj"
           ? new OBJLoader()
-          : objectType === 'fbx'
+          : objectType === "fbx"
             ? new FBXLoader()
             : new STLLoader();
 
-    if (objectType === 'obj') {
+    if (objectType === "obj") {
       const materialLoader = new MTLLoader();
-      try {
-        if (link) materialLoader.load(link?.replace('.obj', '.mtl'), (materials) => {
-          materials.preload();
-          setCurrentMaterial(materials);
+      // try {
+      //   if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
+      //     materials.preload();
+      //     setCurrentMaterial(materials);
 
-          (loader as OBJLoader).setMaterials(materials);
-        });
-      } catch (e) {
-        console.error(e);
-      }
+      //     (loader as OBJLoader).setMaterials(materials);
+      //   });
+      // } catch (e) {
+      //   console.error(e);
+      // }
       if (link) loader.load(
         link,
         (example) => {
@@ -110,14 +110,14 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         },
         undefined,
         (error) => {
-          console.error('An error occurred loading the glTF model:', error);
+          console.error("An error occurred loading the glTF model:", error);
         },
       );
     } else
       if (link) loader.load(
         link,
         (example) => {
-          if (objectType === 'stl') {
+          if (objectType === "stl") {
             // 细分
             // const tessellateModifier = new TessellateModifier(1); // 可以根据模型大小调整这个值
             // const tessellatedGeometry = tessellateModifier.modify(example as THREE.BufferGeometry);
@@ -129,7 +129,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         },
         undefined,
         (error) => {
-          console.error('An error occurred loading the glTF model:', error);
+          console.error("An error occurred loading the glTF model:", error);
         },
       );
 
@@ -144,7 +144,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
       // 创建相机
       const camera = new THREE.PerspectiveCamera(
         75,
-        data.width / data.height,
+        (typeof data.width === "number" ? data.width : 300) / (typeof data.height === "number" ? data.height : 300),
         0.1,
         1000,
       );
@@ -155,7 +155,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
       const renderer = new THREE.WebGLRenderer({
         antialias: true,
       });
-      renderer.setSize(data.width, data.height);
+      renderer.setSize(typeof data.width === "number" ? data.width : 300, typeof data.height === "number" ? data.height : 300);
       mountRef.current.appendChild(renderer.domElement);
 
       const gridHelper = new THREE.GridHelper(100, 100);
@@ -193,11 +193,11 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
       transformControls.visible = false;
       scene.add(transformControls);
 
-      renderer.domElement.addEventListener('wheel', handleWheel);
+      renderer.domElement.addEventListener("wheel", handleWheel);
 
 
-      if (externalObjectType === 'stl' && externalGeometry) {
-        console.log(externalGeometry, 'stl外部模型加载成功');
+      if (externalObjectType === "stl" && externalGeometry) {
+        console.log(externalGeometry, "stl外部模型加载成功");
 
         // 创建材质
         const material = new THREE.MeshPhysicalMaterial({
@@ -221,12 +221,12 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         // 调整模型的位置、旋转和缩放（可选）
         mesh.position.set(0, 0, 0);
         mesh.scale.set(0.02, 0.02, 0.02); // 根据模型大小进行缩放
-      } else if (externalObjectType === 'gltf' && externalGeometry) {
-        console.log(externalGeometry, 'gltf外部模型加载成功');
+      } else if (externalObjectType === "gltf" && externalGeometry) {
+        console.log(externalGeometry, "gltf外部模型加载成功");
         // @ts-ignore
         sceneGroup.add(externalGeometry.scene);
-      } else if (externalObjectType === 'obj' && externalGeometry) {
-        console.log(externalGeometry, 'obj外部模型加载成功');
+      } else if (externalObjectType === "obj" && externalGeometry) {
+        console.log(externalGeometry, "obj外部模型加载成功");
 
         (externalGeometry as THREE.Object3D).traverse((child) => {
           const alarmIndex = (data.alarms as alarmType[])?.findIndex((al) => al.name === child.name)
@@ -252,8 +252,8 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         (externalGeometry as THREE.Object3D).scale.set(0.02, 0.02, 0.02);
 
         sceneGroup.add(externalGeometry as THREE.Object3D);
-      } else if (externalObjectType === 'fbx' && externalGeometry) {
-        console.log(externalGeometry, 'fbx外部模型加载成功');
+      } else if (externalObjectType === "fbx" && externalGeometry) {
+        console.log(externalGeometry, "fbx外部模型加载成功");
         // @ts-ignore
         sceneGroup.add(externalGeometry);
         // 如果模型带有动画，可以通过以下方式播放动画
@@ -305,14 +305,14 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         requestAnimationFrame(animate);
         controls.update();
 
-        renderer.setViewport(0, 0, data.width, data.height); // 恢复主场景视口到全屏
+        renderer.setViewport(0, 0, typeof data.width === "number" ? data.width : 300, typeof data.height === "number" ? data.height : 300); // 恢复主场景视口到全屏
         renderer.clear(); // 清除整个屏幕
         renderer.render(scene, camera); // 渲染主场景
 
         renderer.clearDepth(); // 清除深度缓存，以确保小视口不受主视口的影响
       };
       // 注意fbx有自己的动画载入
-      if (externalObjectType !== 'fbx') animate();
+      if (externalObjectType !== "fbx") animate();
     }
 
     if (loading) {
@@ -367,11 +367,11 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
           id={domId}
           style={{
             width: data.width,
-            height: '100%',
-            alignItems: 'top',
-            justifyContent: 'center',
-            display: 'flex',
-            visibility: loading ? 'hidden' : 'visible',
+            height: data.height,
+            alignItems: "top",
+            justifyContent: "center",
+            display: "flex",
+            visibility: loading ? "hidden" : "visible",
           }}
         />}
       </Col>

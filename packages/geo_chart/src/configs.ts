@@ -6,7 +6,7 @@ export default {
   type: WidgetType.geo_chart,
   width: 600,
   height: 400,
-  bgColor: '#ffffff',
+  bgColor: "#ffffff",
   category: GeoChartCategory.SVG,
-  externalSourceLink: '/public/Geo/Veins_Medical_Diagram_clip_art.svg',
+  externalSourceLink: "/public/Geo/Veins_Medical_Diagram_clip_art.svg",
 } as GeoChartPropsInterface

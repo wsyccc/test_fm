@@ -1,10 +1,10 @@
 import { GeoChartPropsInterface } from "./type";
 
 export enum GeoChartCategory {
-  SVG = 'SVG',
-  SVGScatter = 'SVGScatter',
-  SVGLine = 'SVGLine',
-  SVGAnimation = 'SVGAnimation',
+  SVG = "SVG",
+  SVGScatter = "SVGScatter",
+  SVGLine = "SVGLine",
+  SVGAnimation = "SVGAnimation",
 }
 
 export function generateGeoChartOption({
@@ -16,56 +16,56 @@ export function generateGeoChartOption({
     tooltip: {},
     geo: {
       left: 10,
-      right: '50%',
-      map: 'diagram',
-      selectedMode: 'multiple',
+      right: "50%",
+      map: "diagram",
+      selectedMode: "multiple",
       emphasis: {
         // @ts-ignore
-        focus: 'self',
+        focus: "self",
         itemStyle: {
           color: null
         },
         label: {
-          position: 'bottom',
+          position: "bottom",
           distance: 0,
-          textBorderColor: '#fff',
+          textBorderColor: "#fff",
           textBorderWidth: 2
         }
       },
       blur: {},
       select: {
         itemStyle: {
-          color: '#b50205'
+          color: "#b50205"
         },
         label: {
           show: false,
-          textBorderColor: '#fff',
+          textBorderColor: "#fff",
           textBorderWidth: 2
         }
       }
     },
     grid: {
-      left: '60%',
-      top: '20%',
-      bottom: '20%'
+      left: "60%",
+      top: "20%",
+      bottom: "20%"
     },
     xAxis: {},
     yAxis: {
       data: [
-        'heart',
-        'large-intestine',
-        'small-intestine',
-        'spleen',
-        'kidney',
-        'lung',
-        'liver'
+        "heart",
+        "large-intestine",
+        "small-intestine",
+        "spleen",
+        "kidney",
+        "lung",
+        "liver"
       ]
     },
     series: [
       {
-        type: 'bar',
+        type: "bar",
         emphasis: {
-          focus: 'self'
+          focus: "self"
         },
         data: [121, 321, 141, 52, 198, 289, 139]
       }
@@ -73,16 +73,16 @@ export function generateGeoChartOption({
   } : category === GeoChartCategory.SVGAnimation ? {
     tooltip: {},
     geo: {
-      map: 'diagram',
+      map: "diagram",
       roam: true,
-      layoutCenter: ['50%', '50%'],
-      layoutSize: '100%'
+      layoutCenter: ["50%", "50%"],
+      layoutSize: "100%"
     },
     series: [
       {
-        name: 'Route',
-        type: 'lines',
-        coordinateSystem: 'geo',
+        name: "Route",
+        type: "lines",
+        coordinateSystem: "geo",
         geoIndex: 0,
         emphasis: {
           label: {
@@ -91,24 +91,24 @@ export function generateGeoChartOption({
         },
         polyline: true,
         lineStyle: {
-          color: '#c46e54',
+          color: "#c46e54",
           width: 0
         },
         effect: {
           show: true,
           period: 8,
-          color: '#a10000',
+          color: "#a10000",
           // constantSpeed: 80,
           trailLength: 0,
           symbolSize: [12, 30],
           symbol:
-            'path://M87.1667 3.8333L80.5.5h-60l-6.6667 3.3333L.5 70.5v130l10 10h80l10 -10v-130zM15.5 190.5l15 -20h40l15 20zm75 -65l-15 5v35l15 15zm-80 0l15 5v35l-15 15zm65 0l15 -5v-40l-15 20zm-50 0l-15 -5v-40l15 20zm 65,-55 -15,25 c -15,-5 -35,-5 -50,0 l -15,-25 c 25,-15 55,-15 80,0 z'
+            "path://M87.1667 3.8333L80.5.5h-60l-6.6667 3.3333L.5 70.5v130l10 10h80l10 -10v-130zM15.5 190.5l15 -20h40l15 20zm75 -65l-15 5v35l15 15zm-80 0l15 5v35l-15 15zm65 0l15 -5v-40l-15 20zm-50 0l-15 -5v-40l15 20zm 65,-55 -15,25 c -15,-5 -35,-5 -50,0 l -15,-25 c 25,-15 55,-15 80,0 z"
         },
         z: 100,
         data: [
           {
             effect: {
-              color: '#a10000',
+              color: "#a10000",
               constantSpeed: 100,
               delay: 0
             },
@@ -156,7 +156,7 @@ export function generateGeoChartOption({
           },
           {
             effect: {
-              color: '#00067d',
+              color: "#00067d",
               constantSpeed: 80,
               delay: 0
             },
@@ -194,7 +194,7 @@ export function generateGeoChartOption({
           },
           {
             effect: {
-              color: '#997405',
+              color: "#997405",
               constantSpeed: 60,
               delay: 0
             },
@@ -229,13 +229,13 @@ export function generateGeoChartOption({
     ]
     } : category === GeoChartCategory.SVGLine ? {
       title: {
-        text: 'Visit Route',
-        left: 'center',
+        text: "Visit Route",
+        left: "center",
         bottom: 10
       },
       tooltip: {},
       geo: {
-        map: 'diagram',
+        map: "diagram",
         roam: true,
         emphasis: {
           itemStyle: {
@@ -248,9 +248,9 @@ export function generateGeoChartOption({
       },
       series: [
         {
-          name: 'Route',
-          type: 'lines',
-          coordinateSystem: 'geo',
+          name: "Route",
+          type: "lines",
+          coordinateSystem: "geo",
           geoIndex: 0,
           emphasis: {
             label: {
@@ -259,20 +259,20 @@ export function generateGeoChartOption({
           },
           polyline: true,
           lineStyle: {
-            color: '#c46e54',
+            color: "#c46e54",
             width: 5,
             opacity: 1,
-            type: 'dotted'
+            type: "dotted"
           },
           effect: {
             show: true,
             period: 8,
-            color: '#a10000',
+            color: "#a10000",
             constantSpeed: 80,
             trailLength: 0,
             symbolSize: [20, 12],
             symbol:
-              'path://M35.5 40.5c0-22.16 17.84-40 40-40s40 17.84 40 40c0 1.6939-.1042 3.3626-.3067 5H35.8067c-.2025-1.6374-.3067-3.3061-.3067-5zm90.9621-2.6663c-.62-1.4856-.9621-3.1182-.9621-4.8337 0-6.925 5.575-12.5 12.5-12.5s12.5 5.575 12.5 12.5a12.685 12.685 0 0 1-.1529 1.9691l.9537.5506-15.6454 27.0986-.1554-.0897V65.5h-28.7285c-7.318 9.1548-18.587 15-31.2715 15s-23.9535-5.8452-31.2715-15H15.5v-2.8059l-.0937.0437-8.8727-19.0274C2.912 41.5258.5 37.5549.5 33c0-6.925 5.575-12.5 12.5-12.5S25.5 26.075 25.5 33c0 .9035-.0949 1.784-.2753 2.6321L29.8262 45.5h92.2098z'
+              "path://M35.5 40.5c0-22.16 17.84-40 40-40s40 17.84 40 40c0 1.6939-.1042 3.3626-.3067 5H35.8067c-.2025-1.6374-.3067-3.3061-.3067-5zm90.9621-2.6663c-.62-1.4856-.9621-3.1182-.9621-4.8337 0-6.925 5.575-12.5 12.5-12.5s12.5 5.575 12.5 12.5a12.685 12.685 0 0 1-.1529 1.9691l.9537.5506-15.6454 27.0986-.1554-.0897V65.5h-28.7285c-7.318 9.1548-18.587 15-31.2715 15s-23.9535-5.8452-31.2715-15H15.5v-2.8059l-.0937.0437-8.8727-19.0274C2.912 41.5258.5 37.5549.5 33c0-6.925 5.575-12.5 12.5-12.5S25.5 26.075 25.5 33c0 .9035-.0949 1.784-.2753 2.6321L29.8262 45.5h92.2098z"
           },
           data: [
             {
@@ -306,18 +306,18 @@ export function generateGeoChartOption({
           tooltip: {
             show: true
           },
-          map: 'diagram',
+          map: "diagram",
           roam: true
         },
         series: {
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
+          type: "effectScatter",
+          coordinateSystem: "geo",
           geoIndex: 0,
           symbolSize: function (params) {
             return (params[2] / 100) * 15 + 5;
           },
           itemStyle: {
-            color: '#b02a02'
+            color: "#b02a02"
           },
           encode: {
             tooltip: 2

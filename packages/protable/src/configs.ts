@@ -13,7 +13,7 @@ export default {
   fixedRowHeaders: 0,
   fixedColumnHeaders: true,
   pageBreak: true,
-  tableName: '',
+  tableName: "",
   keepColumnsTogether: true,
   keepRowsTogether: false,
   repeatRowHeaders: true,

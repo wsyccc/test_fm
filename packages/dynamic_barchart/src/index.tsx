@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useDynamicBarchartCommon } from './context';
+import { React } from "@hulk/common";
+import { useDynamicBarchartCommon } from "./context";
 import { DynamicBarchartPropsInterface } from "./type.ts";
-import { DynamicBarChartCategory, generateAnimationBarChartOption, generateDynamicBarChartOption, generateFinanceBarChartOption, generateLargeScaleBarChartOption, generateRaceBarChartOption } from './utils.ts';
-import { ReactEcharts } from '@hulk/common';
-import defaultConfigs from './configs.ts';
+import { DynamicBarChartCategory, generateAnimationBarChartOption, generateDynamicBarChartOption, generateFinanceBarChartOption, generateLargeScaleBarChartOption, generateRaceBarChartOption } from "./utils.ts";
+import { ReactEcharts } from "@hulk/common";
+import defaultConfigs from "./configs.ts";
 
 interface DataItem {
   value: number;
@@ -40,7 +40,7 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
     const now = new Date();
     const res: string[] = [];
     for (let i = 0; i < 10; i++) {
-      res.unshift(new Date(+now - i * 2000).toLocaleTimeString().replace(/^\D*/, ''));
+      res.unshift(new Date(+now - i * 2000).toLocaleTimeString().replace(/^\D*/, ""));
     }
     return res;
   });
@@ -55,7 +55,7 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
   const animationData1: number[] = [];
   const animationData2: number[] = [];
   for (var i = 0; i < 100; i++) {
-    animationXData.push('A' + i);
+    animationXData.push("A" + i);
     animationData1.push((Math.sin(i / 5) * (i / 5 - 10) + i / 6) * 5);
     animationData2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5);
   }
@@ -63,28 +63,28 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
   // DynamicBarChartCategory.Drilldown数据
   const drilldownData = [
     {
-      dataGroupId: 'animals',
+      dataGroupId: "animals",
       data: [
-        ['Cats', 4],
-        ['Dogs', 2],
-        ['Cows', 1],
-        ['Sheep', 2],
-        ['Pigs', 1]
+        ["Cats", 4],
+        ["Dogs", 2],
+        ["Cows", 1],
+        ["Sheep", 2],
+        ["Pigs", 1]
       ]
     },
     {
-      dataGroupId: 'fruits',
+      dataGroupId: "fruits",
       data: [
-        ['Apples', 4],
-        ['Oranges', 2]
+        ["Apples", 4],
+        ["Oranges", 2]
       ]
     },
     {
-      dataGroupId: 'cars',
+      dataGroupId: "cars",
       data: [
-        ['Toyota', 4],
-        ['Opel', 2],
-        ['Volkswagen', 2]
+        ["Toyota", 4],
+        ["Opel", 2],
+        ["Volkswagen", 2]
       ]
     }
   ];
@@ -97,19 +97,19 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
       barData,
       lineData
     }) : data.category === DynamicBarChartCategory.Animation ? generateAnimationBarChartOption({ ...data, animationXData, animationData1, animationData2 }) : data.category === DynamicBarChartCategory.Drilldown ? {
-      xAxis: { data: ['Animals', 'Fruits', 'Cars'] },
+      xAxis: { data: ["Animals", "Fruits", "Cars"] },
       yAxis: {},
-      dataGroupId: '',
+      dataGroupId: "",
       animationDurationUpdate: 500,
       series: {
-        type: 'bar',
-        id: 'sales',
+        type: "bar",
+        id: "sales",
         data: [
-          { value: 5, groupId: 'animals' },
-          { value: 2, groupId: 'fruits' },
-          { value: 4, groupId: 'cars' }
+          { value: 5, groupId: "animals" },
+          { value: 2, groupId: "fruits" },
+          { value: 4, groupId: "cars" }
         ] as DataItem[],
-        universalTransition: { enabled: true, divideShape: 'clone' }
+        universalTransition: { enabled: true, divideShape: "clone" }
       }
     } : data.category === DynamicBarChartCategory.LargeScale ? generateLargeScaleBarChartOption({ ...data }) : data.category === DynamicBarChartCategory.Finance ? generateFinanceBarChartOption({ ...data }) : generateRaceBarChartOption({ ...data, raceData });
   }, [data, categories, categories2, barData, lineData, raceData]);
@@ -132,22 +132,22 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
             data: subData.data.map(item => item[0])
           },
           series: {
-            type: 'bar',
-            id: 'sales',
+            type: "bar",
+            id: "sales",
             dataGroupId: subData.dataGroupId,
             data: subData.data.map(item => item[1]),
             universalTransition: {
               enabled: true,
-              divideShape: 'clone'
+              divideShape: "clone"
             }
           },
           graphic: [
             {
-              type: 'text',
+              type: "text",
               left: 50,
               top: 20,
               style: {
-                text: 'Back',
+                text: "Back",
                 fontSize: 18
               },
               onclick: () => {
@@ -159,18 +159,18 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
 
         echartsInstance.setOption(newOption);
       } else {
-        console.log('点击了图表')
+        console.log("点击了图表")
       };
     }
 
 
     if (echartsInstance) {
-      echartsInstance.on('mousedown', handleChartClick);
+      echartsInstance.on("mousedown", handleChartClick);
     }
 
     const interval = setInterval(() => {
       if (data.category === DynamicBarChartCategory.Dynamic) {
-        const newTime = new Date().toLocaleTimeString().replace(/^\D*/, '');
+        const newTime = new Date().toLocaleTimeString().replace(/^\D*/, "");
         const newBar = Math.round(Math.random() * 1000);
         const newLine = +(Math.random() * 10 + 5).toFixed(1);
 
@@ -216,7 +216,7 @@ const DynamicBarchart: React.FC = (props: DynamicBarchartPropsInterface | {}) =>
 
     return () => {
       if (echartsInstance) {
-        echartsInstance.off('mousedown', handleChartClick);
+        echartsInstance.off("mousedown", handleChartClick);
       }
       () => clearInterval(interval);
     };

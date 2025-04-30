@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "category": {
+      "$ref": "#/definitions/GeoChartCategory"
+    },
+    "externalSourceLink": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "GeoChartCategory": {
+      "type": "string",
+      "enum": [
+        "SVG",
+        "SVGScatter",
+        "SVGLine",
+        "SVGAnimation"
+      ]
+    }
+  }
+}

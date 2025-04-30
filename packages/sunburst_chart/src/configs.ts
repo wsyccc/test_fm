@@ -7,7 +7,7 @@ export default {
   type: WidgetType.sunburst_chart,
   width: 600,
   height: 400,
-  bgColor: '#ffffff',
+  bgColor: "#ffffff",
   category: SunburstChartCategory.Basic,
   yData: RAWDATA,
 } as SunburstChartPropsInterface

@@ -1,7 +1,7 @@
-import { ActionType, Button, Col, convertOriginDataToRawData, ProColumns, ProTable, React, Row } from '@hulk/common';
-import { useProtableCommon } from './context';
+import { ActionType, Button, Col, convertOriginDataToRawData, ProColumns, ProTable, React, Row } from "@hulk/common";
+import { useProtableCommon } from "./context";
 import { ProtablePropsInterface } from "./type.ts";
-import defaultConfigs from './configs.ts';
+import defaultConfigs from "./configs.ts";
 
 
 const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
@@ -48,7 +48,7 @@ const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
             dataIndex: xD,
             // 可以做等分
             // width: `${100 / (xDataName.length + yDataName.length)}%`,
-            ...(data.fixedColumnHeaders ? { fixed: 'left' } : {}),
+            ...(data.fixedColumnHeaders ? { fixed: "left" } : {}),
             search: false,
             // render: (_, record, ind) => [
             //   <span key={ind}>{JSON.stringify(record).slice(0, 5)}</span>
@@ -77,7 +77,7 @@ const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
           dataIndex: xD,
           // 可以做等分
           // width: `${100 / (xDataName.length + yDataName.length)}%`,
-          ...(data.fixedColumnHeaders ? { fixed: 'left' } : {}),
+          ...(data.fixedColumnHeaders ? { fixed: "left" } : {}),
           search: false,
           // render: (_, record, ind) => [
           //   <span key={ind}>{JSON.stringify(record).slice(0, 5)}</span>
@@ -109,9 +109,9 @@ const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
     <Col span={canColumnPagination && currentColumnPage !== 1 ? 1 : 0}>
       <Button
         style={{
-          color: '#1890ff',
-          border: 'none',
-          backgroundColor: 'none',
+          color: "#1890ff",
+          border: "none",
+          backgroundColor: "none",
         }}
         onClick={async () => {
           setCurrentColumnPage(p => p - 1)
@@ -127,12 +127,12 @@ const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
         key={`table-${data.fixedColumnHeaders}-${data.fixedRowHeaders}-${data.columnSize}-${currentColumnPage}`}
         className={""}
         showHeader={data.currentPage === 1 ? true : data.repeatRowHeaders}
-        scroll={{ x: 'max-content' }}
-        headerTitle={data.tableName && data.tableName !== '' ? <span>{data.tableName}</span> : null}
+        scroll={{ x: "max-content" }}
+        headerTitle={data.tableName && data.tableName !== "" ? <span>{data.tableName}</span> : null}
         style={{
           width: data.width,
           height: data.height,
-          overflow: 'scroll'
+          overflow: "scroll"
         }}
         actionRef={actionRef}
         onChange={pagination => {
@@ -167,9 +167,9 @@ const Protable: React.FC = (props: ProtablePropsInterface | {}) => {
     <Col span={canColumnPagination && currentColumnPage !== (totalColumnPages - 1) ? 1 : 0}>
       <Button
         style={{
-          color: '#1890ff',
-          border: 'none',
-          backgroundColor: 'none',
+          color: "#1890ff",
+          border: "none",
+          backgroundColor: "none",
         }}
         onClick={async () => {
           setCurrentColumnPage(p => p + 1)

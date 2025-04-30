@@ -21,7 +21,11 @@ export default defineConfig(({}) => {
           path: inputFile,
           tsconfig: tsconfigPath,
           type: typeName,
-          skipTypeCheck: true
+          skipTypeCheck: true,
+          topRef: false,
+          minify: true,
+          encodeRefs: false,
+          jsDoc: "none"
         };
         const schema = createGenerator(config).createSchema(typeName);
 

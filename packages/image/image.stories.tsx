@@ -1,13 +1,13 @@
-import { Meta, StoryObj } from '@storybook/react';
-import Image from './src/index';
+import { Meta, StoryObj } from "@storybook/react";
+import Image from "./src/index";
 import { ImageProvider } from "./src/context";
 import { ImagePropsInterface } from "./src/type";
-import React from 'react';
+import React from "react";
 
 const meta: Meta<typeof Image> = {
-  title: 'Components/Image',
+  title: "Components/Image",
   component: Image,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   decorators: [
       (Story) => (
         <ImageProvider>
@@ -26,6 +26,8 @@ export const Default: Story = {
   // add some stories default args here
   args: {
     isStorybook: true,
+    src: "/public/Image/CE_Logo_Icon.png",
+    alt: "test purpose only"
   } as ImagePropsInterface
 };
 

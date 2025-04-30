@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "category": {
+      "$ref": "#/definitions/BarChartCategory"
+    },
+    "legendEnabled": {
+      "type": "boolean"
+    },
+    "legendLayout": {
+      "type": "string",
+      "enum": [
+        "vertical",
+        "horizontal"
+      ]
+    },
+    "color": {
+      "type": "string"
+    },
+    "labelEnabled": {
+      "type": "boolean"
+    },
+    "labelPosition": {
+      "type": "string",
+      "enum": [
+        "top",
+        "inside"
+      ]
+    },
+    "rawData": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "columns"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "rows"
+      ],
+      "additionalProperties": false
+    },
+    "xColumn": {
+      "type": "string"
+    },
+    "yColumns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "xData": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "yData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "BarChartCategory": {
+      "type": "string",
+      "enum": [
+        "Basic",
+        "Vertical",
+        "Radial Polar",
+        "Tangential Polar",
+        "Mixed Line",
+        "Stacked",
+        "Stacked Horizontal"
+      ]
+    }
+  }
+}

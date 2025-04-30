@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useGeoChartCommon } from './context';
+import { React } from "@hulk/common";
+import { useGeoChartCommon } from "./context";
 import { GeoChartPropsInterface } from "./type.ts";
-import { ReactEcharts, Echarts } from '@hulk/common';
-import { generateGeoChartOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts, Echarts } from "@hulk/common";
+import { generateGeoChartOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 
 const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
@@ -31,14 +31,14 @@ const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
     if (data.externalSourceLink) fetch(data.externalSourceLink)
       .then(res => res.text())
       .then(svg => {
-        Echarts.registerMap('diagram', { svg });
+        Echarts.registerMap("diagram", { svg });
         setReady(true);
       });
   }, []);
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 
@@ -48,7 +48,7 @@ const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
 
     const onMouseOver = (event: any) => {
       echartsInstance.dispatchAction({
-        type: 'highlight',
+        type: "highlight",
         geoIndex: 0,
         name: event.name
       });
@@ -56,18 +56,18 @@ const GeoChart: React.FC = (props: GeoChartPropsInterface | {}) => {
 
     const onMouseOut = (event: any) => {
       echartsInstance.dispatchAction({
-        type: 'downplay',
+        type: "downplay",
         geoIndex: 0,
         name: event.name
       });
     };
 
-    echartsInstance.on('mouseover', { seriesIndex: 0 }, onMouseOver);
-    echartsInstance.on('mouseout', { seriesIndex: 0 }, onMouseOut);
+    echartsInstance.on("mouseover", { seriesIndex: 0 }, onMouseOver);
+    echartsInstance.on("mouseout", { seriesIndex: 0 }, onMouseOut);
 
     return () => {
-      echartsInstance.off('mouseover', onMouseOver);
-      echartsInstance.off('mouseout', onMouseOut);
+      echartsInstance.off("mouseover", onMouseOver);
+      echartsInstance.off("mouseout", onMouseOut);
     };
   }, []);
 

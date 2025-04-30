@@ -10,28 +10,28 @@
  *
  * 2. add the lib export in @hulk/common/index.ts, remember to use the specific import for 3-rd package you need.
  * ```ts
- * export { Button } from 'antd';
+ * export { Button } from "antd";
  * ```
  * 3. add the lib import in the component
  * ```ts
- * import { Button } from '@hulk/common';
+ * import { Button } from "@hulk/common";
  * ```
  */
-import { React } from '@hulk/common';
-import { useThreeDCommon } from './context';
+import { React } from "@hulk/common";
+import { useThreeDCommon } from "./context";
 import { alarmType, ThreeDPropsInterface, updateConfigObjectType } from "./type.ts";
-import { BaseTriggerActions } from '@hulk/common';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { BaseTriggerActions } from "@hulk/common";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // 各种加载器
-import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from '@hulk/common';
-import type { GLTF } from '@hulk/common';
-import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from '@hulk/common';
+import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from "@hulk/common";
+import type { GLTF } from "@hulk/common";
+import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from "@hulk/common";
 import "./index.css";
-import defaultConfigs from './configs.ts';
+import defaultConfigs from "./configs.ts";
 
 const { DirectoryTree } = Tree;
-const domId = '3d-dom'
+const domId = "3d-dom"
 
 const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useThreeDCommon();
@@ -62,7 +62,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     | null
   >(null);
   // 记录模型类型
-  const [externalObjectType, setExternalObjectType] = useState<string>('');
+  const [externalObjectType, setExternalObjectType] = useState<string>("");
   const [children, setChildren] = useState<THREE.Mesh<any, any, any>[]>([]);
 
   const wheelTimeoutRef = useRef<number | null>(null);
@@ -103,8 +103,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const [originalMaterial, setOriginalMaterial] = useState(null);
   const [originalMaterials, setOriginalMaterials] = useState(new Map());
   const [transformControlMode, setTransformControlMode] = useState<
-    'translate' | 'rotate' | 'scale'
-  >('translate');
+    "translate" | "rotate" | "scale"
+  >("translate");
 
   const onChange = (changed: Record<string, any>) => {
     const key = Object.keys(changed)[0];
@@ -125,7 +125,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     const obj = highlightedObjectRef.current ? highlightedObjectRef.current as any : externalGeometry as any;
 
     if (key in obj) {
-      if (typeof changed[key] === 'object') {
+      if (typeof changed[key] === "object") {
         const subKey = Object.keys(changed[key])[0];
         if (subKey in obj[key]) {
           (obj[key] as any)[subKey] = changed[key][subKey];
@@ -139,15 +139,15 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
   // 创建渐变纹理
   function createGradientTexture() {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = data.width; // 设置较小的尺寸
-    canvas.height = data.height;
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = typeof data.width === "number" ? data.width : 300; // 设置较小的尺寸
+    canvas.height = typeof data.height === "number" ? data.height : 300
 
     // 创建线性渐变，上浅蓝，下白色
     const gradient = context!.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, '#87CEFA'); // 浅蓝色
-    gradient.addColorStop(1, '#FFFFFF'); // 白色
+    gradient.addColorStop(0, "#87CEFA"); // 浅蓝色
+    gradient.addColorStop(1, "#FFFFFF"); // 白色
 
     context!.fillStyle = gradient;
     context!.fillRect(0, 0, canvas.width, canvas.height);
@@ -198,7 +198,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     // 创建八面体几何体
     const octahedronGeometry = new THREE.BufferGeometry();
     const verticesArray = new Float32Array(vertices.flatMap((v) => [v.x, v.y, v.z]));
-    octahedronGeometry.setAttribute('position', new THREE.BufferAttribute(verticesArray, 3));
+    octahedronGeometry.setAttribute("position", new THREE.BufferAttribute(verticesArray, 3));
 
     // 八面体的边索引
     const edgeIndicesArray = new Uint16Array(edgesIndices.flat());
@@ -243,9 +243,9 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     event.stopPropagation();
     if (cameraRef.current && sceneRef.current && !isStorybook) {
       const rect = mountRef.current?.getBoundingClientRect()
-      mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / data.width) * 2 - 1;
+      mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / (typeof data.width === "number" ? data.width : 300)) * 2 - 1;
       mouse.y =
-        -((event.clientY - (rect?.top || 0) - ((rect?.top || 0) - (canvasRect?.top ?? 0)) / 2) / data.height) * 2 + 1;
+        -((event.clientY - (rect?.top || 0) - ((rect?.top || 0) - (canvasRect?.top ?? 0)) / 2) / (typeof data.height === "number" ? data.height : 300)) * 2 + 1;
 
       // 更新 raycaster 的位置和方向
       raycaster.setFromCamera(mouse, cameraRef.current);
@@ -255,8 +255,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         .intersectObjects(sceneRef.current.children, true)
         .filter(
           (s) =>
-            s.object.name !== '' &&
-            !['X', 'Y', 'Z', 'XZ', 'YZ', 'XY', 'XYZ', 'XYZE', 'DELTA', 'AXIS'].includes(
+            s.object.name !== "" &&
+            !["X", "Y", "Z", "XZ", "YZ", "XY", "XYZ", "XYZE", "DELTA", "AXIS"].includes(
               s.object.name,
             ),
         );
@@ -282,7 +282,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
           if (controlsRef.current) controlsRef.current.enabled = false;
           // 设置高亮色
           const highlightMaterial = new THREE.MeshBasicMaterial({
-            color: '#1890ff',
+            color: "#1890ff",
             transparent: intersectedObject.material.transparent,
             opacity: intersectedObject.material.opacity,
           });
@@ -303,30 +303,30 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
     const link = data.externalSourceLink
     const objectType =
-      link?.toLowerCase().endsWith('.glb') || link?.toLowerCase().endsWith('.gltf')
-        ? 'gltf'
-        : link?.toLowerCase().endsWith('.obj')
-          ? 'obj'
-          : link?.toLowerCase().endsWith('.fbx')
-            ? 'fbx'
-            : link?.toLowerCase().endsWith('.stl')
-              ? 'stl'
-              : 'other';
+      link?.toLowerCase().endsWith(".glb") || link?.toLowerCase().endsWith(".gltf")
+        ? "gltf"
+        : link?.toLowerCase().endsWith(".obj")
+          ? "obj"
+          : link?.toLowerCase().endsWith(".fbx")
+            ? "fbx"
+            : link?.toLowerCase().endsWith(".stl")
+              ? "stl"
+              : "other";
     setExternalObjectType(objectType);
 
     const loader =
-      objectType === 'gltf'
+      objectType === "gltf"
         ? new GLTFLoader()
-        : objectType === 'obj'
+        : objectType === "obj"
           ? new OBJLoader()
-          : objectType === 'fbx'
+          : objectType === "fbx"
             ? new FBXLoader()
             : new STLLoader();
 
-    if (objectType === 'obj') {
+    if (objectType === "obj") {
       const materialLoader = new MTLLoader();
       try {
-        if (link) materialLoader.load(link?.replace('.obj', '.mtl'), (materials) => {
+        if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
           materials.preload();
           setCurrentMaterial(materials);
           (loader as OBJLoader).setMaterials(materials);
@@ -369,14 +369,14 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         },
         undefined,
         (error) => {
-          console.error('An error occurred loading the glTF model:', error);
+          console.error("An error occurred loading the glTF model:", error);
         },
       );
     } else
       if (link) loader.load(
         link,
         (example) => {
-          if (objectType === 'stl') {
+          if (objectType === "stl") {
             // 细分
             // const tessellateModifier = new TessellateModifier(1); // 可以根据模型大小调整这个值
             // const tessellatedGeometry = tessellateModifier.modify(example as THREE.BufferGeometry);
@@ -388,7 +388,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         },
         undefined,
         (error) => {
-          console.error('An error occurred loading the glTF model:', error);
+          console.error("An error occurred loading the glTF model:", error);
         },
       );
 
@@ -403,7 +403,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       // 创建相机
       const camera = new THREE.PerspectiveCamera(
         75,
-        data.width / data.height,
+        (typeof data.width === "number" ? data.width : 300) / (typeof data.height === "number" ? data.height : 300),
         0.1,
         1000,
       );
@@ -414,7 +414,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       const renderer = new THREE.WebGLRenderer({
         antialias: true,
       });
-      renderer.setSize(data.width, data.height);
+      renderer.setSize(typeof data.width === "number" ? data.width : 300, typeof data.height === "number" ? data.height : 300);
       mountRef.current.appendChild(renderer.domElement);
 
       // 创建 100x100 的网格
@@ -485,14 +485,14 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       scene.add(transformControls);
       transformControlsRef.current = transformControls;
 
-      renderer.domElement.addEventListener('mouseup', handleMouseUp);
-      renderer.domElement.addEventListener('wheel', handleWheel);
-      renderer.domElement.addEventListener('mousedown', (event) => {
+      renderer.domElement.addEventListener("mouseup", handleMouseUp);
+      renderer.domElement.addEventListener("wheel", handleWheel);
+      renderer.domElement.addEventListener("mousedown", (event) => {
         onDocumentMouseClick(event, renderer.domElement.getBoundingClientRect());
       });
 
-      if (externalObjectType === 'stl' && externalGeometry) {
-        console.log(externalGeometry, 'stl外部模型加载成功');
+      if (externalObjectType === "stl" && externalGeometry) {
+        console.log(externalGeometry, "stl外部模型加载成功");
         // 如果透明开启，表示查看内部，这时候外面材质参数要取消，否则里面太细碎
         const disabledExternalMaterialConfigs = data.transparent
           ? {}
@@ -523,12 +523,12 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         mesh.position.set(0, 0, 0);
         mesh.rotation.set(-Math.PI / 2, 0, 0); // 将模型摆正
         mesh.scale.set(0.02, 0.02, 0.02); // 根据模型大小进行缩放
-      } else if (externalObjectType === 'gltf' && externalGeometry) {
-        console.log(externalGeometry, 'gltf外部模型加载成功');
+      } else if (externalObjectType === "gltf" && externalGeometry) {
+        console.log(externalGeometry, "gltf外部模型加载成功");
         // @ts-ignore
         sceneGroup.add(externalGeometry.scene);
-      } else if (externalObjectType === 'obj' && externalGeometry) {
-        console.log(externalGeometry, 'obj外部模型加载成功');
+      } else if (externalObjectType === "obj" && externalGeometry) {
+        console.log(externalGeometry, "obj外部模型加载成功");
         const disabledExternalMaterialConfigs = data.transparent
           ? {}
           : {
@@ -587,8 +587,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         (externalGeometry as THREE.Object3D).scale.set(0.02, 0.02, 0.02);
 
         sceneGroup.add(externalGeometry as THREE.Object3D);
-      } else if (externalObjectType === 'fbx' && externalGeometry) {
-        console.log(externalGeometry, 'fbx外部模型加载成功');
+      } else if (externalObjectType === "fbx" && externalGeometry) {
+        console.log(externalGeometry, "fbx外部模型加载成功");
         // @ts-ignore
         sceneGroup.add(externalGeometry);
         // 如果模型带有动画，可以通过以下方式播放动画
@@ -640,14 +640,14 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         requestAnimationFrame(animate);
         controls.update();
 
-        renderer.setViewport(0, 0, data.width, data.height); // 恢复主场景视口到全屏
+        renderer.setViewport(0, 0, typeof data.width === "number" ? data.width : 300, typeof data.height === "number" ? data.height : 300); // 恢复主场景视口到全屏
         renderer.clear(); // 清除整个屏幕
         renderer.render(scene, camera); // 渲染主场景
 
         renderer.clearDepth(); // 清除深度缓存，以确保小视口不受主视口的影响
       };
       // 注意fbx有自己的动画载入
-      if (externalObjectType !== 'fbx') animate();
+      if (externalObjectType !== "fbx") animate();
     }
 
     if (loading) {
@@ -707,7 +707,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       );
     }
 
-    if (externalObjectType === 'obj' && externalGeometry) {
+    if (externalObjectType === "obj" && externalGeometry) {
       // 应用变动
       const updatedConfigsMap = new Map<string, updateConfigObjectType>(
         // JSON.parse(configs?.updatedConfigs.data ?? []),
@@ -856,19 +856,19 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       <Col span={3}>
         <Collapse
           collapsible="icon"
-          defaultActiveKey={'3DController'}
+          defaultActiveKey={"3DController"}
           style={{
-            position: 'absolute',
-            backgroundColor: 'white',
-            padding: '0px 5px',
+            position: "absolute",
+            backgroundColor: "white",
+            padding: "0px 5px",
             opacity: 0.7,
-            width: '100%',
+            width: "100%",
           }}
           items={[
             {
-              key: '3DController',
+              key: "3DController",
               label: (
-                <span className="Card" style={{ width: '100%', display: 'block' }}>
+                <span className="Card" style={{ width: "100%", display: "block" }}>
                   3D Controller
                 </span>
               ),
@@ -878,9 +878,9 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                     <Col className="three-controller" span={24}>
                       <Button
                         size="small"
-                        disabled={transformControlMode === 'translate'}
+                        disabled={transformControlMode === "translate"}
                         onClick={() => {
-                          setTransformControlMode('translate');
+                          setTransformControlMode("translate");
                         }}
                       >
                         移动模式
@@ -889,9 +889,9 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                     <Col className="three-controller" span={24}>
                       <Button
                         size="small"
-                        disabled={transformControlMode === 'rotate'}
+                        disabled={transformControlMode === "rotate"}
                         onClick={() => {
-                          setTransformControlMode('rotate');
+                          setTransformControlMode("rotate");
                         }}
                       >
                         旋转模式
@@ -900,9 +900,9 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                     <Col className="three-controller" span={24}>
                       <Button
                         size="small"
-                        disabled={transformControlMode === 'scale'}
+                        disabled={transformControlMode === "scale"}
                         onClick={() => {
-                          setTransformControlMode('scale');
+                          setTransformControlMode("scale");
                         }}
                       >
                         缩放
@@ -1020,32 +1020,32 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
           id={domId}
           style={{
             width: data.width,
-            height: '100%',
-            alignItems: 'top',
-            justifyContent: 'center',
-            display: 'flex',
-            visibility: loading ? 'hidden' : 'visible',
+            height: data.height,
+            alignItems: "top",
+            justifyContent: "center",
+            display: "flex",
+            visibility: loading ? "hidden" : "visible",
           }}
         />}
       </Col>
-      {externalObjectType == 'obj' && <>
+      {externalObjectType == "obj" && <>
         <Col span={3}>
           <Collapse
             collapsible="icon"
-            defaultActiveKey={'3DStructure'}
+            defaultActiveKey={"3DStructure"}
             style={{
-              position: 'absolute',
-              backgroundColor: 'white',
-              padding: '0px 5px',
+              position: "absolute",
+              backgroundColor: "white",
+              padding: "0px 5px",
               opacity: 0.7,
-              width: '100%',
+              width: "100%",
             }}
 
             items={[
               {
-                key: '3DStructure',
+                key: "3DStructure",
                 label: (
-                  <span className="Card" style={{ width: '100%', display: 'block' }}>
+                  <span className="Card" style={{ width: "100%", display: "block" }}>
                     3D Structure
                   </span>
                 ),
@@ -1056,13 +1056,13 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                         return (
                           <List.Item key={`${item.name}`}
                             style={{
-                              border: highlightedObjectRef.current?.name === item.name ? '1px solid red' : '',
-                              paddingLeft: '8px'
+                              border: highlightedObjectRef.current?.name === item.name ? "1px solid red" : "",
+                              paddingLeft: "8px"
                             }}
                             actions={[
                               <Button
                                 type="link"
-                                style={{ width: '100%', color: "#1890ff" }}
+                                style={{ width: "100%", color: "#1890ff" }}
                                 onClick={() => {
                                   setCurrentEditItem(item);
                                   // setChildEditorModalVisible(true);
@@ -1151,7 +1151,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
                           // 设置高亮色
                           const highlightMaterial = new THREE.MeshBasicMaterial({
-                            color: '#1890ff',
+                            color: "#1890ff",
                             transparent: item.material.transparent,
                             opacity: item.material.opacity,
                           });
@@ -1173,19 +1173,19 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         <Col span={3}>
           <Collapse
             collapsible="icon"
-            defaultActiveKey={'Properties'}
+            defaultActiveKey={"Properties"}
             style={{
-              position: 'absolute',
-              backgroundColor: 'white',
-              padding: '0px 5px',
+              position: "absolute",
+              backgroundColor: "white",
+              padding: "0px 5px",
               opacity: 0.7,
-              width: '100%',
+              width: "100%",
             }}
             items={[
               {
-                key: 'Properties',
+                key: "Properties",
                 label: (
-                  <span className="Card" style={{ width: '100%', display: 'block' }}>
+                  <span className="Card" style={{ width: "100%", display: "block" }}>
                     Object Properties
                   </span>
                 ),
@@ -1194,52 +1194,52 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                     <Form form={objectForm} onValuesChange={handleObjectValueChange}>
                       <Row>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="名称" name={'name'}>
+                          <Form.Item label="名称" name={"name"}>
                             <Input disabled size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="x轴移动" name={['position', 'x']}>
+                          <Form.Item label="x轴移动" name={["position", "x"]}>
                             <InputNumber size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="y轴移动" name={['position', 'y']}>
+                          <Form.Item label="y轴移动" name={["position", "y"]}>
                             <InputNumber size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="z轴移动" name={['position', 'z']}>
+                          <Form.Item label="z轴移动" name={["position", "z"]}>
                             <InputNumber size="small" />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="x轴旋转" name={['rotation', 'x']}>
+                          <Form.Item label="x轴旋转" name={["rotation", "x"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="y轴旋转" name={['rotation', 'y']}>
+                          <Form.Item label="y轴旋转" name={["rotation", "y"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="z轴旋转" name={['rotation', 'z']}>
+                          <Form.Item label="z轴旋转" name={["rotation", "z"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="x轴缩放" name={['scale', 'x']}>
+                          <Form.Item label="x轴缩放" name={["scale", "x"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="y轴缩放" name={['scale', 'y']}>
+                          <Form.Item label="y轴缩放" name={["scale", "y"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
                         <Col className="three-controller" span={24}>
-                          <Form.Item label="z轴缩放" name={['scale', 'z']}>
+                          <Form.Item label="z轴缩放" name={["scale", "z"]}>
                             <InputNumber size="small" step={0.02} />
                           </Form.Item>
                         </Col>
@@ -1249,22 +1249,22 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                     </Form>
                     {originalMaterial && <Form form={materialForm}>
                       <Col className="three-controller" span={24}>
-                        <Form.Item label="材质名称" name={'name'}>
+                        <Form.Item label="材质名称" name={"name"}>
                           <Input disabled size="small" />
                         </Form.Item>
                       </Col>
                       <Col className="three-controller" span={24}>
-                        <Form.Item label="材质颜色R" name={['color', 'r']}>
+                        <Form.Item label="材质颜色R" name={["color", "r"]}>
                           <InputNumber size="small" disabled />
                         </Form.Item>
                       </Col>
                       <Col className="three-controller" span={24}>
-                        <Form.Item label="材质颜色G" name={['color', 'g']}>
+                        <Form.Item label="材质颜色G" name={["color", "g"]}>
                           <InputNumber size="small" disabled />
                         </Form.Item>
                       </Col>
                       <Col className="three-controller" span={24}>
-                        <Form.Item label="材质颜色B" name={['color', 'b']}>
+                        <Form.Item label="材质颜色B" name={["color", "b"]}>
                           <InputNumber size="small" disabled />
                         </Form.Item>
                       </Col>

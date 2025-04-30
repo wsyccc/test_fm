@@ -1,12 +1,12 @@
-import { Button, React } from '@hulk/common';
-import { useSplitterCommon } from './context';
+import { Button, React } from "@hulk/common";
+import { useSplitterCommon } from "./context";
 import { SplitterPropsInterface } from "./type.ts";
-import { Flex, Splitter as AntdSplitter, Typography } from '@hulk/common';
-import defaultConfigs from './configs.ts';
+import { Flex, Splitter as AntdSplitter, Typography } from "@hulk/common";
+import defaultConfigs from "./configs.ts";
 
 const Desc: React.FC<Readonly<{ text?: string | number, parentStylish?: {}, childStylish?: {} }>> = (props) => (
-  <Flex justify="center" align="center" style={{ height: '100%', ...props.parentStylish }}>
-    <Typography.Title type="secondary" level={5} style={{ whiteSpace: 'nowrap', margin: 0, ...props.childStylish }}>
+  <Flex justify="center" align="center" style={{ height: "100%", ...props.parentStylish }}>
+    <Typography.Title type="secondary" level={5} style={{ whiteSpace: "nowrap", margin: 0, ...props.childStylish }}>
       {props.text}
     </Typography.Title>
   </Flex>
@@ -49,8 +49,8 @@ const Splitter: React.FC = (props: SplitterPropsInterface | {}) => {
         style: {
           width: data.width,
           height: data.height,
-          boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-          backgroundColor: data.bgColor ?? ''
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          backgroundColor: data.bgColor ?? ""
         }
       } : {}),
     };
@@ -75,8 +75,8 @@ const Splitter: React.FC = (props: SplitterPropsInterface | {}) => {
           } else if (typeof item === "object" && item.title) {
             return (
               <AntdSplitter.Panel key={index} {...item}>
-                {item.title === 'Left' ? <>
-                  <Button type='primary' style={{ width: "100%", height: "100%" }}>{item.title}</Button>
+                {item.title === "Left" ? <>
+                  <Button type="primary" style={{ width: "100%", height: "100%" }}>{item.title}</Button>
                 </> : <Desc
                   text={item.title}
                   // 把item.style应用到包裹着label的dom里面

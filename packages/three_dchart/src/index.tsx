@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useThreeDChartCommon } from './context';
+import { React } from "@hulk/common";
+import { useThreeDChartCommon } from "./context";
 import { ThreeDChartPropsInterface } from "./type.ts";
-import { ReactEcharts } from '@hulk/common';
-import { generateBasicChartOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts } from "@hulk/common";
+import { generateBasicChartOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 
 const ThreeDChart: React.FC = (props: ThreeDChartPropsInterface | {}) => {

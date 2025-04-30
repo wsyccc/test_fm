@@ -1,14 +1,11 @@
 import {BaseTriggerActions, WidgetType} from "./constants";
-import {CSSProperties} from "react";
 
-export interface StyleConfig extends CSSProperties {
-  [key: string]: any;
-}
+export type StyleConfig = Record<string, any>;
 
 export interface BaseWidgetDataType {
   width: number | string;
   height: number | string;
-  style?: Record<string, any>;
+  style?: StyleConfig;
   bgColor?: string;
   isStorybook?: boolean;
 }

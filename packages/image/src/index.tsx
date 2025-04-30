@@ -1,7 +1,7 @@
-import { React } from '@hulk/common';
-import { useImageCommon } from './context';
+import { React } from "@hulk/common";
+import { useImageCommon } from "./context";
 import { ImagePropsInterface } from "./type.ts";
-import defaultConfigs from './configs.ts';
+import defaultConfigs from "./configs.ts";
 
 
 const Image: React.FC = (props: ImagePropsInterface | {}) => {
@@ -21,12 +21,12 @@ const Image: React.FC = (props: ImagePropsInterface | {}) => {
   const isStorybook = data.isStorybook ?? false;
 
   return <img
-    src={data.src ?? ''}
-    alt={data.alt ?? ''}
+    src={data.src ?? ""}
+    alt={data.alt ?? ""}
     style={{
       backgroundColor: data.bgColor,
-      width: data.width ?? '100%',
-      height: data.height ?? '100%',
+      width: data.width ?? "100%",
+      height: data.height ?? "100%",
 
     }} />
 }

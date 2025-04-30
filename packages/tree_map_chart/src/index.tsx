@@ -1,9 +1,9 @@
-import { React } from '@hulk/common';
-import { useTreeMapChartCommon } from './context';
+import { React } from "@hulk/common";
+import { useTreeMapChartCommon } from "./context";
 import { TreeMapChartPropsInterface } from "./type.ts";
-import { ReactEcharts } from '@hulk/common';
-import { generateBasicTreeMapChartOption } from './utils.ts';
-import defaultConfigs from './configs.ts';
+import { ReactEcharts } from "@hulk/common";
+import { generateBasicTreeMapChartOption } from "./utils.ts";
+import defaultConfigs from "./configs.ts";
 
 const TreeMapChart: React.FC = (props: TreeMapChartPropsInterface | {}) => {
   const { widgetData, updateWidgetData, resetWidgetData, triggerAction } = useTreeMapChartCommon();
@@ -25,7 +25,7 @@ const TreeMapChart: React.FC = (props: TreeMapChartPropsInterface | {}) => {
 
   useEffect(() => {
     const handleChartClick = () => {
-      console.log('图表被点击了');
+      console.log("图表被点击了");
       // 这里可以添加你的点击处理逻辑
     };
 

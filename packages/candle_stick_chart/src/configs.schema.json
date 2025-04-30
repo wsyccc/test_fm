@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "category": {
+      "$ref": "#/definitions/CandleStickChartCategory"
+    },
+    "xData": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "yData": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "string"
+              ]
+            }
+          },
+          {
+            "$ref": "#/definitions/alias-src_type.ts-100-159-src_type.ts-0-1443"
+          }
+        ]
+      }
+    },
+    "amount": {
+      "type": "number"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
+    "StyleConfig": {
+      "type": "object"
+    },
+    "CandleStickChartCategory": {
+      "type": "string",
+      "enum": [
+        "Basic",
+        "Detail",
+        "LargeScale",
+        "AxisPointer"
+      ]
+    },
+    "alias-src_type.ts-100-159-src_type.ts-0-1443": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "string"
+              ]
+            }
+          },
+          {
+            "$ref": "#/definitions/alias-src_type.ts-100-159-src_type.ts-0-1443"
+          }
+        ]
+      }
+    }
+  }
+}
