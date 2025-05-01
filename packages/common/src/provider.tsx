@@ -1,10 +1,10 @@
-import {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
+import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {ActionRequest, BaseWidgetDataType, CurrentWidgetIdentity} from '../type';
-import {BaseMessagePurpose, BaseTriggerActions, WidgetType} from "../constants";
+import {BaseMessagePurpose, WidgetType} from "../constants";
 import {sendMessage, useWebviewListener} from "./data_manager";
 import {Message} from "./data_manager/Message";
-import { parseReceiverMessagePayload} from "./data_manager/receiver";
-import { v4 as uuidv4 } from "uuid";
+import {parseReceiverMessagePayload} from "./data_manager/receiver";
+import {v4 as uuidv4} from "uuid";
 
 export interface CommonContextType<T extends BaseWidgetDataType | Omit<BaseWidgetDataType, 'width' | 'height'>> {
   widgetData: T | null;
@@ -46,14 +46,16 @@ export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetD
     });
 
     const updateWidgetData = (update: Partial<T>, widgetVersion?: string, isStorybook?: boolean) => {
-      if (widgetVersion) setWidgetIdentity(prevState => ({...prevState, widgetVersion}));
+      const isCreate = !widgetIdentity?.widgetVersion && widgetData == null;
+      if (!widgetIdentity?.widgetVersion && widgetVersion) setWidgetIdentity(prevState => ({...prevState, widgetVersion}));
       setWidgetData(prevState => {
         return {...prevState, ...update} as T;
       });
       if (!isStorybook) {
+        // send back the current configs
         sendMessage(new Message({
           id: uuidv4(),
-          purpose: BaseMessagePurpose.SEND_UPDATE_WIDGET,
+          purpose: isCreate ? BaseMessagePurpose.SEND_CREATE_WIDGET : BaseMessagePurpose.SEND_UPDATE_WIDGET,
           widgetId: widgetIdentity?.widgetId!,
           widgetType: widgetIdentity?.widgetType!,
           senderMessagePayload: {

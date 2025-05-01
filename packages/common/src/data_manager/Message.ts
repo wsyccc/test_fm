@@ -1,4 +1,5 @@
 import {BaseMessagePurpose, BaseTriggerActions, WidgetType} from "../../constants";
+import { v4 as uuidv4 } from "uuid";
 
 export interface ReceiverMessagePayload {
   updateWidgets: {
@@ -23,7 +24,7 @@ export interface SenderMessagePayload {
 }
 
 export interface MessageInterface {
-  id: string;
+  id?: string;
   purpose: BaseMessagePurpose;
   widgetId: string;
   widgetType: WidgetType;
@@ -64,7 +65,7 @@ export class Message {
   private _widgetHeight?: number;
   private _receiverMessagePayload?: ReceiverMessagePayload;
   private _senderMessagePayload?: SenderMessagePayload;
-  // the widget config string to initialize the widget
+  // the widget config string to initialize the widget, for example, yamlText for report builder
   private _configDataString?: string;
 
   private _chunkIndex?: number;
@@ -85,7 +86,7 @@ export class Message {
                 isChunk,
                 configDataString
               }: MessageInterface) {
-    this._id = id;
+    this._id = id ?? uuidv4();
     this._widgetId = widgetId;
     this._widgetType = widgetType;
     this._widgetWidth = widgetWidth;
@@ -263,14 +264,13 @@ export class Message {
   /**
    * Send message to WebView2
    */
-  toJSON(): any {
+  toJSON(): MessageInterface {
     return {
       widgetId: this.widgetId,
       widgetType: this.widgetType,
       purpose: this.purpose,
       widgetWidth: this.widgetWidth,
       widgetHeight: this.widgetHeight,
-      receiverMessagePayload: this.receiverMessagePayload,
       senderMessagePayload: this.senderMessagePayload,
       chunkIndex: this.chunkIndex,
       totalChunks: this.totalChunks,
@@ -287,7 +287,6 @@ export class Message {
       const parsedMessage = JSON.parse(message);
       return new Message(
         {
-          id: parsedMessage.id ?? undefined,
           widgetId: parsedMessage.widgetId ?? undefined,
           widgetType: parsedMessage.widgetType ?? undefined,
           purpose: parsedMessage.purpose ?? undefined,

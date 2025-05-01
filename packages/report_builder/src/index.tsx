@@ -1,6 +1,6 @@
 import { React, WidgetType, Row, Button, Col, YamlParser} from "@hulk/common";
 import { useReportBuilderCommon } from "./context";
-import { ReportBuilderPropsInterface } from "./type.ts";
+import {Report, ReportBuilderPropsInterface} from "./type.ts";
 import defaultConfigs from "./configs.ts";
 import { getLazyProvider, getLazyWidget } from "./layout_render/cache";
 import { LayoutRender } from "./layout_render";
@@ -15,7 +15,7 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
 
   const { useState, useMemo, Suspense } = React;
 
-  const data: ReportBuilderPropsInterface = useMemo(() => {
+  const data: ReportBuilderPropsInterface | string = useMemo(() => {
     const mergedData = _.mergeWith(
       {},
       defaultConfigs,
@@ -29,30 +29,36 @@ const ReportBuilder: React.FC<ReportBuilderPropsInterface> = (props: ReportBuild
         return undefined;
       }
     );
-    if (mergedData.jsonData) return mergedData.jsonData;
-    else return mergedData;
+    if (mergedData.jsonData) {
+      delete mergedData.yamlText;
+    } else if (mergedData.yamlText){
+      delete mergedData.jsonData;
+    }
+
+    return mergedData;
   }, [props, widgetData]);
 
   const isStorybook = data.isStorybook ?? false;
 
-  let config: null;
+  let config: Report | null | Record<string, any> = null;
 
+  // when the yamlText exist, means 1. initial generate in design mode, 2. is storybook
   if (data.yamlText){
     const renderer = new YamlParser({ reportText: data.yamlText });
-    config = renderer.getReport() as Record<string, any> | null;
+    config = renderer.getReport();
     const error = renderer.getError();
 
     if (error) {
       return <pre style={{ color: "red" }}>{error}</pre>;
     }
-
-    if (!config) {
-      return <div>没有可渲染的内容</div>;
-    }
-  } else {
-    config = data;
+  } else if (data.jsonData) {
+    config = JSON.parse(data.jsonData);
   }
 
+
+  if (!config) {
+    return <div>没有可渲染的内容</div>;
+  }
 
   const { header, footer, pages, orientation } = config;
 

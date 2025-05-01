@@ -3,25 +3,15 @@ import {Message} from "./Message";
 import {BaseMessagePurpose} from "../../constants";
 import {v4 as uuidv4 } from "uuid";
 
-export const handleMessage = (message: Message, currentWidget: CurrentWidgetIdentity, widgetData: any, setWidgetData: (data: any) => void) => {
-  if (message.purpose === BaseMessagePurpose.INIT) {
 
-  } else {
-    message.receiverMessagePayload?.updateWidgets.forEach(payload => {
-      if (payload.widgetId === currentWidget.widgetId) {
-        switch (message.purpose) {
-          case BaseMessagePurpose.RECEIVE_WIDGET_DATA:
-            setWidgetData({
-              ...widgetData,
-              ...payload.data
-            });
-            break;
-        }
-      }
-    });
-  }
-}
-
+/**
+ * Parses the message payload received from the receiver and extracts the widget data.
+ *
+ * @param {Message} message - The message object received from the receiver.
+ * @param {CurrentWidgetIdentity} widgetIdentity - The identity object representing the current widget.
+ * @return {{widgetId?: string, data?: any} | null} The parsed payload containing the widget ID and data,
+ * or null if the message is not relevant or parsing fails.
+ */
 export function parseReceiverMessagePayload(
   message: Message,
   widgetIdentity: CurrentWidgetIdentity
