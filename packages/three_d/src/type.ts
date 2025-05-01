@@ -1,10 +1,5 @@
 import { BaseWidgetDataType } from "@hulk/common";
 
-export type alarmType = {
-  name: string;
-  color: string;
-}
-
 type threeDimensionDataType = {
   x: number;
   y: number;
@@ -12,9 +7,11 @@ type threeDimensionDataType = {
 };
 
 export type updateConfigObjectType = {
-  position: threeDimensionDataType;
-  rotation: threeDimensionDataType;
-  scale: threeDimensionDataType;
+  name: string;
+  position?: threeDimensionDataType;
+  rotation?: threeDimensionDataType;
+  scale?: threeDimensionDataType;
+  color?: string;
 };
 export interface ThreeDPropsInterface extends BaseWidgetDataType {
   externalSourceLink?: string;
@@ -27,7 +24,15 @@ export interface ThreeDPropsInterface extends BaseWidgetDataType {
   xScale?: number;
   yScale?: number;
   zScale?: number;
-  alarms?: alarmType[];
+
+  cameraPosition?: threeDimensionDataType;
+  controlsTarget?: threeDimensionDataType;
+
+  // alarms?: alarmType[];
+  // 用户选择聚焦某个对象/图层
+  focusItemName?: string,
+  // 用户对某些对象/图层进行了操作，例如旋转、移动
+  updatedConfigs?: updateConfigObjectType[]
 }
 
 const ThreeDPropsSchema = {

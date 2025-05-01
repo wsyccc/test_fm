@@ -2,10 +2,10 @@ import { React } from "@hulk/common";
 import * as THREE from "three";
 import { OrbitControls } from "@hulk/common";
 // 各种加载器
-import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from "@hulk/common";
+import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader, gsap } from "@hulk/common";
 import type { GLTF } from "@hulk/common";
 import { Col, Row, Spin } from "@hulk/common";
-import { alarmType, SpeedThreeDPropsInterface } from "./type";
+import { SpeedThreeDPropsInterface } from "./type";
 import { useSpeedThreeDCommon } from "./context";
 import defaultConfigs from "./configs.ts";
 
@@ -37,16 +37,32 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
   >(null);
   // 记录模型类型
   const [externalObjectType, setExternalObjectType] = useState<string>("");
+  const [children, setChildren] = useState<THREE.Mesh<any, any, any>[]>([]);
+  const [highlighted, setHighlighted] = useState<number>(0);
+
   // 材质文件
   const [currentMaterial, setCurrentMaterial] = useState<MTLLoader.MaterialCreator | null>(null);
+  const [originalMaterials, setOriginalMaterials] = useState(new Map());
+
 
   const wheelTimeoutRef = useRef<number | null>(null);
+  const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
+    x: 0,
+    y: 0,
+    z: 0
+  })
+
+  const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
+    x: 0,
+    y: 0,
+    z: 0
+  })
 
   // 创建渐变纹理
   function createGradientTexture() {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    canvas.width = typeof data.width==="number"?data.width:300; // 设置较小的尺寸
+    canvas.width = typeof data.width === "number" ? data.width : 300; // 设置较小的尺寸
     canvas.height = typeof data.height === "number" ? data.height : 300
 
     // 创建线性渐变，上浅蓝，下白色
@@ -92,21 +108,46 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
     if (objectType === "obj") {
       const materialLoader = new MTLLoader();
-      // try {
-      //   if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
-      //     materials.preload();
-      //     setCurrentMaterial(materials);
+      try {
+        if (link) materialLoader.load(link?.replace(".obj", ".mtl"), (materials) => {
+          materials.preload();
+          setCurrentMaterial(materials);
 
-      //     (loader as OBJLoader).setMaterials(materials);
-      //   });
-      // } catch (e) {
-      //   console.error(e);
-      // }
+          (loader as OBJLoader).setMaterials(materials);
+        });
+      } catch (e) {
+        console.error(e);
+      }
       if (link) loader.load(
         link,
         (example) => {
           setExternalGeometry(example);
+          const tempChildren = [] as THREE.Mesh<any, any, any>[];
+          const materialsMap = new Map();
+          (example as THREE.Object3D).traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              // 由于每个mesh都会存在自己的几何中心，所以无法在外面创建
+              // 如果用默认的几何中心进行旋转会出错
+              // 所以需要在遍历时重新计算几何中心，再将中心移动到局部原点
+              // 然后设为child的自身中心
+              if (!children.find((c) => c.uuid === child.uuid)) {
+                const boundingBox = new THREE.Box3().setFromObject(child);
+                const geometryCenter = boundingBox.getCenter(new THREE.Vector3());
+                child.geometry.translate(
+                  -geometryCenter.x,
+                  -geometryCenter.y,
+                  -geometryCenter.z,
+                );
 
+                // 将几何中心设为自身中心
+                child.position.copy(geometryCenter);
+              }
+              materialsMap.set(child.uuid, child.material);
+              tempChildren.push(child);
+            }
+            setOriginalMaterials(materialsMap);
+            setChildren(tempChildren);
+          });
         },
         undefined,
         (error) => {
@@ -148,8 +189,8 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         0.1,
         1000,
       );
-      camera.position.set(0, 0, 0)
-      camera.lookAt(0, 0, 0);
+      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
+      camera.lookAt(controlsTarget.x, controlsTarget.y, controlsTarget.z);
       cameraRef.current = camera;
       // 创建渲染器
       const renderer = new THREE.WebGLRenderer({
@@ -180,13 +221,35 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
       const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
 
-        // 根据滚轮滚动的方向调整相机的位置
+        // // 根据滚轮滚动的方向调整相机的位置
         const delta = event.deltaY * 0.01; // 调整滚轮灵敏度
-        camera.position.z += delta; // 例如，沿 Z 轴移动相机
+        // 这是最基本的camera控制，会因为controls.target导致滚动到一定情况时开始旋转
+        // camera.position.z += delta; // 例如，沿 Z 轴移动相机
 
         if (wheelTimeoutRef.current) {
           clearTimeout(wheelTimeoutRef.current); // 清除之前的超时
         }
+        // 这种做法是根据当前视角方向进行前进后退
+        const direction = new THREE.Vector3()
+          .subVectors(controls.target, camera.position)
+          .normalize();
+
+        const moveVector = direction.clone().multiplyScalar(delta * 5);
+
+        const nextPosition = camera.position.clone().add(moveVector);
+        const newDirection = new THREE.Vector3()
+          .subVectors(controls.target, nextPosition)
+          .normalize();
+
+        // 点乘为负，说明跨过 target 了，阻止跨越，由于为了保持鼠标左键的旋转控制，所以不能更改controls.target，然后因为跨越target会反向，然后用户滚轮会一直在target附近徘徊，所以做了禁止
+        const dot = direction.dot(newDirection);
+        if (dot < 0) return;
+
+        camera.position.copy(nextPosition);
+        controls.update();
+
+        setCameraPosition(camera.position.clone());
+        setControlsTarget(controls.target.clone());
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);
@@ -226,26 +289,63 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         // @ts-ignore
         sceneGroup.add(externalGeometry.scene);
       } else if (externalObjectType === "obj" && externalGeometry) {
+
+        const updatedConfigsMap = new Map(
+          (data.updatedConfigs ?? []).map(({ name, ...rest }) => [name, rest])
+        );
         console.log(externalGeometry, "obj外部模型加载成功");
 
         (externalGeometry as THREE.Object3D).traverse((child) => {
-          const alarmIndex = (data.alarms as alarmType[])?.findIndex((al) => al.name === child.name)
+          if (child instanceof THREE.Mesh) {
+            const childUpdateConfig = updatedConfigsMap.get(child.name);
+            // 如果找到这个updateConfig那就应用变动
 
-          if (child instanceof THREE.Mesh && data.alarms?.length && alarmIndex > -1) {
-            child.material = new THREE.MeshPhysicalMaterial({
-              color: data.alarms[alarmIndex].color,
-              metalness: 0.4,
-              roughness: 0.4,
-              reflectivity: 0.5,
-              clearcoat: 1.0,
-              clearcoatRoughness: 0.1,
-              emissive: 0xff0000,
-              transmission: 0.3,
-              flatShading: true,
-              wireframe: false,
-              transparent: false,
-              opacity: 0.3,
-            });
+            if (childUpdateConfig?.position) {
+              child.position.copy(childUpdateConfig.position);
+
+            }
+            if (childUpdateConfig?.scale) {
+              child.scale.copy(childUpdateConfig.scale);
+
+            }
+            if (childUpdateConfig?.rotation) {
+              child.rotation.x = childUpdateConfig.rotation.x;
+              child.rotation.y = childUpdateConfig.rotation.y;
+              child.rotation.z = childUpdateConfig.rotation.z;
+            }
+
+
+            if (childUpdateConfig?.color) {
+              child.material = new THREE.MeshPhysicalMaterial({
+                color: childUpdateConfig?.color,
+                // 如果开启下面的设定，包括自发光、透明、反射、金属漆等等，颜色不会严格变成用户设定的颜色
+                // metalness: 0.4,
+                // roughness: 0.4,
+                // reflectivity: 0.5,
+                // clearcoat: 1.0,
+                // clearcoatRoughness: 0.1,
+                // emissive: 0xff0000,
+                // transmission: 0.3,
+                // flatShading: true,
+                // wireframe: false,
+                // transparent: false,
+                // opacity: 0.3,
+              });
+            } else if (currentMaterial === null ) {
+              child.material = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff
+              });
+            } else {
+              const originalMat = originalMaterials.get(child.uuid);
+              if (child.material) {
+                if (Array.isArray(child.material)) {
+                  child.material.forEach(m => m.dispose());
+                } else {
+                  child.material.dispose();
+                }
+              }
+              child.material = originalMat;
+            }
           }
         });
 
@@ -318,6 +418,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
     if (loading) {
       setLoading(false);
     }
+    setHighlighted((p) => (p % 10) + 1);
 
     // 清理函数，卸载时删除渲染器的 DOM 元素
     return () => {
@@ -355,8 +456,64 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         }
       }
     };
-  }, [externalGeometry, data.width, data.height, data.alarms]);
+  }, [externalGeometry, data.width, data.height, data.updatedConfigs]);
 
+  useEffect(() => {
+    // data.focusItemName变动时，camera视角会变动
+    if (data.focusItemName && cameraRef.current && controlsRef.current) {
+      const focusItem = children.find(child => child.name === data.focusItemName)
+      if (focusItem) {
+        const objectWorldPosition = new THREE.Vector3();
+        focusItem.getWorldPosition(objectWorldPosition);
+
+        // 获取当前朝向，保持朝向不变的情况下移动相机
+        const objectWorldDirection = new THREE.Vector3();
+        objectWorldDirection.subVectors(controlsRef.current.target, cameraRef.current.position).normalize();
+
+        // 根据物体大小决定相机和它的相对距离，物体/图层越小距离越近
+        const box = new THREE.Box3().setFromObject(focusItem);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const distance = size * 1.4;
+        const finalCameraPosition = objectWorldPosition.clone().sub(objectWorldDirection.multiplyScalar(distance));
+
+        // 视角转动动画
+        const duration = 1.2;
+        gsap.to(cameraRef.current.position, {
+          x: finalCameraPosition.x,
+          y: finalCameraPosition.y,
+          z: finalCameraPosition.z,
+          duration,
+          onUpdate: () => {
+            if (controlsRef.current)
+              controlsRef.current.update(); // 保证 OrbitControls 正确更新
+          },
+          onComplete: () => {
+            cameraRef.current!.position.copy(finalCameraPosition)
+          }
+        });
+
+        // 动画 controls.target
+        gsap.to(controlsRef.current.target, {
+          x: objectWorldPosition.x,
+          y: objectWorldPosition.y,
+          z: objectWorldPosition.z,
+          duration,
+          onUpdate: () => {
+            controlsRef.current!.update();
+          },
+          onComplete: () => {
+            if (controlsRef.current)
+              controlsRef.current.target.copy(objectWorldPosition)
+          }
+        });
+      }
+
+    }
+  }, [highlighted, data.focusItemName])
+
+  useEffect(() => {
+    console.log('send back', data);
+  }, [])
 
   return (
     <Row>
