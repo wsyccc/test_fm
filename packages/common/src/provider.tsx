@@ -72,10 +72,10 @@ export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetD
     };
 
     const triggerAction = ({request, isStorybook}: { request: ActionRequest, isStorybook?: boolean }) => {
-      if (widgetIdentity && widgetIdentity.current.widgetType && widgetIdentity.current.widgetId && !isStorybook) {
-        const actionTrigger = new ActionHandler(widgetIdentity.current.widgetType, widgetIdentity.current.widgetId, actions, payload);
-        actionTrigger.triggerAction();
-      }
+      // if (widgetIdentity && widgetIdentity.current.widgetType && widgetIdentity.current.widgetId && !isStorybook) {
+      //   const actionTrigger = new ActionHandler(widgetIdentity.current.widgetType, widgetIdentity.current.widgetId, actions, payload);
+      //   actionTrigger.triggerAction();
+      // }
     };
     return widgetIdentity?.widgetId ? (
       <Context.Provider value={{widgetData, updateWidgetData, triggerAction}}>
