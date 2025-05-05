@@ -7,7 +7,7 @@ import {exportSchemaFilter} from "../../utils";
 export default defineConfig(({}) => {
 
   return {
-    base: 'dist_three_dchart',
+    base: './',
     plugins: [react(), {
       name: 'widget-props-schema',
       apply: 'build',

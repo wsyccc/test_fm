@@ -7,7 +7,7 @@ import {exportSchemaFilter} from "../../utils";
 export default defineConfig(({}) => {
 
   return {
-    base: 'dist_speed_three_d',
+    base: './',
     plugins: [react(), {
       name: 'widget-props-schema',
       apply: 'build',

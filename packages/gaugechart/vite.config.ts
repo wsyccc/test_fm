@@ -7,7 +7,7 @@ import {exportSchemaFilter} from "../../utils";
 export default defineConfig(({}) => {
 
   return {
-    base: 'dist_gaugechart',
+    base: './',
     plugins: [react(), {
       name: 'widget-props-schema',
       apply: 'build',
