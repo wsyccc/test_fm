@@ -37,6 +37,7 @@ const printHelp = () => {
                          • java           → Java 类（.java）
                          • typescript (ts)→ TypeScript 接口（.ts）
   -h, --help           显示本帮助文档。
+  --prod                使用生产模式构建（vite --mode production），不传默认为开发模式 (--mode development)。
 
 示例:
   yarn build:widget
@@ -85,6 +86,7 @@ if (schemaFlagIndex !== -1) {
 }
 
 let forceBuildCommon: boolean | null = null;
+let isProd = false;
 const nonFlagArgs: string[] = [];
 
 for (const arg of rawArgs) {
@@ -92,6 +94,8 @@ for (const arg of rawArgs) {
     forceBuildCommon = true;
   } else if (arg === '-n') {
     forceBuildCommon = false;
+  } else if (arg === '--prod') {
+    isProd = true;
   } else {
     nonFlagArgs.push(arg);
   }
@@ -124,7 +128,9 @@ const getAllWidgets = () => {
 
 const buildWidget = (widgetName: string) => {
   console.log(`🚧 building ${widgetName}...`);
-  child_process.execSync(`yarn workspace ${widgetName} build`, {stdio: 'inherit'});
+  const viteMode = isProd ? 'production' : 'development';
+
+  child_process.execSync(`yarn workspace ${widgetName} build --mode ${viteMode}`, {stdio: 'inherit'});
 
   const widgetDistFrom = path.join(rootDir, `packages/${widgetName}/dist_${widgetName}`);
   const widgetDistTo = path.join(distDir, `dist_${widgetName}`);
@@ -273,7 +279,8 @@ const main = async () => {
 
   if (shouldBuildCommon) {
     console.log(`🚧 building @hulk/common...`);
-    child_process.execSync('yarn workspace @hulk/common build', {stdio: 'inherit'});
+    const viteMode = isProd ? 'production' : 'development';
+    child_process.execSync(`yarn workspace @hulk/common build --mode ${viteMode}`, {stdio: 'inherit'});
 
     const commonDistFrom = path.join(rootDir, 'packages/common/dist_common');
     const commonDistTo = path.join(distDir, 'dist_common');

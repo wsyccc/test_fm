@@ -77,7 +77,11 @@ export function getCommonContext<T extends BaseWidgetDataType | Omit<BaseWidgetD
       //   actionTrigger.triggerAction();
       // }
     };
-    return widgetIdentity?.widgetId ? (
+    return (widgetIdentity?.widgetId && (import.meta as any).env.MODE === "production") ? (
+      <Context.Provider value={{widgetData, updateWidgetData, triggerAction}}>
+        {children}
+      </Context.Provider>
+    ) : (import.meta as any).env.MODE === "development" ? (
       <Context.Provider value={{widgetData, updateWidgetData, triggerAction}}>
         {children}
       </Context.Provider>
