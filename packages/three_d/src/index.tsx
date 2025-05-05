@@ -19,14 +19,14 @@
  */
 import { React } from "@hulk/common";
 import { useThreeDCommon } from "./context";
-import { alarmType, ThreeDPropsInterface, updateConfigObjectType } from "./type.ts";
+import { ThreeDPropsInterface } from "./type.ts";
 import { BaseTriggerActions } from "@hulk/common";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // 各种加载器
 import { TransformControls, GLTFLoader, FBXLoader, MTLLoader, OBJLoader, STLLoader } from "@hulk/common";
 import type { GLTF } from "@hulk/common";
-import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree } from "@hulk/common";
+import { Button, Col, Collapse, Form, Input, InputNumber, Row, Slider, Spin, Switch, Tree, gsap } from "@hulk/common";
 import "./index.css";
 import defaultConfigs from "./configs.ts";
 
@@ -66,13 +66,13 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const [children, setChildren] = useState<THREE.Mesh<any, any, any>[]>([]);
 
   const wheelTimeoutRef = useRef<number | null>(null);
-  const [cameraPosition, setCameraPosition] = useState({
+  const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
     x: 0,
     y: 0,
     z: 0
   })
 
-  const [controlsTarget, setControlsTarget] = useState({
+  const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
     x: 0,
     y: 0,
     z: 0
@@ -91,6 +91,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const [highlightedObjects, setHighlightedObjects] = useState<
     Map<string, THREE.Object3D | THREE.Mesh>
   >(new Map());
+  // 选择物体后旋转camera，转动视角
+  const shouldTransferPerspectiveRef = useRef<boolean>(false);
   const [highlighted, setHighlighted] = useState<number>(0);
   const highlightedObjectMaterialRef = useRef<THREE.Material | THREE.Material[] | null>(null);
 
@@ -241,7 +243,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     // 为true表示物体处于编辑状态
     event.preventDefault();
     event.stopPropagation();
-    if (cameraRef.current && sceneRef.current && !isStorybook) {
+    
+    if (cameraRef.current && sceneRef.current) {
       const rect = mountRef.current?.getBoundingClientRect()
       mouse.x = ((event.clientX - (rect?.left || 0) - ((rect?.width || 0) - (canvasRect?.width ?? 0)) / 2) / (typeof data.width === "number" ? data.width : 300)) * 2 - 1;
       mouse.y =
@@ -459,25 +462,35 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
 
-        // 根据滚轮滚动的方向调整相机的位置
-        const delta = event.deltaY * 0.01; // 调整滚轮灵敏度
-        camera.position.z += delta; // 例如，沿 Z 轴移动相机
+        const delta = event.deltaY * 0.01;
+        // 这是最基本的camera控制，会因为controls.target导致滚动到一定情况时开始旋转
+        // camera.position.z += delta; // 例如，沿 Z 轴移动相机
 
         if (wheelTimeoutRef.current) {
           clearTimeout(wheelTimeoutRef.current); // 清除之前的超时
         }
 
-        setCameraPosition({
-          x: camera.position.x,
-          y: camera.position.y,
-          z: camera.position.z,
-        });
-        setControlsTarget({
-          x: controls.target.x,
-          y: controls.target.y,
-          z: controls.target.z,
-        });
+        // 这种做法是根据当前视角方向进行前进后退
+        const direction = new THREE.Vector3()
+          .subVectors(controls.target, camera.position)
+          .normalize();
 
+        const moveVector = direction.clone().multiplyScalar(delta * 5);
+
+        const nextPosition = camera.position.clone().add(moveVector);
+        const newDirection = new THREE.Vector3()
+          .subVectors(controls.target, nextPosition)
+          .normalize();
+
+        // 点乘为负，说明跨过 target 了，阻止跨越，由于为了保持鼠标左键的旋转控制，所以不能更改controls.target，然后因为跨越target会反向，然后用户滚轮会一直在target附近徘徊，所以做了禁止
+        const dot = direction.dot(newDirection);
+        if (dot < 0) return;
+
+        camera.position.copy(nextPosition);
+        controls.update();
+
+        setCameraPosition(camera.position.clone());
+        setControlsTarget(controls.target.clone());
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);
@@ -541,14 +554,33 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
             transmission: 0.3, // 透光性
           };
 
-        (externalGeometry as THREE.Object3D).traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            // 设置透明材质
-            const alarmIndex = (data.alarms as alarmType[])?.findIndex((al) => al.name === child.name)
+        const updatedConfigsMap = new Map(
+          (data.updatedConfigs ?? []).map(({ name, ...rest }) => [name, rest])
+        );
 
-            if (data.alarms?.length && alarmIndex > -1) {
+        (externalGeometry as THREE.Object3D).traverse((child) => {
+
+          if (child instanceof THREE.Mesh) {
+            const childUpdateConfig = updatedConfigsMap.get(child.name);
+            // 如果找到这个updateConfig那就应用变动
+
+            if (childUpdateConfig?.position) {
+              child.position.copy(childUpdateConfig.position);
+
+            }
+            if (childUpdateConfig?.scale) {
+              child.scale.copy(childUpdateConfig.scale);
+
+            }
+            if (childUpdateConfig?.rotation) {
+              child.rotation.x = childUpdateConfig.rotation.x;
+              child.rotation.y = childUpdateConfig.rotation.y;
+              child.rotation.z = childUpdateConfig.rotation.z;
+            }
+
+            if (childUpdateConfig?.color) {
               child.material = new THREE.MeshPhysicalMaterial({
-                color: data.alarms[alarmIndex].color,
+                color: childUpdateConfig?.color,
                 metalness: 0.4,
                 roughness: 0.4,
                 reflectivity: 0.5,
@@ -653,7 +685,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     if (loading) {
       setLoading(false);
     }
-
+    setHighlighted((p) => (p % 10) + 1);
     // 清理函数，卸载时删除渲染器的 DOM 元素
     return () => {
       if (sceneRef.current) {
@@ -690,11 +722,114 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         }
       }
     };
-  }, [externalGeometry, data.width, data.height, data.ambientLight, data.shallowTheme, data.wireframe, data.transparent, data.grid, data.xScale, data.yScale, data.zScale, data.alarms]);
+  }, [externalGeometry, data.width, data.height, data.ambientLight, data.shallowTheme, data.wireframe, data.transparent, data.grid, data.xScale, data.yScale, data.zScale, data.updatedConfigs]);
 
 
   useEffect(() => {
-    if (cameraRef.current && controlsRef.current) {
+    shouldTransferPerspectiveRef.current = true;
+  }, [data.focusItemName])
+
+  useEffect(() => {
+
+    // 如果用户点击了高亮对象/图层，且应该转动视角，那么做视角转动
+    if (highlightedObjectRef.current && shouldTransferPerspectiveRef.current && cameraRef.current && controlsRef.current) {
+
+      const objectWorldPosition = new THREE.Vector3();
+      highlightedObjectRef.current.getWorldPosition(objectWorldPosition);
+
+      // 获取当前朝向，保持朝向不变的情况下移动相机
+      const objectWorldDirection = new THREE.Vector3();
+      objectWorldDirection.subVectors(controlsRef.current.target, cameraRef.current.position).normalize();
+
+      // 根据物体大小决定相机和它的相对距离，物体/图层越小距离越近
+      const box = new THREE.Box3().setFromObject(highlightedObjectRef.current);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const distance = size * 1.4;
+      const finalCameraPosition = objectWorldPosition.clone().sub(objectWorldDirection.multiplyScalar(distance));
+
+      // 视角转动动画
+      const duration = 1.2;
+      gsap.to(cameraRef.current.position, {
+        x: finalCameraPosition.x,
+        y: finalCameraPosition.y,
+        z: finalCameraPosition.z,
+        duration,
+        onUpdate: () => {
+          if (controlsRef.current)
+            controlsRef.current!.update();
+        },
+        onComplete: () => {
+          cameraRef.current!.position.copy(finalCameraPosition)
+        }
+      });
+
+      // 动画 controls.target
+      gsap.to(controlsRef.current.target, {
+        x: objectWorldPosition.x,
+        y: objectWorldPosition.y,
+        z: objectWorldPosition.z,
+        duration,
+        onUpdate: () => {
+          if (controlsRef.current)
+            controlsRef.current!.update();
+        },
+        onComplete: () => {
+          controlsRef.current!.target.copy(objectWorldPosition)
+        }
+      });
+      shouldTransferPerspectiveRef.current = false;
+    } else if (data.focusItemName && shouldTransferPerspectiveRef.current && cameraRef.current && controlsRef.current) {
+
+      const focusItem = children.find(child => child.name === data.focusItemName)
+
+      if (focusItem) {
+        const objectWorldPosition = new THREE.Vector3();
+        focusItem.getWorldPosition(objectWorldPosition);
+
+        // 获取当前朝向，保持朝向不变的情况下移动相机
+        const objectWorldDirection = new THREE.Vector3();
+        objectWorldDirection.subVectors(controlsRef.current.target, cameraRef.current.position).normalize();
+
+        // 根据物体大小决定相机和它的相对距离，物体/图层越小距离越近
+        const box = new THREE.Box3().setFromObject(focusItem);
+        const size = box.getSize(new THREE.Vector3()).length();
+        const distance = size * 1.4;
+        const finalCameraPosition = objectWorldPosition.clone().sub(objectWorldDirection.multiplyScalar(distance));
+
+        // 视角转动动画
+        const duration = 1.2;
+        gsap.to(cameraRef.current.position, {
+          x: finalCameraPosition.x,
+          y: finalCameraPosition.y,
+          z: finalCameraPosition.z,
+          duration,
+          onUpdate: () => {
+            if (controlsRef.current)
+              controlsRef.current!.update();
+          },
+          onComplete: () => {
+            cameraRef.current!.position.copy(finalCameraPosition)
+          }
+        });
+
+        // 动画 controls.target
+        gsap.to(controlsRef.current.target, {
+          x: objectWorldPosition.x,
+          y: objectWorldPosition.y,
+          z: objectWorldPosition.z,
+          duration,
+          onUpdate: () => {
+            if (controlsRef.current)
+              controlsRef.current!.update();
+          },
+          onComplete: () => {
+            controlsRef.current!.target.copy(objectWorldPosition)
+          }
+        });
+      }
+      shouldTransferPerspectiveRef.current = false;
+
+    } else if (cameraRef.current && controlsRef.current) {
       cameraRef.current.position.set(
         cameraPosition.x,
         cameraPosition.y,
@@ -705,40 +840,6 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         controlsTarget.y,
         controlsTarget.z,
       );
-    }
-
-    if (externalObjectType === "obj" && externalGeometry) {
-      // 应用变动
-      const updatedConfigsMap = new Map<string, updateConfigObjectType>(
-        // JSON.parse(configs?.updatedConfigs.data ?? []),
-        []
-      );
-
-      (externalGeometry as THREE.Object3D).traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          // 将记录下来的变动应用到每个child上
-          const childUpdateConfig = updatedConfigsMap.get(child.name);
-          // 如果找到这个updateConfig那就应用变动
-          if (childUpdateConfig) {
-            child.position.copy(childUpdateConfig.position);
-            child.scale.copy(childUpdateConfig.scale);
-            child.rotation.x = childUpdateConfig.rotation.x;
-            child.rotation.y = childUpdateConfig.rotation.y;
-            child.rotation.z = childUpdateConfig.rotation.z;
-          } else {
-            // 如果没找到，说明这个object应该在它原来的位置上，由于这个object可能已经变动过了，需要把它set回去，不然undo没有效果
-            const originChild = highlightedObjects.get(child.name);
-
-            if (originChild) {
-              child.position.copy(originChild.position);
-              child.scale.copy(originChild.scale);
-              child.rotation.x = originChild.rotation.x;
-              child.rotation.y = originChild.rotation.y;
-              child.rotation.z = originChild.rotation.z;
-            }
-          }
-        }
-      });
     }
 
     // 清除旧八面体
@@ -756,9 +857,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       highlightedObjectRef.current &&
       sceneRef.current
     ) {
-      const updatedConfigsMap = new Map<string, updateConfigObjectType>(
-        // JSON.parse(configs?.updatedConfigs.data ?? []),
-        []
+      const updatedConfigsMap = new Map(
+        (data.updatedConfigs ?? []).map(({ name, ...rest }) => [name, rest])
       );
       if (transformControlsRef.current) {
         if (highlightedObjectRef.current) {
@@ -788,17 +888,17 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       materialForm.setFieldsValue(originalMat)
       if (formConfig) {
         controlForm.setFieldsValue({
-          xScenePosition: formConfig.position.x,
-          yScenePosition: formConfig.position.y,
-          zScenePosition: formConfig.position.z,
+          xScenePosition: formConfig.position?.x || 0,
+          yScenePosition: formConfig.position?.y || 0,
+          zScenePosition: formConfig.position?.z || 0,
 
-          xSceneRotation: formConfig.rotation.x,
-          ySceneRotation: formConfig.rotation.y,
-          zSceneRotation: formConfig.rotation.z,
+          xSceneRotation: formConfig.rotation?.x || 0,
+          ySceneRotation: formConfig.rotation?.y || 0,
+          zSceneRotation: formConfig.rotation?.z || 0,
 
-          xScale: formConfig.scale.x,
-          yScale: formConfig.scale.y,
-          zScale: formConfig.scale.z,
+          xScale: formConfig.scale?.x || 1,
+          yScale: formConfig.scale?.y || 1,
+          zScale: formConfig.scale?.z || 1,
         });
       } else {
         controlForm.setFieldsValue({
@@ -839,20 +939,23 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       // }
     }
 
-
-
-
     return () => { };
   }, [cameraPosition, controlsTarget, highlighted,
-    highlightedObjects,]);
+    highlightedObjects, data.focusItemName]);
 
   useEffect(() => {
 
     controlForm.setFieldsValue(data)
   }, [data])
 
+  useEffect(() => {
+    console.log('send back', data);
+  }, [])
+
   return (
-    <Row>
+    <Row style={{
+      width: typeof data.width === 'number' ? data.width / 0.625 : ''
+    }}>
       <Col span={3}>
         <Collapse
           collapsible="icon"
@@ -863,6 +966,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
             padding: "0px 5px",
             opacity: 0.7,
             width: "100%",
+            height: data.height,
+            overflow: "auto"
           }}
           items={[
             {
@@ -1039,6 +1144,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
               padding: "0px 5px",
               opacity: 0.7,
               width: "100%",
+              height: data.height,
+              overflow: "auto"
             }}
 
             items={[
@@ -1051,65 +1158,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
                 ),
                 children:
                   <>
-                    {/* <List>
-                      {children?.map((item) => {
-                        return (
-                          <List.Item key={`${item.name}`}
-                            style={{
-                              border: highlightedObjectRef.current?.name === item.name ? "1px solid red" : "",
-                              paddingLeft: "8px"
-                            }}
-                            actions={[
-                              <Button
-                                type="link"
-                                style={{ width: "100%", color: "#1890ff" }}
-                                onClick={() => {
-                                  setCurrentEditItem(item);
-                                  // setChildEditorModalVisible(true);
-
-                                  // 如果有上一个高亮的对象，恢复原色
-                                  if (
-                                    highlightedObjectRef.current &&
-                                    highlightedObjectMaterialRef.current
-                                  ) {
-                                    // @ts-ignore
-                                    (highlightedObjectRef.current as THREE.Mesh).material =
-                                      highlightedObjectMaterialRef.current;
-                                  } else if (highlightedObjectRef.current) {
-                                    (
-                                      (highlightedObjectRef.current as THREE.Mesh)
-                                        .material as THREE.MeshBasicMaterial
-                                    ).color.set(0xffffff);
-                                  }
-
-                                  highlightedObjectMaterialRef.current = item.material.clone();
-                                  highlightedObjectRef.current = item;
-                                  if (controlsRef.current) controlsRef.current.enabled = false;
-
-
-                                  // 设置高亮色
-                                  const highlightMaterial = new THREE.MeshBasicMaterial({
-                                    color: 0xff0000,
-                                    transparent: item.material.transparent,
-                                    opacity: item.material.opacity,
-                                  });
-
-                                  // 将目标对象的材质设置为高亮材质
-                                  (item.material as THREE.Material) = highlightMaterial;
-
-                                  setHighlighted((p) => (p % 10) + 1);
-                                }}
-                              >
-                                Select
-                              </Button>
-                            ]}>
-
-                            {item.name}
-
-                          </List.Item>
-                        );
-                      })}
-                    </List> */}
+                    
                     <DirectoryTree
                       treeData={children.length === 0 ? [] : [...children.map((c) => {
                         return {
@@ -1158,12 +1207,14 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
 
                           // 将目标对象的材质设置为高亮材质
                           (item.material as THREE.Material) = highlightMaterial;
-
+                          // 选择完物体后允许相机视角移动
+                          shouldTransferPerspectiveRef.current = true;
                           setHighlighted((p) => (p % 10) + 1);
                         } else {
                           highlightedObjectRef.current = null
                         }
                       }}
+                      selectedKeys={[highlightedObjectRef.current?.uuid || '']}
                     />
                   </>
               }]}
@@ -1180,6 +1231,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
               padding: "0px 5px",
               opacity: 0.7,
               width: "100%",
+              height: data.height,
+              overflow: "auto"
             }}
             items={[
               {

@@ -71,6 +71,7 @@ export { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 export { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 export { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+export { gsap } from 'gsap';
 /**
  * ============================================
  */

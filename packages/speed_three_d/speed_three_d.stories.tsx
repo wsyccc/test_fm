@@ -29,8 +29,32 @@ export const Default: Story = {
     width: 800,
     height: 580,
     externalSourceLink: "/3D/objExample2.obj",
-    alarms: [
-      { name: 'obj5', color: 'red' }
+    cameraPosition: {
+      x: 15.280475853474545,
+      y: 30.977834647277273,
+      z: 40.76467013638617
+    },
+    controlsTarget: {
+      x: -2.615881235563659,
+      y: 19.160965686342387,
+      z: -3.262830296569124
+    },
+    focusItemName: "obj5",
+    updatedConfigs: [
+      {
+        name: "obj5",
+        rotation: {
+          x: 0,
+          y: 0,
+          z: 0
+        },
+        scale: {
+          x: 1,
+          y: 1,
+          z: 1
+        },
+        color: "red"
+      }
     ]
   } as SpeedThreeDPropsInterface
 };
