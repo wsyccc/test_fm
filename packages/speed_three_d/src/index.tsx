@@ -46,17 +46,17 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
 
   const wheelTimeoutRef = useRef<number | null>(null);
-  const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  // const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
+  //   x: 0,
+  //   y: 0,
+  //   z: 0
+  // })
 
-  const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  // const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
+  //   x: 0,
+  //   y: 0,
+  //   z: 0
+  // })
 
   // 创建渐变纹理
   function createGradientTexture() {
@@ -189,8 +189,12 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         0.1,
         1000,
       );
-      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
-      camera.lookAt(controlsTarget.x, controlsTarget.y, controlsTarget.z);
+      camera.position.copy(data.cameraPosition ?? {
+        x: 0,
+        y: 0,
+        z: 0
+      })
+      camera.lookAt(data.controlsTarget?.x ?? 0, data.controlsTarget?.y ?? 0, data.controlsTarget?.z ?? 0);
       cameraRef.current = camera;
       // 创建渲染器
       const renderer = new THREE.WebGLRenderer({
@@ -248,8 +252,8 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
         camera.position.copy(nextPosition);
         controls.update();
 
-        setCameraPosition(camera.position.clone());
-        setControlsTarget(controls.target.clone());
+        // setCameraPosition(camera.position.clone());
+        // setControlsTarget(controls.target.clone());
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);
@@ -331,7 +335,7 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
                 // transparent: false,
                 // opacity: 0.3,
               });
-            } else if (currentMaterial === null ) {
+            } else if (currentMaterial === null) {
               child.material = new THREE.MeshPhysicalMaterial({
                 color: 0xffffff
               });
@@ -510,6 +514,15 @@ const SpeedThreeD: React.FC = (props: SpeedThreeDPropsInterface | {}) => {
 
     }
   }, [highlighted, data.focusItemName])
+
+  useEffect(() => {
+    if (data.cameraPosition) {
+      cameraRef.current?.position.copy(data.cameraPosition)
+    }
+    if (data.controlsTarget) {
+      controlsRef.current?.target.copy(data.controlsTarget)
+    }
+  }, [data.cameraPosition, data.controlsTarget])
 
   useEffect(() => {
     console.log('send back', data);

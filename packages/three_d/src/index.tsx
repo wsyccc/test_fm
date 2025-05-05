@@ -66,17 +66,17 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
   const [children, setChildren] = useState<THREE.Mesh<any, any, any>[]>([]);
 
   const wheelTimeoutRef = useRef<number | null>(null);
-  const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  // const [cameraPosition, setCameraPosition] = useState(data.cameraPosition ?? {
+  //   x: 0,
+  //   y: 0,
+  //   z: 0
+  // })
 
-  const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
-    x: 0,
-    y: 0,
-    z: 0
-  })
+  // const [controlsTarget, setControlsTarget] = useState(data.controlsTarget ?? {
+  //   x: 0,
+  //   y: 0,
+  //   z: 0
+  // })
 
   // 控制模式
   const raycaster = new THREE.Raycaster();
@@ -410,8 +410,12 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         0.1,
         1000,
       );
-      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
-      camera.lookAt(controlsTarget.x, controlsTarget.y, controlsTarget.z);
+      camera.position.copy(data.cameraPosition ?? {
+        x: 0,
+        y: 0,
+        z: 0
+      })
+      camera.lookAt(data.controlsTarget?.x ?? 0, data.controlsTarget?.y ?? 0, data.controlsTarget?.z ?? 0);
       cameraRef.current = camera;
       // 创建渲染器
       const renderer = new THREE.WebGLRenderer({
@@ -445,19 +449,19 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       controls.update();
       controlsRef.current = controls;
 
-      const handleMouseUp = () => {
-        setCameraPosition({
-          x: camera.position.x,
-          y: camera.position.y,
-          z: camera.position.z,
-        });
-        setControlsTarget({
-          x: controls.target.x,
-          y: controls.target.y,
-          z: controls.target.z,
-        });
+      // const handleMouseUp = () => {
+      //   setCameraPosition({
+      //     x: camera.position.x,
+      //     y: camera.position.y,
+      //     z: camera.position.z,
+      //   });
+      //   setControlsTarget({
+      //     x: controls.target.x,
+      //     y: controls.target.y,
+      //     z: controls.target.z,
+      //   });
 
-      };
+      // };
 
       const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
@@ -489,8 +493,8 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
         camera.position.copy(nextPosition);
         controls.update();
 
-        setCameraPosition(camera.position.clone());
-        setControlsTarget(controls.target.clone());
+        // setCameraPosition(camera.position.clone());
+        // setControlsTarget(controls.target.clone());
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);
@@ -498,7 +502,7 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       scene.add(transformControls);
       transformControlsRef.current = transformControls;
 
-      renderer.domElement.addEventListener("mouseup", handleMouseUp);
+      // renderer.domElement.addEventListener("mouseup", handleMouseUp);
       renderer.domElement.addEventListener("wheel", handleWheel);
       renderer.domElement.addEventListener("mousedown", (event) => {
         onDocumentMouseClick(event, renderer.domElement.getBoundingClientRect());
@@ -829,18 +833,19 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       }
       shouldTransferPerspectiveRef.current = false;
 
-    } else if (cameraRef.current && controlsRef.current) {
-      cameraRef.current.position.set(
-        cameraPosition.x,
-        cameraPosition.y,
-        cameraPosition.z,
-      );
-      controlsRef.current.target.set(
-        controlsTarget.x,
-        controlsTarget.y,
-        controlsTarget.z,
-      );
-    }
+    } 
+    // else if (cameraRef.current && controlsRef.current) {
+    //   cameraRef.current.position.set(
+    //     cameraPosition.x,
+    //     cameraPosition.y,
+    //     cameraPosition.z,
+    //   );
+    //   controlsRef.current.target.set(
+    //     controlsTarget.x,
+    //     controlsTarget.y,
+    //     controlsTarget.z,
+    //   );
+    // }
 
     // 清除旧八面体
     if (octahedronRef.current && sceneRef.current) {
@@ -940,8 +945,17 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
     }
 
     return () => { };
-  }, [cameraPosition, controlsTarget, highlighted,
+  }, [highlighted,
     highlightedObjects, data.focusItemName]);
+
+  useEffect(() => {
+    if (data.cameraPosition) {
+      cameraRef.current?.position.copy(data.cameraPosition)
+    }
+    if (data.controlsTarget) {
+      controlsRef.current?.target.copy(data.controlsTarget)
+    }
+  }, [data.cameraPosition, data.controlsTarget])
 
   useEffect(() => {
 

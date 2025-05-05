@@ -1,107 +1,104 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$ref": "#/definitions/TextPropsInterface",
-  "definitions": {
-    "TextPropsInterface": {
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "height": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "style": {
+      "$ref": "#/definitions/StyleConfig"
+    },
+    "bgColor": {
+      "type": "string"
+    },
+    "isStorybook": {
+      "type": "boolean"
+    },
+    "value": {
+      "type": "string"
+    },
+    "fontSize": {
+      "type": "number"
+    },
+    "fontFamily": {
+      "$ref": "#/definitions/Fonts"
+    },
+    "color": {
+      "type": "string"
+    },
+    "justifyContent": {
+      "$ref": "#/definitions/AlignItems"
+    },
+    "alignItems": {
+      "$ref": "#/definitions/AlignItems"
+    },
+    "border": {
       "type": "object",
       "properties": {
-        "width": {
-          "type": [
-            "number",
-            "string"
-          ]
-        },
-        "height": {
-          "type": [
-            "number",
-            "string"
-          ]
-        },
-        "style": {
-          "$ref": "#/definitions/StyleConfig"
-        },
-        "bgColor": {
-          "type": "string"
-        },
-        "isStorybook": {
-          "type": "boolean"
-        },
-        "value": {
-          "type": "string"
-        },
-        "fontSize": {
+        "size": {
           "type": "number"
         },
-        "fontFamily": {
-          "$ref": "#/definitions/Fonts"
+        "style": {
+          "$ref": "#/definitions/TextDecorationStyle"
         },
         "color": {
           "type": "string"
-        },
-        "justifyContent": {
-          "$ref": "#/definitions/AlignItems"
-        },
-        "alignItems": {
-          "$ref": "#/definitions/AlignItems"
-        },
-        "border": {
-          "type": "object",
-          "properties": {
-            "size": {
-              "type": "number"
-            },
-            "style": {
-              "$ref": "#/definitions/TextDecorationStyle"
-            },
-            "color": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "size",
-            "style",
-            "color"
-          ],
-          "additionalProperties": false
-        },
-        "boxShadow": {
-          "type": "object",
-          "properties": {
-            "x": {
-              "type": "number"
-            },
-            "y": {
-              "type": "number"
-            },
-            "blur": {
-              "type": "number"
-            },
-            "diffusion": {
-              "type": "number"
-            },
-            "color": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "x",
-            "y",
-            "blur",
-            "diffusion",
-            "color"
-          ],
-          "additionalProperties": false
-        },
-        "textDecoration": {
-          "$ref": "#/definitions/TextDecorationFormData"
         }
       },
-      "additionalProperties": false,
       "required": [
-        "height",
-        "width"
-      ]
+        "size",
+        "style",
+        "color"
+      ],
+      "additionalProperties": false
     },
+    "boxShadow": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "blur": {
+          "type": "number"
+        },
+        "diffusion": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "blur",
+        "diffusion",
+        "color"
+      ],
+      "additionalProperties": false
+    },
+    "textDecoration": {
+      "$ref": "#/definitions/TextDecorationFormData"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "height",
+    "width"
+  ],
+  "definitions": {
     "StyleConfig": {
       "type": "object"
     },

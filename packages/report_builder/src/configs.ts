@@ -9,6 +9,8 @@ export default {
     value: Header
     color: red
     fontSize: 32
+    width: 100%
+    height: 40
     border:
       style: dashed
       size: 2
@@ -16,6 +18,7 @@ export default {
   subtitle:
     type: text
     width: 100%
+    height: 15
     value: Report builder Sample code
   logo:
     type: image
@@ -30,6 +33,7 @@ footer:
     type: text
     value: Report Builder
     width: 100%
+    height: 30
     color: pink
     fontSize: 24
     border:
@@ -39,6 +43,7 @@ footer:
   subtitle:
     type: text
     width: 100%
+    height: 15
     value: Copyright by @Cermate Software Inc.
   logo:
     type: image
