@@ -37,7 +37,7 @@ const Button: React.FC<ButtonPropsInterface> = (props) => {
       };
       // on design time
       if (!widgetData) {
-        updateWidgetData(data, pkg.version, data.isStorybook ?? false);
+        updateWidgetData(mergedData, pkg.version, mergedData.isStorybook ?? false);
       }
       return mergedData;
 

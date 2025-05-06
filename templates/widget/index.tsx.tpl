@@ -37,7 +37,7 @@ const {{namePascal}}: React.FC = (props: {{namePascal}}PropsInterface | {}) => {
         ...widgetData,
       };
       if (!widgetData) {
-        updateWidgetData(data, pkg.version, data.isStorybook ?? false);
+        updateWidgetData(mergedData, pkg.version, mergedData.isStorybook ?? false);
       }
       return mergedData;
 
