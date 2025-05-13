@@ -466,35 +466,13 @@ const ThreeD: React.FC = (props: ThreeDPropsInterface | {}) => {
       const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
 
-        const delta = event.deltaY * 0.01;
-        // 这是最基本的camera控制，会因为controls.target导致滚动到一定情况时开始旋转
-        // camera.position.z += delta; // 例如，沿 Z 轴移动相机
+        // 根据滚轮滚动的方向调整相机的位置
+        const delta = event.deltaY * 0.01; // 调整滚轮灵敏度
+        camera.position.z += delta; // 例如，沿 Z 轴移动相机
 
         if (wheelTimeoutRef.current) {
           clearTimeout(wheelTimeoutRef.current); // 清除之前的超时
         }
-
-        // 这种做法是根据当前视角方向进行前进后退
-        const direction = new THREE.Vector3()
-          .subVectors(controls.target, camera.position)
-          .normalize();
-
-        const moveVector = direction.clone().multiplyScalar(delta * 5);
-
-        const nextPosition = camera.position.clone().add(moveVector);
-        const newDirection = new THREE.Vector3()
-          .subVectors(controls.target, nextPosition)
-          .normalize();
-
-        // 点乘为负，说明跨过 target 了，阻止跨越，由于为了保持鼠标左键的旋转控制，所以不能更改controls.target，然后因为跨越target会反向，然后用户滚轮会一直在target附近徘徊，所以做了禁止
-        const dot = direction.dot(newDirection);
-        if (dot < 0) return;
-
-        camera.position.copy(nextPosition);
-        controls.update();
-
-        // setCameraPosition(camera.position.clone());
-        // setControlsTarget(controls.target.clone());
       };
 
       const transformControls = new TransformControls(camera, renderer.domElement);
